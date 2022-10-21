@@ -1,38 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+//import 'package:easy_localization/easy_localization.dart';
+
+import 'childlifedata.dart';
+import 'fl_graph_test.dart';
+
 //maindart change test
-void main() {
-  runApp(const Screen1());
+
+final supportedLocales = [Locale('en', 'US'), Locale('ko', 'KR')];
+
+void main() async {
+  await ScreenUtil.ensureScreenSize(); //화면 비율 맞추기 위함
+  // await EasyLocalization.ensureInitialized();//외국어번역
+
+  runApp(SmartInfoPanel());
 }
 
-class Screen1 extends StatelessWidget {
-  const Screen1({Key? key}) : super(key: key);
+class SmartInfoPanel extends StatelessWidget {
+  const SmartInfoPanel({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) => ScreenUtilInit(
+      designSize: const Size(1920, 1080),
+      builder: (ctx, child) {
+        return MaterialApp(
+          theme: ThemeData(
+            fontFamily: 'NotoSansKR',
+          ),
+          home: const SmartInfoPanelMain(),
+        );
+      });
+}
+
+class SmartInfoPanelMain extends StatefulWidget {
+  const SmartInfoPanelMain({Key? key}) : super(key: key);
+
+  @override
+  State<SmartInfoPanelMain> createState() => _SmartInfoPanelMainState();
+}
+
+class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 1920,
-        height: 1080,
-        decoration: const BoxDecoration(
-            color: Colors.white),
-        child: Row(
-        children: [
-          Column(
-            children: [
-              Row(
-                children: [// 0세 데코-02
-                  Container(
-                    width: 356,
-                    height: 329,
-                      child: const Image(image: AssetImage('assets/drawable-xxhdpi/0_02.jpg')),
-                  )
-    ],
-    )
-      ],
-    ),
-          Column()
-      ],
-    )
-        );
+      width: 1920.w,
+      height: 1080.w,
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Container(
+          width: 200.w,
+          height: 100.w,
+          color: Colors.white,
+          child: ElevatedButton(
+            onPressed: () {
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
+            },
+            child: Text('시작'),
+          )),
+    );
   }
 }
