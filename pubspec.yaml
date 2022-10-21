@@ -34,6 +34,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_screenutil: ^5.5.4
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_test:
@@ -57,7 +59,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/drawable-xxhdpi/0_02.jpg
+    - assets/childlifedata/0_02.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -75,6 +77,18 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+
+  fonts:
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/ko/NotoSansKR-Medium.otf
+          weight: 500
+        - asset: assets/fonts/ko/NotoSansKR-Bold.otf
+          weight: 700
+        - asset: assets/fonts/ko/NotoSansKR-Regular.otf
+          weight: 400
+        - asset: assets/fonts/ko/NotoSansKR-Black.otf
+          weight: 900
   # fonts:
   #   - family: Schyler
   #     fonts:
