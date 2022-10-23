@@ -16,6 +16,7 @@ void main() async {
   runApp(SmartInfoPanel());
 }
 
+//기본적인 앱들어갈때 세팅할것들
 class SmartInfoPanel extends StatelessWidget {
   const SmartInfoPanel({Key? key}) : super(key: key);
 
@@ -54,8 +55,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           color: Colors.white,
           child: ElevatedButton(
             onPressed: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));
-              Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
             },
             child: Text('시작'),
           )),

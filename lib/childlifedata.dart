@@ -84,9 +84,12 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                           width: 356.w,
                           height: 329.w,
                           margin: EdgeInsets.only(left: 249.w, top: 49.w),
-                          child: const Image(
-                              image:
-                                  AssetImage('assets/childlifedata/0_02.jpg')),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/childlifedata/0_02.jpg')
+                            )
+                          ),
                         ),
 
                         ///아이정보
@@ -755,28 +758,57 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                   image: AssetImage(
                                       'assets/childlifedata/02_3.jpg')),
                             ),
-                            Container(
-                              width: 200.w,
-                              height: 200.w,
-                              margin: EdgeInsets.only(left:  40.w),
-                              child: AspectRatio(
-                                aspectRatio: 0.1.w,
-                                child: Stack(
-                                  children: <Widget>[
-                                    BarChart(
-                                    ChildBarData(boyrate),
+                            Stack(
+                              children: <Widget>[
+                                Transform.rotate(
+                                  angle: radians,
+                                  child: Container(
+                                    width: 0.w,
+                                    height: 50.w,
+                                    //margin: EdgeInsets.only(bottom: 40.w),
+                                    child: BarChart(
+                                      ChildBarData(boyrate),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             )
                             //남아
                           ],
                         ),
 
                         ///남아
+                        SizedBox(
+                          width: 216.w,
+                        ),
+
                         ///여아
-                        Column()
+                        Column(
+                          children: [
+                            Container(
+                              width: 182.w,
+                              height: 110.w,
+                              margin: EdgeInsets.only(top: 16.w),
+                              child: const Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/02_4.jpg')),
+                            ),
+                            Stack(
+                              children: <Widget>[
+                                Transform.rotate(
+                                  angle: radians,
+                                  child: SizedBox(
+                                    width: 0.w,
+                                    height: 50.w,
+                                    child: BarChart(
+                                      ChildBarData(girlrate),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
 
                         ///여아
                       ],
@@ -840,7 +872,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                   child: Column(
                                     children: [
                                       Container(
-                                        height: 5.w,
+                                        height: 10.w,
                                         width: 748.w,
                                         color: Color(0xff63e6d7),
                                       ),
@@ -857,10 +889,25 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                       ),
                     )
                   ],
+                ),///등원유아 수
+              ),
+              ///공기질
+              Container(
+                width: 820.w,
+                height: 518.w,
+                margin: EdgeInsets.only(left: 15.w, top: 12.w),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/childlifedata/sunny_01.jpg'),
+                  )
                 ),
-              )
+                // child: Container(
+                //   margin: ,
+                // ),
+              )///공기질
             ],
-          )
+          )///등원유아 수, 공기질
         ],
       ),
     );
@@ -868,13 +915,13 @@ class _ChildLifeDataState extends State<ChildLifeData> {
 
   ///유아그래프
   BarChartGroupData makeGroupData(
-      int x,
-      double y, {
-        bool isTouched = false,
-        Color barColor = Colors.white,
-        double width = 22,
-        List<int> showTooltips = const [],
-      }) {
+    int x,
+    double y, {
+    bool isTouched = false,
+    Color barColor = Colors.white,
+    double width = 22,
+    List<int> showTooltips = const [],
+  }) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -886,7 +933,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             toY: 100,
-            color: Colors.white,
+            color: Colors.white, //배경
           ),
         ),
       ],
@@ -894,8 +941,8 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   }
 
   List<BarChartGroupData> showingChildGroups() => List.generate(1, (i) {
-    return makeGroupData(0, 20);
-  });
+        return makeGroupData(0, 50);
+      });
 
   BarChartData ChildBarData(double value) {
     return BarChartData(
@@ -904,8 +951,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
           tooltipBgColor: Colors.blueGrey,
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-          },
+          getTooltipItem: (group, groupIndex, rod, rodIndex) {},
         ),
       ),
       titlesData: FlTitlesData(
@@ -950,7 +996,10 @@ class _ChildLifeDataState extends State<ChildLifeData> {
       child: text,
     );
   }
+
   ///유아그래프
+  ///
+  ///
   ///반그래프
   //그래프 데이터중 막대 그래프 하나입니다
   BarChartGroupData makeClassGroupData(
@@ -969,7 +1018,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
           toY: y, //y값
           color: barColor, //색상
           width: 20.w, //두께
-          borderSide: BorderSide(color: Colors.white, width: 0), //몰라요
+          borderSide: BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
         ),
       ],
       showingTooltipIndicators: [0],
@@ -979,7 +1028,8 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   //그래프 데이터를 만들때 사용하는 막대그래프에 데이터 넣어주는 역할입니다
   //사람 수만큼 만든다음에
   //데이터를 넣어주면 완성됩니다.
-  List<BarChartGroupData> showingClassGroups() => List.generate(childHeadCount, (i) {
+  List<BarChartGroupData> showingClassGroups() =>
+      List.generate(childHeadCount, (i) {
         return makeClassGroupData(i, chartData[i]);
       });
 

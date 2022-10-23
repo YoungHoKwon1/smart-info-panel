@@ -59,7 +59,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/childlifedata/0_02.jpg
+    - assets/childlifedata/
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
