@@ -18,7 +18,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   @override
   void initState() {
     radians = degrees * math.pi / 180;
-    // TODO: implement initState
+
     super.initState();
   }
 
