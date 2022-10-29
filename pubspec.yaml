@@ -62,7 +62,6 @@ dev_dependencies:
   get: ^4.6.5
   http: ^0.13.4
   provider: ^6.0.3
-  flutter_secure_storage: ^5.0.2
   widget_mask: 1.0.0+0
   retrofit_generator: ^2.0.1+1
   build_runner: ^2.0.1
