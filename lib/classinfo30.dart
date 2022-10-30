@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -16,11 +15,13 @@ class ClassInfo30 extends StatefulWidget {
 class _ClassInfo30State extends State<ClassInfo30> {
   double degrees = 90;
   double radians = 0;
-
+  int childNum = 28;
+  int column = 7;
+  double row=4;
   @override
   void initState() {
     radians = degrees * math.pi / 180;
-    //row = childNum / column;
+    row = childNum / column;
     super.initState();
   }
 
@@ -46,9 +47,6 @@ class _ClassInfo30State extends State<ClassInfo30> {
   List<String> teacherName = ['김담임', '김담임', '김담임'];
   String className = '새싹어린이반';
   List<int> classInfo =[0,10,6,4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
-  int childNum = 28;
-  int column = 7;
-  double row=4;
 
 
   @override
@@ -108,8 +106,8 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                   child: Text(className,
                                       style: TextStyle(
                                         fontFamily: 'GamjaFlower',
-                                        color: Color(0xff39605f),
-                                        fontSize: 20.sp,
+                                        color: const Color(0xff39605f),
+                                        fontSize: 30.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
                                       )
@@ -119,8 +117,8 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                     width: 270.w,
                                     height: 40.w,
                                     margin: EdgeInsets.only(top: 20.w),
-                                    decoration: new BoxDecoration(
-                                        color: Color(0xffc7f7f5),
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xffc7f7f5),
                                         borderRadius: BorderRadius.circular(20)
                                     ),
                                   child: Center(
@@ -150,7 +148,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                   width: 160.w,
                                   height: 40.w,
                                   decoration: BoxDecoration(
-                                      color: Color(0xffc7f7f5),
+                                      color: const Color(0xffc7f7f5),
                                       borderRadius: BorderRadius.circular(20)
                                   ),
                                 child: Center(
@@ -187,35 +185,36 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                     margin: EdgeInsets.only(left: 31.w, top: 30.w),
                                     child: const Image(
                                         image: AssetImage(
-                                            'assets/childlifedata/02_3.jpg')),
+                                            'assets/childlifedata/baby_sample.png')),
                                   )
                                 ] else ...[
                                   Container(
                                     width: 110.w,
                                     height: 110.w,
                                     margin: EdgeInsets.only(left: 36.w, top: 30.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/02_3.jpg')),
+                                    child: const Center(
+                                      child: Image(
+                                          image: AssetImage(
+                                              'assets/childlifedata/baby_sample.png')),
+                                    ),
                                   )
                                 ],
                                 Container(
                                     width: 116.w,
                                     height: 35.w,
-                                    decoration: new BoxDecoration(
-                                        color: Color(0xffc7f7f5),
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xffc7f7f5),
                                         borderRadius: BorderRadius.circular(17.5)
                                     ),
+                                  margin: EdgeInsets.only(left: 28.w),
                                   child: Center(
                                     child: Text("김아가",
                                         style: TextStyle(
                                           fontFamily: 'NotoSansKR',
-                                          color: Color(0xff000000),
+                                          color: const Color(0xff000000),
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w400,
                                           fontStyle: FontStyle.normal,
-
-
                                         )
                                     ),
                                   ),
@@ -407,7 +406,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                     ),
 
                     ///학급별그래프
-                    Container(
+                    SizedBox(
                       width: 748.w,
                       height: 309.w,
                       child: AspectRatio(

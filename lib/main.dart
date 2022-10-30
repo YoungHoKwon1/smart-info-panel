@@ -3,13 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_info_panel/classinfo30.dart';
 import 'package:smart_info_panel/classinfo20.dart';
 //import 'package:easy_localization/easy_localization.dart';
-//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'childlifedata.dart';
+import 'classinfo10.dart';
+import 'classinfo30.dart';
 import 'fl_graph_test.dart';
 
 //maindart change test
+
 final supportedLocales = [Locale('en', 'US'), Locale('ko', 'KR')];
+
 void main() async {
   await ScreenUtil.ensureScreenSize(); //화면 비율 맞추기 위함
   // await EasyLocalization.ensureInitialized();//외국어번역
@@ -36,17 +38,12 @@ class SmartInfoPanel extends StatelessWidget {
 
 class SmartInfoPanelMain extends StatefulWidget {
   const SmartInfoPanelMain({Key? key}) : super(key: key);
-  //static const tokenStorage = FlutterSecureStorage();
-  @override
-  initState() async{
-    //await tokenStorage.write(key: "token", value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MSwidmVyc2lvbiI6IjAuMC40IiwiaWF0IjoxNjY2MzQ4NjA0LCJleHAiOjE2Njg5NDA2MDQsImlzcyI6ImFpam9hIn0.6IL9-icuHh8DjHJRnKol8MFz92u3bhKtZDUtqzXY5cg");
-  }
+
   @override
   State<SmartInfoPanelMain> createState() => _SmartInfoPanelMainState();
 }
 
 class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,11 +58,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           color: Colors.white,
           child: ElevatedButton(
             onPressed: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
               Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20()));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30()));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
             },
-            child: Text('시작'),
+            child: Text('제발 멀쩡하게 해주세요'),
           )),
     );
   }

@@ -29,10 +29,8 @@ class _GraphTestState extends State<GraphTest> {
             ),
             child: GraphSet(), //등원 유아 수 그래프입니다.(이건 잘 못하겠어요)
             // child: BarChartSample1(), //그래프 그리는 함수임미다.(주석에 설명 달아놨습니다. 이것먼저 보시는 것 추천드려요)
-
-            ),
           ),
-
+        ),
       ),
     );
   }
@@ -81,7 +79,9 @@ class _GraphSetState extends State<GraphSet> {
             child: SizedBox(
               width: 30.w,
               height: 300.w,
-              child: BarChartSample2(value: value,),
+              child: BarChartSample2(
+                value: value,
+              ),
             ),
           ),
         ),
@@ -93,7 +93,9 @@ class _GraphSetState extends State<GraphSet> {
             child: SizedBox(
               width: 30.w,
               height: 300.w,
-              child: BarChartSample2(value: value,),
+              child: BarChartSample2(
+                value: value,
+              ),
             ),
           ),
         ),
@@ -107,13 +109,10 @@ class _GraphSetState extends State<GraphSet> {
         //   width: 30.w,
         //   color: Colors.red,
         // ),
-
-
       ],
     );
   }
 }
-
 
 class BarChartSample1 extends StatefulWidget {
   const BarChartSample1({Key? key}) : super(key: key);
@@ -337,7 +336,8 @@ class BarChartSample1State extends State<BarChartSample1> {
 }
 
 class BarChartSample2 extends StatefulWidget {
-  const BarChartSample2({Key? key,
+  const BarChartSample2({
+    Key? key,
     required this.value,
   }) : super(key: key);
   final double value;
@@ -391,7 +391,7 @@ class BarChartSample2State extends State<BarChartSample2> {
   }
 
   List<BarChartGroupData> showingGroups() => List.generate(1, (i) {
-    return makeGroupData(0,widget.value);
+        return makeGroupData(0, widget.value);
       });
 
   BarChartData ChildBarData() {
@@ -401,8 +401,7 @@ class BarChartSample2State extends State<BarChartSample2> {
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
           tooltipBgColor: Colors.blueGrey,
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-          },
+          getTooltipItem: (group, groupIndex, rod, rodIndex) {},
         ),
       ),
       titlesData: FlTitlesData(
