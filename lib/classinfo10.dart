@@ -207,6 +207,25 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                         image: AssetImage(
                                             'assets/childlifedata/baby_sample.png')),
                                   )
+                                  ,Container(
+                                    width: 116.w,
+                                    height: 35.w,
+                                    margin: EdgeInsets.only(left: 149.w),
+                                    decoration: new BoxDecoration(
+                                        color: Color(0xffc7f7f5),
+                                        borderRadius:
+                                        BorderRadius.circular(17.5)),
+                                    child: Center(
+                                      child: Text("김아가",
+                                          style: TextStyle(
+                                            fontFamily: 'NotoSansKR',
+                                            color: Color(0xff000000),
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    ),
+                                  )
                                 ] else ...[
                                   Container(
                                     width: 120.w,
@@ -217,26 +236,27 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                         image: AssetImage(
                                             'assets/childlifedata/baby_sample.png')),
                                   )
+                                  ,Container(
+                                    width: 116.w,
+                                    height: 35.w,
+                                    margin: EdgeInsets.only(left: 88.w),
+                                    decoration: new BoxDecoration(
+                                        color: Color(0xffc7f7f5),
+                                        borderRadius:
+                                        BorderRadius.circular(17.5)),
+                                    child: Center(
+                                      child: Text("김아가",
+                                          style: TextStyle(
+                                            fontFamily: 'NotoSansKR',
+                                            color: Color(0xff000000),
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    ),
+                                  )
                                 ],
-                                Container(
-                                  width: 116.w,
-                                  height: 35.w,
-                                  margin: EdgeInsets.only(left: 88.w),
-                                  decoration: new BoxDecoration(
-                                      color: Color(0xffc7f7f5),
-                                      borderRadius:
-                                          BorderRadius.circular(17.5)),
-                                  child: Center(
-                                    child: Text("김아가",
-                                        style: TextStyle(
-                                          fontFamily: 'NotoSansKR',
-                                          color: Color(0xff000000),
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w400,
-                                          fontStyle: FontStyle.normal,
-                                        )),
-                                  ),
-                                )
+
                               ],
                             )
                           ]
