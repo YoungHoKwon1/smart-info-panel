@@ -93,6 +93,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/childlifedata/
+    - assets/classinfodeco/
+    - assets/airple_weather/
 
 
   # To add assets to your application, add an assets section, like this:
