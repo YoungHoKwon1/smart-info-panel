@@ -305,7 +305,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 40.w, top: 38.w),
-                      //overflowed 0.666pixels 걸려서 등원유아수부터 전체적으로 top을 올려버림 추후 그래픽에 따라서 수정요망
+                      //overflowed 0.666pixels 걸려서 등원유아수부터 전체적으로 top을 올려버림 추후 그래픽에 따라서 수정요망.
                       child: Text(
                         '등원유아 수',
                         style: TextStyle(
