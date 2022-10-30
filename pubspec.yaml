@@ -125,6 +125,11 @@ flutter:
           weight: 400
         - asset: assets/fonts/ko/NotoSansKR-Black.otf
           weight: 900
+
+    - family: GamjaFlower
+      fonts:
+        - asset: assets/fonts/ko/GamjaFlower-Regular.ttf
+          weight: 400
   # fonts:
   #   - family: Schyler
   #     fonts:
