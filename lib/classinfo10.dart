@@ -13,7 +13,6 @@ class ClassInfo10 extends StatefulWidget {
   State<ClassInfo10> createState() => _ClassInfo10State();
 }
 
-
 class _ClassInfo10State extends State<ClassInfo10> {
   double degrees = 90;
   double radians = 0;
@@ -46,11 +45,10 @@ class _ClassInfo10State extends State<ClassInfo10> {
   int teacherNum = 1;
   List<String> teacherName = ['김담임'];
   String className = '새싹어린이반';
-  List<int> classInfo =[0,10,6,4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
+  List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
   int childNum = 12;
   int column = 4;
   double row = 3;
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +60,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
         children: [
           Column(
             children: [
+              //좌측구역
               Container(
                 width: 1048.w,
                 height: 1048.w,
@@ -92,10 +91,11 @@ class _ClassInfo10State extends State<ClassInfo10> {
                   children: [
                     Row(
                       children: [
+                        //교실정보구역
                         Container(
                           width: 464.w,
                           height: 298.w,
-                          margin: EdgeInsets.only(left: 61.w, top: 13.w),
+                          margin: EdgeInsets.only(left: 170.w),
                           decoration: const BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.cover,
@@ -104,29 +104,41 @@ class _ClassInfo10State extends State<ClassInfo10> {
                           child: Center(
                             child: Column(
                               children: [
+                                //교실이름구역
                                 Container(
-                                  margin: EdgeInsets.only(left: 40.w, top: 140.w),
+                                  margin:
+                                      EdgeInsets.only(left: 60.w, top: 143.w),
                                   child: Text(className,
                                       style: TextStyle(
                                         fontFamily: 'GamjaFlower',
                                         color: Color(0xff39605f),
-                                        fontSize: 20.sp,
+                                        fontSize: 33.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
-                                      )
-                                  ),
+                                      )),
                                 ),
                                 Container(
-                                    width: 270.w,
-                                    height: 40.w,
-                                    margin: EdgeInsets.only(top: 20.w),
-                                    decoration: new BoxDecoration(
-                                        color: Color(0xffc7f7f5),
-                                        borderRadius: BorderRadius.circular(20)
-                                    ),
+                                  width: 351.w,
+                                  height: 53.w,
+                                  margin: EdgeInsets.only(top: 20.w),
+                                  decoration: new BoxDecoration(
+                                      color: Color(0xffc7f7f5),
+                                      borderRadius: BorderRadius.circular(20)),
                                   child: Center(
-                                    child: Text(classInfo[0].toString() + '세 | '+classInfo[1].toString()+'명 | 남:'
-                                    +classInfo[2].toString()+'명 여:'+classInfo[3].toString()+'명', style: TextStyle(fontSize: 18.sp),),
+                                    child: Text(
+                                      classInfo[0].toString() +
+                                          '세 | ' +
+                                          classInfo[1].toString() +
+                                          '명 | 남:' +
+                                          classInfo[2].toString() +
+                                          '명 여:' +
+                                          classInfo[3].toString() +
+                                          '명',
+                                      style: TextStyle(
+                                          fontSize: 20.sp,
+                                          color: Colors.black,
+                                          fontFamily: '.AppleSystemUIFont'),
+                                    ),
                                   ),
                                 )
                               ],
@@ -135,30 +147,30 @@ class _ClassInfo10State extends State<ClassInfo10> {
                         ),
 
                         ///담임
-                        for(int i=0;i<teacherNum;i++)...[
+                        for (int i = 0; i < teacherNum; i++) ...[
                           Column(
                             children: [
                               Container(
-                                width: 100.w,
-                                height: 66.w,
+                                width: 150.w,
+                                height: 100.w,
                                 //페이지에 따라 마진 조절 바람 건희, 성민
-                                margin: EdgeInsets.only(left: 60.w),
+
                                 child: const Image(
                                     image: AssetImage(
                                         'assets/childlifedata/02_2.jpg')),
                               ),
                               Container(
-                                  width: 160.w,
-                                  height: 40.w,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffc7f7f5),
-                                      borderRadius: BorderRadius.circular(20)
-                                  ),
+                                width: 190.w,
+                                height: 47.w,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffc7f7f5),
+                                    borderRadius: BorderRadius.circular(20)),
                                 child: Center(
-                                  child: Text(teacherName[i],
+                                  child: Text(
+                                    teacherName[i],
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 18.sp,
+                                      fontSize: 20.sp,
                                       fontFamily: '.AppleSystemUIFont',
                                     ),
                                     strutStyle: StrutStyle(
@@ -171,42 +183,49 @@ class _ClassInfo10State extends State<ClassInfo10> {
                             ],
                           )
                         ]
+
                         ///담임
                       ],
                     ),
+
                     ///아이들
-                    for(int i=0;i<4;i++) ...[// 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
+                    for (int i = 0; i < 3; i++) ...[
+                      // 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
                       Row(
                         children: [
-                          for(int j=0;j<column;j++)...[
-                            Column(//사진+이름배치를 위해 column으로 시작
+                          for (int j = 0; j < column; j++) ...[
+                            Column(
+                              //사진+이름배치를 위해 column으로 시작
                               children: [
-                                if(j==0)...[
+                                if (j == 0) ...[
                                   Container(
-                                    width: 110.w,
-                                    height: 110.w,
-                                    margin: EdgeInsets.only(left: 31.w, top: 30.w),
+                                    width: 120.w,
+                                    height: 120.w,
+                                    margin:
+                                        EdgeInsets.only(left: 149.w, top: 70.w),
                                     child: const Image(
                                         image: AssetImage(
-                                            'assets/childlifedata/02_3.jpg')),
+                                            'assets/childlifedata/baby_sample.png')),
                                   )
                                 ] else ...[
                                   Container(
-                                    width: 110.w,
-                                    height: 110.w,
-                                    margin: EdgeInsets.only(left: 36.w, top: 30.w),
+                                    width: 120.w,
+                                    height: 120.w,
+                                    margin:
+                                        EdgeInsets.only(left: 88.w, top: 70.w),
                                     child: const Image(
                                         image: AssetImage(
-                                            'assets/childlifedata/02_3.jpg')),
+                                            'assets/childlifedata/baby_sample.png')),
                                   )
                                 ],
                                 Container(
-                                    width: 116.w,
-                                    height: 35.w,
-                                    decoration: new BoxDecoration(
-                                        color: Color(0xffc7f7f5),
-                                        borderRadius: BorderRadius.circular(17.5)
-                                    ),
+                                  width: 116.w,
+                                  height: 35.w,
+                                  margin: EdgeInsets.only(left: 88.w),
+                                  decoration: new BoxDecoration(
+                                      color: Color(0xffc7f7f5),
+                                      borderRadius:
+                                          BorderRadius.circular(17.5)),
                                   child: Center(
                                     child: Text("김아가",
                                         style: TextStyle(
@@ -215,10 +234,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w400,
                                           fontStyle: FontStyle.normal,
-
-
-                                        )
-                                    ),
+                                        )),
                                   ),
                                 )
                               ],
@@ -227,12 +243,11 @@ class _ClassInfo10State extends State<ClassInfo10> {
                         ],
                       )
                     ]
+
                     ///아이들
                   ],
                 ),
               ),
-
-
             ],
           ),
 
@@ -251,7 +266,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     border:
-                    Border.all(color: const Color(0x6663e6d7), width: 1),
+                        Border.all(color: const Color(0x6663e6d7), width: 1),
                     boxShadow: const [
                       BoxShadow(
                           color: Color(0x29b1b1b1),
@@ -269,7 +284,8 @@ class _ClassInfo10State extends State<ClassInfo10> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 40.w, top: 40.w),
+                      margin: EdgeInsets.only(left: 40.w, top: 38.w),
+                      //overflowed 0.666pixels 걸려서 등원유아수부터 전체적으로 top을 올려버림 추후 그래픽에 따라서 수정요망
                       child: Text(
                         '등원유아 수',
                         style: TextStyle(
@@ -298,7 +314,8 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 Container(
                                   width: 182.w,
                                   height: 105.w,
-                                  margin: EdgeInsets.only(left: 26.w, top: 16.w),
+                                  margin:
+                                      EdgeInsets.only(left: 26.w, top: 16.w),
                                   child: const Image(
                                       image: AssetImage(
                                           'assets/childlifedata/02_3.jpg')),
@@ -310,21 +327,23 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                       fontSize: 30.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
-
-
-                                    )
-                                )
+                                    ))
                               ],
                             ),
                             Container(
-                              width: 203.w,//336
+                              width: 203.w,
+                              //336
                               height: 20.w,
                               margin: EdgeInsets.only(left: 40.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.w),
                                 color: const Color(0xFF80DB68),
                               ),
-                              child: Text("67%", style: TextStyle(fontSize: 16.sp),textAlign: TextAlign.right,),
+                              child: Text(
+                                "67%",
+                                style: TextStyle(fontSize: 16.sp),
+                                textAlign: TextAlign.right,
+                              ),
                             )
                             // Stack(
                             //   children: <Widget>[
@@ -344,6 +363,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                             //남아
                           ],
                         ),
+
                         ///남아
                         SizedBox(
                           width: 210.w,
@@ -370,21 +390,21 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                       fontSize: 30.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
-
-
-                                    )
-                                )
+                                    ))
                               ],
                             ),
                             Container(
-                              width: 256.w,//336
+                              width: 256.w, //336
                               height: 20.w,
                               //margin: EdgeInsets.only(left: 40.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18.w),
-                                  color: const Color(0xCEFF74B8)
+                                  color: const Color(0xCEFF74B8)),
+                              child: Text(
+                                "78%",
+                                style: TextStyle(fontSize: 16.sp),
+                                textAlign: TextAlign.right,
                               ),
-                              child: Text("78%", style: TextStyle(fontSize: 16.sp),textAlign: TextAlign.right,),
                             )
                             // Stack(
                             //   children: <Widget>[
@@ -428,7 +448,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   crossAxisAlignment:
-                                  CrossAxisAlignment.stretch,
+                                      CrossAxisAlignment.stretch,
                                   children: <Widget>[
                                     Text(
                                       '학급별',
@@ -495,9 +515,9 @@ class _ClassInfo10State extends State<ClassInfo10> {
                 margin: EdgeInsets.only(left: 15.w, top: 12.w),
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/childlifedata/sunny_01.jpg'),
-                    )),
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/childlifedata/snow_01.jpg'),
+                )),
                 child: Row(
                   children: [
                     SizedBox(
@@ -568,7 +588,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text("22도",
+                          child: Text("-273도",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -576,7 +596,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 40.w),
+                          margin: EdgeInsets.only(top: 51.w),
                         ),
                         Container(
                           child: Text("52%",
@@ -587,7 +607,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 40.w),
+                          margin: EdgeInsets.only(top: 40.w, left: 20.w),
                         ),
                         Container(
                           child: Text("15",
@@ -598,7 +618,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 43.w),
+                          margin: EdgeInsets.only(top: 40.w, left: 30.w),
                         ),
                         Container(
                           child: Text("328ppm",
@@ -609,7 +629,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 45.w),
+                          margin: EdgeInsets.only(top: 40.w),
                         ),
                         Container(
                           child: Text("102ppb",
@@ -620,7 +640,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 43.w),
+                          margin: EdgeInsets.only(top: 40.w),
                         ),
                       ],
                     )
@@ -640,13 +660,13 @@ class _ClassInfo10State extends State<ClassInfo10> {
 
   ///유아그래프
   BarChartGroupData makeGroupData(
-      int x,
-      double y, {
-        bool isTouched = false,
-        Color barColor = Colors.white,
-        double width = 22,
-        List<int> showTooltips = const [],
-      }) {
+    int x,
+    double y, {
+    bool isTouched = false,
+    Color barColor = Colors.white,
+    double width = 22,
+    List<int> showTooltips = const [],
+  }) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -666,8 +686,8 @@ class _ClassInfo10State extends State<ClassInfo10> {
   }
 
   List<BarChartGroupData> showingChildGroups() => List.generate(1, (i) {
-    return makeGroupData(0, 50);
-  });
+        return makeGroupData(0, 50);
+      });
 
   BarChartData ChildBarData(double value) {
     return BarChartData(
@@ -728,14 +748,14 @@ class _ClassInfo10State extends State<ClassInfo10> {
   ///반그래프
   //그래프 데이터중 막대 그래프 하나입니다
   BarChartGroupData makeClassGroupData(
-      int x,
-      double y, {
-        // 이부분은 생성자로 사실 안 쓰입니다
-        bool isTouched = false,
-        Color barColor = const Color(0xffc7f7f5),
-        double width = 22,
-        List<int> showTooltips = const [],
-      }) {
+    int x,
+    double y, {
+    // 이부분은 생성자로 사실 안 쓰입니다
+    bool isTouched = false,
+    Color barColor = const Color(0xffc7f7f5),
+    double width = 22,
+    List<int> showTooltips = const [],
+  }) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -743,7 +763,8 @@ class _ClassInfo10State extends State<ClassInfo10> {
           toY: y, //y값
           color: barColor, //색상
           width: 20.w, //두께
-          borderSide: const BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
+          borderSide:
+              const BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
         ),
       ],
       showingTooltipIndicators: [0],
@@ -844,5 +865,5 @@ class _ClassInfo10State extends State<ClassInfo10> {
     );
   }
 
-///반데이터
+  ///반데이터
 }
