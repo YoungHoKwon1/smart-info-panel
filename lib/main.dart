@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 //import 'package:easy_localization/easy_localization.dart';
 
 import 'classinfo10.dart';
+import 'classinfo30.dart';
 import 'fl_graph_test.dart';
 
 //maindart change test
@@ -55,7 +56,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           color: Colors.white,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10()));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30()));
               // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
             },
             child: Text('제발 멀쩡하게 해주세요'),

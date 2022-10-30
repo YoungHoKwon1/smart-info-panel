@@ -185,7 +185,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                     margin: EdgeInsets.only(left: 31.w, top: 30.w),
                                     child: const Image(
                                         image: AssetImage(
-                                            'assets/childlifedata/02_3.jpg')),
+                                            'assets/childlifedata/baby_sample.png')),
                                   )
                                 ] else ...[
                                   Container(
@@ -195,7 +195,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                     child: const Center(
                                       child: Image(
                                           image: AssetImage(
-                                              'assets/childlifedata/02_3.jpg')),
+                                              'assets/childlifedata/baby_sample.png')),
                                     ),
                                   )
                                 ],
@@ -206,6 +206,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                         color: const Color(0xffc7f7f5),
                                         borderRadius: BorderRadius.circular(17.5)
                                     ),
+                                  margin: EdgeInsets.only(left: 28.w),
                                   child: Center(
                                     child: Text("김아가",
                                         style: TextStyle(
@@ -214,8 +215,6 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w400,
                                           fontStyle: FontStyle.normal,
-
-
                                         )
                                     ),
                                   ),
