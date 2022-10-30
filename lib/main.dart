@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_info_panel/classinfo30.dart';
+import 'package:smart_info_panel/classinfo20.dart';
 //import 'package:easy_localization/easy_localization.dart';
 //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -62,7 +63,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             onPressed: () {
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));
               // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20()));
             },
             child: Text('시작'),
           )),
