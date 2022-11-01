@@ -60,7 +60,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20()));
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10()));
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30()));
+             // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30()));
               // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
             },
             child: Text('제발 멀쩡하게 해주세요'),

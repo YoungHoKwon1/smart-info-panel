@@ -125,7 +125,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                   ),
                                   child: Center(
                                     child: Text(classInfo[0].toString() + '세 | '+classInfo[1].toString()+'명 | 남:'
-                                        +classInfo[2].toString()+'명 여:'+classInfo[3].toString()+'명', style: TextStyle(fontSize: 18.sp),),
+                                        +classInfo[2].toString()+'명 여:'+classInfo[3].toString()+'명', style: TextStyle(fontSize: 18.sp,color:Colors.black),),
                                   ),
                                 )
                               ],
