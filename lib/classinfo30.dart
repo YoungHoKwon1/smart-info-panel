@@ -97,7 +97,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: AssetImage(
-                                      'assets/classinfodeco/03.jpg'))),
+                                      'assets/class_info_deco/age1class.png'))),
                           child: Center(
                             child: Column(
                               children: [
@@ -494,7 +494,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/childlifedata/sunny_01.jpg'),
+                      image: AssetImage('assets/airple_weather/sunny.jpg'),
                     )),
                 child: Row(
                   children: [

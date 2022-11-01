@@ -87,7 +87,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/childlifedata/0_02.jpg')
+                              image: AssetImage('assets/child_face_deco/age0.jpg')
                             )
                           ),
                         ),
@@ -899,7 +899,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage('assets/childlifedata/sunny_01.jpg'),
+                    image: AssetImage('assets/childlifedata/sunny.jpg'),
                   )
                 ),
                 // child: Container(

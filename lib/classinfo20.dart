@@ -99,7 +99,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: AssetImage(
-                                      'assets/classinfodeco/2000.png'))),
+                                      'assets/class_info_deco/age0class.png'))),
                           child: Center(
                             child: Column(
                               children: [
@@ -187,12 +187,12 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                     margin: EdgeInsets.only(left: 132.w, top: 30.w),
                                     child: const Image(
                                         image: AssetImage(
-                                            'assets/childlifedata/02_3.jpg')),
+                                            'assets/childlifedata/baby_sample.png')),
                                   ),
                                   Container(
                                     width: 116.w,
                                     height: 35.w,
-                                    margin: EdgeInsets.only(left: 90.w),
+                                    margin: EdgeInsets.only(left: 132.w),
                                     decoration: new BoxDecoration(
                                         color: Color(0xffc7f7f5),
                                         borderRadius: BorderRadius.circular(17.5)
@@ -219,11 +219,12 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                     margin: EdgeInsets.only(left: 50.w, top: 30.w),
                                     child: const Image(
                                         image: AssetImage(
-                                            'assets/childlifedata/02_3.jpg')),
+                                            'assets/childlifedata/baby_sample.png')),
                                   ),
                                   Container(
                                     width: 116.w,
                                     height: 35.w,
+                                    margin: EdgeInsets.only(left: 50.w),
                                     decoration: new BoxDecoration(
                                         color: Color(0xffc7f7f5),
                                         borderRadius: BorderRadius.circular(17.5)
@@ -520,7 +521,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/airple_weather/01.jpg'),
+                      image: AssetImage('assets/airple_weather/snow_rain.jpg'),
                     )),
                 child: Row(
                   children: [
