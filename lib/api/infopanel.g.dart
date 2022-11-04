@@ -8,7 +8,7 @@ part of 'infopanel.dart';
 
 class _RestInfoPanel implements RestInfoPanel {
   _RestInfoPanel(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.0.7:8080';
+    baseUrl ??= 'http://tmap.aijoa.us:48764';
   }
 
   final Dio _dio;

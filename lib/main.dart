@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_info_panel/childlifedata.dart';
 import 'package:smart_info_panel/classinfo30.dart';
 import 'package:smart_info_panel/classinfo20.dart';
+import 'package:smart_info_panel/kinder_info_2.dart';
 //import 'package:easy_localization/easy_localization.dart';
 
 import 'classinfo10.dart';
@@ -44,6 +46,10 @@ class SmartInfoPanelMain extends StatefulWidget {
 }
 
 class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
+
+  //static const tokenStorage = FlutterSecureStorage();
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,12 +64,14 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           color: Colors.white,
           child: ElevatedButton(
             onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10())); //건희
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
               // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
             },
-            child: Text('제발 멀쩡하게 해주세요'),
+            child: Text('데모 시작'),
           )),
     );
   }
