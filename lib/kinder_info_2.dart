@@ -16,16 +16,40 @@ class KinderInfo2 extends StatefulWidget {
 class _KinderInfo2State extends State<KinderInfo2> {
   double degrees = 90;
   double radians = 0;
-  int childNum = 28;
-  int column = 7;
-  double row = 4;
+
+  List<double> classGraphValue = [20, 20, 20, 20, 20];
+  List<String> classGraphName = [
+    '만 3세반',
+    '만 4세반',
+    '만 5세반',
+    '혼합 3-4세반',
+    '혼합 4-5세반'
+  ];
+  late int classNumTotal;
+  List<int> classNumEach = [1, 3, 3, 1, 1];
+  List<Color> classGraphColor = [
+    Color(0xffc7f7f5),
+    Color(0xffc6d0f4),
+    Color(0xfff4dac6),
+    Color(0xfff4f4c6),
+    Color(0xfff4c6ed)
+  ];
+
+  int childNumTotal = 40;
+  List<int> childNumEachClass = [
+    12,
+    27,
+    25,
+  ];
+  List<String> ageStr = ['만 3세', '만 4세', '만 5세'];
 
   @override
-  void initState() async {
-    radians = degrees * math.pi / 180;
-    row = childNum / column;
-
+  void initState() {
     super.initState();
+    radians = degrees * math.pi / 180;
+    setState(() {
+      classNumTotal = classGraphName.length;
+    });
   }
 
   List<String> firstRowStr = [
@@ -54,6 +78,18 @@ class _KinderInfo2State extends State<KinderInfo2> {
   ];
   List<int> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
 
+  List<String> thirdRowStr = [
+    "수",
+    "면적",
+    "수",
+    "면적",
+    "수",
+    "면적",
+    "수",
+    "면적",
+  ];
+  List<int> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
+
   double boyrate = 67;
   double girlrate = 78;
 
@@ -77,6 +113,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
   String className = '새싹어린이반';
   List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
 
+  int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +154,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                 child: Column(
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ///<어린이집 사진
                         Container(
@@ -131,27 +169,285 @@ class _KinderInfo2State extends State<KinderInfo2> {
                         ///어린이집 사진>
 
                         ///<학급수, 유아수 그래프
-                        Column(
-                          children: [
-                            Row(
+                        Column(children: [
+                          Row(children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                ///<원형그래프:학급수
-                                ///원형그래프:학급수>
-                                ///<원형그래프:유아수
-                                ///원형그래프:유아수>
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(left: 76.w, top: 122.w),
+                                  child: Text("학급수",
+                                      style: TextStyle(
+                                          color: Color(0xff393838),
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "NotoSansKR",
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: 16.0.sp),
+                                      textAlign: TextAlign.left),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ///<원형그래프:학급수
+                                    Container(
+                                      width: 279.w,
+                                      height: 143.w,
+                                      margin: EdgeInsets.only(
+                                          left: 40.w, top: 15.w),
+                                      child: Row(
+                                        children: [
+                                          AspectRatio(
+                                            aspectRatio: 1,
+                                            child: PieChart(
+                                              PieChartData(
+                                                borderData: FlBorderData(
+                                                  show: false,
+                                                ),
+                                                sectionsSpace: 0,
+                                                centerSpaceRadius: 30.w,
+                                                sections: showingSections(
+                                                    classNumTotal),
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Column(
+                                                // mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  for (int i = 0;
+                                                      i < classNumTotal;
+                                                      i++) ...[
+                                                    Row(
+                                                      children: [
+                                                        Indicator(
+                                                            color:
+                                                                classGraphColor[
+                                                                    i],
+                                                            text:
+                                                                classGraphName[
+                                                                    i],
+                                                            isSquare: true),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 7.w,
+                                                    ),
+                                                  ]
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: 10.w,
+                                              ),
+                                              Column(
+                                                // mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  for (int i = 0;
+                                                      i < classNumTotal;
+                                                      i++) ...[
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          classNumEach[i]
+                                                                  .toString() +
+                                                              '개',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'NotoSansKR',
+                                                            color: Color(
+                                                                0xff393838),
+                                                            fontSize: 14.sp,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 7.w,
+                                                    ),
+                                                  ]
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    ///원형그래프:학급수>
+                                  ],
+                                ),
                               ],
                             ),
 
-                            ///<막대그래프:교사/학급당 유아수
-                            ///막대그래프:교사/학급당 유아수>
-                          ],
-                        ),
+                            ///<원형그래프: 유아수
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(left: 40.w, top: 122.w),
+                                  child: Text("유아수",
+                                      style: TextStyle(
+                                          color: Color(0xff393838),
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "NotoSansKR",
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: 16.0.sp),
+                                      textAlign: TextAlign.left),
+                                ),
+                                Container(
+                                  width: 271.w,
+                                  height: 143.w,
+                                  margin: EdgeInsets.only(top: 15.w),
+                                  child: Row(
+                                    children: [
+                                      AspectRatio(
+                                        aspectRatio: 1,
+                                        child: PieChart(
+                                          PieChartData(
+                                            borderData: FlBorderData(
+                                              show: false,
+                                            ),
+                                            sectionsSpace: 0,
+                                            centerSpaceRadius: 30.w,
+                                            sections:
+                                                showingSections(ageStr.length),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          for (int i = 0;
+                                              i < ageStr.length;
+                                              i++) ...[
+                                            Indicator(
+                                                color: classGraphColor[i],
+                                                text: ageStr[i],
+                                                isSquare: true),
+                                            SizedBox(
+                                              height: 7.w,
+                                            ),
+                                          ]
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
+                                      Column(
+                                        // mainAxisAlignment: MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          for (int i = 0;
+                                              i < ageStr.length;
+                                              i++) ...[
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  childNumEachClass[i]
+                                                          .toString() +
+                                                      '명',
+                                                  style: TextStyle(
+                                                    fontFamily: 'NotoSansKR',
+                                                    color: Color(0xff393838),
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontStyle: FontStyle.normal,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 7.w,
+                                            ),
+                                          ]
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+
+                                  ///원형그래프:유아수>
+                                ),
+                              ],
+                            )
+                          ]),
+                          Container(
+                              width: 544.w,
+                              height: 150.w,
+                              margin: EdgeInsets.only(left: 43.w, top: 30.w),
+                              decoration: BoxDecoration(
+                                color: Color(0xffffffff),
+                                borderRadius: BorderRadius.circular(20.w),
+                                boxShadow: [BoxShadow(
+                                    color: Color(0x29b1b1b1),
+                                    offset: Offset(-2,2),
+                                    blurRadius: 6.w,
+                                    spreadRadius: 0
+
+                                ),BoxShadow(
+                                    color: Color(0x29dbdbdb),
+                                    offset: Offset(-2,-4),
+                                    blurRadius: 6.w,
+                                    spreadRadius: 0
+
+                                ) ],
+                                border: Border.all(
+                                    color: const Color(0x6663e6d7),
+                                    width: 1
+                                ),
+                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(left: 93.w, top: 23.w),
+                                  child: Text("교사당/학급당 유아수",
+                                      style: TextStyle(
+                                        fontFamily: 'NotoSansKR',
+                                        color: Color(0xff393838),
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w700,
+                                        fontStyle: FontStyle.normal,
+                                      )
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(left: 93.w, top: 20.w),
+                                      child: Text("교사당 유아수",
+                                          style: TextStyle(
+                                            fontFamily: 'NotoSansKR',
+                                            color: Color(0xff393838),
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            )
+                          ),
+                        ])
 
                         ///학급수, 유아수 그래프>
                       ],
                     ),
-
-                    /// <각종 차트들
 
                     ///<첫번째줄
                     Column(
@@ -163,16 +459,16 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               height: 41.w,
                               margin: EdgeInsets.only(left: 39.w, top: 50.w),
                               decoration: BoxDecoration(
-                                  color: Color(0xffeffffe),
+                                  color: const Color(0xffeffffe),
                                   border: Border.all(
-                                      color: Color(0x4d63e6d7), width: 1),
+                                      color: const Color(0x4d63e6d7), width: 1),
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20.w))),
                               child: Center(
                                 child: Text("교실",
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
-                                      color: Color(0xff393838),
+                                      color: const Color(0xff393838),
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
@@ -187,13 +483,13 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(20.w)),
                                   border: Border.all(
-                                      color: Color(0x4d63e6d7), width: 1),
+                                      color: const Color(0x4d63e6d7), width: 1),
                                   color: const Color(0xffeffffe)),
                               child: Center(
                                 child: Text("체육장/놀이터",
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
-                                      color: Color(0xff393838),
+                                      color: const Color(0xff393838),
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
@@ -212,9 +508,9 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                 width: 100.w,
                                 height: 41.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffc7f7f5),
+                                  color: const Color(0xffc7f7f5),
                                   border: Border.all(
-                                    color: Color(0x4d63e6d7),
+                                    color: const Color(0x4d63e6d7),
                                     //width: 0.5.w,
                                   ),
                                 ),
@@ -222,7 +518,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                   child: Text(firstRowStr[i],
                                       style: TextStyle(
                                         fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
+                                        color: const Color(0xff393838),
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
@@ -235,9 +531,9 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                 width: 98.w,
                                 height: 41.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffc7f7f5),
+                                  color: const Color(0xffc7f7f5),
                                   border: Border.all(
-                                    color: Color(0x4d63e6d7),
+                                    color: const Color(0x4d63e6d7),
                                     //width: 0.5.w,
                                   ),
                                 ),
@@ -245,7 +541,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                   child: Text(firstRowStr[i],
                                       style: TextStyle(
                                         fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
+                                        color: const Color(0xff393838),
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
@@ -261,50 +557,102 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               width: 39.w,
                             ),
                             for (int i = 0; i < 2; i++) ...[
-                              Container(
-                                width: 100.w,
-                                height: 41.w,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  border: Border.all(
-                                    color: Color(0x4d63e6d7),
-                                    //width: 0.5.w,
+                              if (i == 0) ...[
+                                Container(
+                                  width: 100.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(20.w)),
+                                  ),
+                                  child: Center(
+                                    child: Text(firstRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
                                   ),
                                 ),
-                                child: Center(
-                                  child: Text(firstRowInt[i].toString(),
-                                      style: TextStyle(
-                                        fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                      )),
+                              ] else ...[
+                                Container(
+                                  width: 100.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(firstRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
                                 ),
-                              ),
+                              ]
                             ],
                             for (int i = 2; i < 10; i++) ...[
-                              Container(
-                                width: 98.w,
-                                height: 41.w,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  border: Border.all(
-                                    color: Color(0x4d63e6d7),
-                                    //width: 0.5.w,
+                              if (i == 9) ...[
+                                Container(
+                                  width: 98.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.w)),
                                   ),
-                                ),
-                                child: Center(
-                                  child: Text(firstRowInt[i].toString(),
-                                      style: TextStyle(
-                                        fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                      )),
-                                ),
-                              )
+                                  child: Center(
+                                    child: Text(firstRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                )
+                              ] else ...[
+                                Container(
+                                  width: 98.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(firstRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                )
+                              ]
                             ]
                           ],
                         )
@@ -323,16 +671,16 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               height: 41.w,
                               margin: EdgeInsets.only(left: 39.w, top: 30.w),
                               decoration: BoxDecoration(
-                                  color: Color(0xffeffffe),
+                                  color: const Color(0xffeffffe),
                                   border: Border.all(
-                                      color: Color(0x4d63e6d7), width: 1),
+                                      color: const Color(0x4d63e6d7), width: 1),
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20.w))),
                               child: Center(
                                 child: Text("보건실",
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
-                                      color: Color(0xff393838),
+                                      color: const Color(0xff393838),
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
@@ -345,13 +693,13 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               margin: EdgeInsets.only(top: 30.w),
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Color(0x4d63e6d7), width: 1),
+                                      color: const Color(0x4d63e6d7), width: 1),
                                   color: const Color(0xffeffffe)),
                               child: Center(
                                 child: Text("위생시설(목욕실/화장실)",
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
-                                      color: Color(0xff393838),
+                                      color: const Color(0xff393838),
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
@@ -359,18 +707,18 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               ),
                             ),
                             Container(
-                              width: 261.w,
+                              width: 263.w,
                               height: 41.w,
                               margin: EdgeInsets.only(top: 30.w),
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Color(0x4d63e6d7), width: 1),
+                                      color: const Color(0x4d63e6d7), width: 1),
                                   color: const Color(0xffeffffe)),
                               child: Center(
                                 child: Text("조리실",
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
-                                      color: Color(0xff393838),
+                                      color: const Color(0xff393838),
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
@@ -378,20 +726,20 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               ),
                             ),
                             Container(
-                              width: 261.w,
+                              width: 262.w,
                               height: 41.w,
                               margin: EdgeInsets.only(top: 30.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(20.w)),
                                   border: Border.all(
-                                      color: Color(0x4d63e6d7), width: 1),
+                                      color: const Color(0x4d63e6d7), width: 1),
                                   color: const Color(0xffeffffe)),
                               child: Center(
                                 child: Text("급식실",
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
-                                      color: Color(0xff393838),
+                                      color: const Color(0xff393838),
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
@@ -410,17 +758,17 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                 width: 100.w,
                                 height: 41.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffc7f7f5),
+                                  color: const Color(0xffc7f7f5),
                                   border: Border.all(
-                                    color: Color(0x4d63e6d7),
+                                    color: const Color(0x4d63e6d7),
                                     //width: 0.5.w,
                                   ),
                                 ),
                                 child: Center(
-                                  child: Text(firstRowStr[i],
+                                  child: Text(secondRowStr[i],
                                       style: TextStyle(
                                         fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
+                                        color: const Color(0xff393838),
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
@@ -428,22 +776,22 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                 ),
                               ),
                             ],
-                            for (int i = 2; i < 10; i++) ...[
+                            for (int i = 2; i < 8; i++) ...[
                               Container(
-                                width: 98.w,
+                                width: 131.w,
                                 height: 41.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffc7f7f5),
+                                  color: const Color(0xffc7f7f5),
                                   border: Border.all(
-                                    color: Color(0x4d63e6d7),
+                                    color: const Color(0x4d63e6d7),
                                     //width: 0.5.w,
                                   ),
                                 ),
                                 child: Center(
-                                  child: Text(firstRowStr[i],
+                                  child: Text(secondRowStr[i],
                                       style: TextStyle(
                                         fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
+                                        color: const Color(0xff393838),
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
@@ -459,21 +807,218 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               width: 39.w,
                             ),
                             for (int i = 0; i < 2; i++) ...[
+                              if (i == 0) ...[
+                                Container(
+                                  width: 100.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(20.w)),
+                                  ),
+                                  child: Center(
+                                    child: Text(secondRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                ),
+                              ] else ...[
+                                Container(
+                                  width: 100.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(secondRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                ),
+                              ]
+                            ],
+                            for (int i = 2; i < 8; i++) ...[
+                              if (i == 7) ...[
+                                Container(
+                                  width: 131.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.w)),
+                                  ),
+                                  child: Center(
+                                    child: Text(secondRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                )
+                              ] else ...[
+                                Container(
+                                  width: 131.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(secondRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                )
+                              ]
+                            ]
+                          ],
+                        )
+                      ],
+                    ),
+
+                    /// 두번째줄>
+                    ///
+                    /// <세번째줄
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 200.w,
+                              height: 41.w,
+                              margin: EdgeInsets.only(left: 39.w, top: 30.w),
+                              decoration: BoxDecoration(
+                                  color: const Color(0xffeffffe),
+                                  border: Border.all(
+                                      color: const Color(0x4d63e6d7), width: 1),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20.w))),
+                              child: Center(
+                                child: Text("원장실",
+                                    style: TextStyle(
+                                      fontFamily: 'NotoSansKR',
+                                      color: const Color(0xff393838),
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              width: 261.w,
+                              height: 41.w,
+                              margin: EdgeInsets.only(top: 30.w),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0x4d63e6d7), width: 1),
+                                  color: const Color(0xffeffffe)),
+                              child: Center(
+                                child: Text("교사실",
+                                    style: TextStyle(
+                                      fontFamily: 'NotoSansKR',
+                                      color: const Color(0xff393838),
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              width: 263.w,
+                              height: 41.w,
+                              margin: EdgeInsets.only(top: 30.w),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0x4d63e6d7), width: 1),
+                                  color: const Color(0xffeffffe)),
+                              child: Center(
+                                child: Text("상담실",
+                                    style: TextStyle(
+                                      fontFamily: 'NotoSansKR',
+                                      color: const Color(0xff393838),
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              width: 262.w,
+                              height: 41.w,
+                              margin: EdgeInsets.only(top: 30.w),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(20.w)),
+                                  border: Border.all(
+                                      color: const Color(0x4d63e6d7), width: 1),
+                                  color: const Color(0xffeffffe)),
+                              child: Center(
+                                child: Text("기타공간",
+                                    style: TextStyle(
+                                      fontFamily: 'NotoSansKR',
+                                      color: const Color(0xff393838),
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 39.w,
+                            ),
+                            for (int i = 0; i < 2; i++) ...[
                               Container(
                                 width: 100.w,
                                 height: 41.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
+                                  color: const Color(0xffc7f7f5),
                                   border: Border.all(
-                                    color: Color(0x4d63e6d7),
+                                    color: const Color(0x4d63e6d7),
                                     //width: 0.5.w,
                                   ),
                                 ),
                                 child: Center(
-                                  child: Text(firstRowInt[i].toString(),
+                                  child: Text(thirdRowStr[i],
                                       style: TextStyle(
                                         fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
+                                        color: const Color(0xff393838),
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
@@ -481,22 +1026,22 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                 ),
                               ),
                             ],
-                            for (int i = 2; i < 10; i++) ...[
+                            for (int i = 2; i < 8; i++) ...[
                               Container(
-                                width: 98.w,
+                                width: 131.w,
                                 height: 41.w,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
+                                  color: const Color(0xffc7f7f5),
                                   border: Border.all(
-                                    color: Color(0x4d63e6d7),
+                                    color: const Color(0x4d63e6d7),
                                     //width: 0.5.w,
                                   ),
                                 ),
                                 child: Center(
-                                  child: Text(firstRowInt[i].toString(),
+                                  child: Text(thirdRowStr[i],
                                       style: TextStyle(
                                         fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
+                                        color: const Color(0xff393838),
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w400,
                                         fontStyle: FontStyle.normal,
@@ -505,10 +1050,117 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               )
                             ]
                           ],
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 39.w,
+                            ),
+                            for (int i = 0; i < 2; i++) ...[
+                              if (i == 0) ...[
+                                Container(
+                                  width: 100.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(20.w)),
+                                  ),
+                                  child: Center(
+                                    child: Text(thirdRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                ),
+                              ] else ...[
+                                Container(
+                                  width: 100.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(thirdRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                ),
+                              ]
+                            ],
+                            for (int i = 2; i < 8; i++) ...[
+                              if (i == 7) ...[
+                                Container(
+                                  width: 131.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.w)),
+                                  ),
+                                  child: Center(
+                                    child: Text(thirdRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                )
+                              ] else ...[
+                                Container(
+                                  width: 131.w,
+                                  height: 41.w,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffffffff),
+                                    border: Border.all(
+                                      color: const Color(0x4d63e6d7),
+                                      //width: 0.5.w,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(thirdRowInt[i].toString(),
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                  ),
+                                )
+                              ]
+                            ]
+                          ],
                         )
                       ],
                     ),
-                    /// 두번째줄>
+
+                    /// 세번째줄>
+                    ///
                     /// 각종 차트들>
                   ],
                 ),
@@ -1130,4 +1782,122 @@ class _KinderInfo2State extends State<KinderInfo2> {
   }
 
   ///반데이터
+  ///
+  /// 원형그래프
+  List<PieChartSectionData> showingSections(int num) {
+    return List.generate(num, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 25.0.sp : 16.0.sp;
+      final radius = isTouched ? 60.0.w : 20.0.w; //그래프 테두리 두깨
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: Color(0xffc7f7f5),
+            value: classGraphValue[0],
+            radius: radius,
+            titleStyle: TextStyle(
+              //강제로 fontSize: 0 지정해줘야 숫자 안뜸
+              fontSize: 0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xffffffff),
+            ),
+          );
+        case 1:
+          return PieChartSectionData(
+            color: Color(0xffc6d0f4),
+            value: classGraphValue[1],
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: 0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xffffffff),
+            ),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: Color(0xfff4dac5),
+            value: classGraphValue[2],
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: 0,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+            ),
+          );
+        case 3:
+          return PieChartSectionData(
+            color: Color(0xfff4f4c6),
+            value: classGraphValue[3],
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: 0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xffffffff),
+            ),
+          );
+        case 4:
+          return PieChartSectionData(
+            color: Color(0xfff4c6ed),
+            value: classGraphValue[4],
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: 0,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+            ),
+          );
+        default:
+          throw Error();
+      }
+    });
+  }
+
+  ///
+}
+
+class Indicator extends StatelessWidget {
+  final Color color;
+  final Color textColor;
+  final String text;
+  final bool isSquare;
+  final double size;
+
+  const Indicator({
+    Key? key,
+    required this.color,
+    this.textColor = Colors.white,
+    required this.text,
+    required this.isSquare,
+    this.size = 10,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: size.w,
+          height: size.w,
+          decoration: BoxDecoration(
+            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+            color: color,
+          ),
+        ),
+        SizedBox(
+          width: 10.w,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            color: const Color(0xff393838),
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+            fontFamily: "NotoSansKR",
+          ),
+        )
+      ],
+    );
+  }
 }

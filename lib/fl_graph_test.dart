@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 
+
 class GraphTest extends StatefulWidget {
   const GraphTest({Key? key}) : super(key: key);
 
@@ -25,10 +26,11 @@ class _GraphTestState extends State<GraphTest> {
             decoration: BoxDecoration(
               border: Border.all(width: 1.w, color: Color(0xff222222)),
               borderRadius: BorderRadius.all(Radius.circular(20.w)),
-              color: Colors.white,
+              color: Colors.blue,
             ),
-            child: GraphSet(), //등원 유아 수 그래프입니다.(이건 잘 못하겠어요)
+            // child: GraphSet(), //등원 유아 수 그래프입니다.(이건 잘 못하겠어요)
             // child: BarChartSample1(), //그래프 그리는 함수임미다.(주석에 설명 달아놨습니다. 이것먼저 보시는 것 추천드려요)
+            child: PieChartSample2()
           ),
         ),
       ),
@@ -444,6 +446,209 @@ class BarChartSample2State extends State<BarChartSample2> {
       axisSide: meta.axisSide,
       space: 16,
       child: text,
+    );
+  }
+}
+
+class PieChartSample2 extends StatefulWidget {
+  const PieChartSample2({key});
+
+  @override
+  State<StatefulWidget> createState() => PieChart2State();
+}
+
+class PieChart2State extends State {
+  int touchedIndex = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.3,
+      child: Card(
+        color: Colors.amberAccent,
+        child: Row(
+          children: <Widget>[
+            // const SizedBox(
+            //   height: 18,
+            // ),
+            AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                  //그래프 위에 마우스대면
+                  //그래프 줌인되는 기능
+                  // pieTouchData: PieTouchData(
+                  //   touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                  //     setState(() {
+                  //       if (!event.isInterestedForInteractions ||
+                  //           pieTouchResponse == null ||
+                  //           pieTouchResponse.touchedSection == null) {
+                  //         touchedIndex = -1;
+                  //         return;
+                  //       }
+                  //       touchedIndex = pieTouchResponse
+                  //           .touchedSection!.touchedSectionIndex;
+                  //     });
+                  //   },
+                  // ),
+                  // borderData: FlBorderData(
+                  //   show: false,
+                  // ),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 40, //그래프 전체적크기(내부 빈공간크기)
+                  sections: showingSections(), //그래프 출력
+                ),
+              ),
+            ),
+            Column(//그래프 해당 색이 의미하는것 출력용
+              // mainAxisAlignment: MainAxisAlignment.end, //밑으로 정렬
+              crossAxisAlignment: CrossAxisAlignment.start, //한줄로 세우기
+              children: const <Widget>[
+                //for문으로 돌려야할듯
+                Indicator(
+                  color: Color(0xff0293ee),
+                  text: 'First',
+                  isSquare: true, //true: 사각형, false: 원형
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xfff8b250),
+                  text: 'Second',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xff845bef),
+                  text: 'Third',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xff13d38e),
+                  text: 'Fourth',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 18,
+                ),
+              ],
+            ),
+            // const SizedBox(
+            //   width: 28,
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return List.generate(4, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 25.0 : 16.0;
+      final radius = isTouched ? 60.0 : 20.0;
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: const Color(0xff0293ee),
+            value: 40,
+            // title: '40%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xff0293ee), //글씨 같은색으로 하면 없앨 수 있음
+            ),
+          );
+        case 1:
+          return PieChartSectionData(
+            color: const Color(0xfff8b250),
+            value: 30,
+            // title: '30%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+            ),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: const Color(0xff845bef),
+            value: 15,
+            //title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+            ),
+          );
+        case 3:
+          return PieChartSectionData(
+            color: const Color(0xff13d38e),
+            value: 15,
+            // title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+            ),
+          );
+        default:
+          throw Error();
+      }
+    });
+  }
+}
+// Indicator
+class Indicator extends StatelessWidget {
+  final Color color;
+  final Color textColor;
+  final String text;
+  final bool isSquare;
+  final double size;
+
+  const Indicator({
+    Key? key,
+    required this.color,
+    this.textColor = Colors.white,
+    required this.text,
+    required this.isSquare,
+    this.size = 10,//색깔별 구분 네모 크기
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+            color: color,
+          ),
+        ),
+        const SizedBox(
+          width: 3,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
+        )
+      ],
     );
   }
 }
