@@ -24,13 +24,13 @@ class _GraphTestState extends State<GraphTest> {
             width: 800.w,
             height: 500.w,
             decoration: BoxDecoration(
-              border: Border.all(width: 1.w, color: Color(0xff222222)),
+              border: Border.all(width: 1.w, color: const Color(0xff222222)),
               borderRadius: BorderRadius.all(Radius.circular(20.w)),
               color: Colors.blue,
             ),
             // child: GraphSet(), //등원 유아 수 그래프입니다.(이건 잘 못하겠어요)
             // child: BarChartSample1(), //그래프 그리는 함수임미다.(주석에 설명 달아놨습니다. 이것먼저 보시는 것 추천드려요)
-            child: PieChartSample2()
+            child: const PieChartSample2()
           ),
         ),
       ),
@@ -51,7 +51,6 @@ class _GraphSetState extends State<GraphSet> {
 
   @override
   void initState() {
-    radians = degrees * math.pi / 180;
     // TODO: implement initState
     super.initState();
   }
@@ -160,7 +159,7 @@ class BarChartSample1State extends State<BarChartSample1> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18.w),
-          color: Color(0xffffffff),
+          color: const Color(0xffffffff),
         ),
         //그래프와 그래프 이름
         child: Stack(
@@ -173,7 +172,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                   Text(
                     '학급별',
                     style: TextStyle(
-                      color: Color(0xff39605f),
+                      color: const Color(0xff39605f),
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -206,7 +205,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                     Container(
                       height: 10.w,
                       width: 700.w,
-                      color: Color(0xff63e6d7),
+                      color: const Color(0xff63e6d7),
                     ),
                     // Container(
                     //   height: 0.w,
@@ -238,7 +237,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           toY: y, //y값
           color: barColor, //색상
           width: 20.w, //두께
-          borderSide: BorderSide(color: Colors.white, width: 0), //몰라요
+          borderSide: const BorderSide(color: Colors.white, width: 0), //몰라요
         ),
       ],
       showingTooltipIndicators: [0],
@@ -323,7 +322,7 @@ class BarChartSample1State extends State<BarChartSample1> {
   //value값은 인원수 만큼 알아서 넣어지더라고요.
   Widget getTitles(double value, TitleMeta meta) {
     TextStyle style = TextStyle(
-      color: Color(0xff393838),
+      color: const Color(0xff393838),
       fontWeight: FontWeight.bold,
       fontSize: 14.w,
     );
