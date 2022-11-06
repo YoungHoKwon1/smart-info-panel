@@ -62,14 +62,6 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   }
 
   void _callAirpleApi() async {
-    // final url = Uri.parse('http://mqtt.brilcom.com:8080/mqtt/GetAirQuality?serialNum=AC67B25CC502&startTime=20221101170000&endTime=20221101172959&type=Co2,Humid,Pm10,Pm25,Temperature,Tvoc');
-    //
-    // final response = await http.post(url, body: {
-    //   'key': 'value',
-    // });
-    //
-    // print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
       final client = RestAirpleDemo(dio);
       final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
@@ -78,7 +70,6 @@ class _ChildLifeDataState extends State<ChildLifeData> {
         "startTime": startTime,
         "endTime": endTime,
         "type": "Co2,Humid,Pm10,Pm25,Temperature,Tvoc"
-
       });
       final responseEnv = await client.postEnvInfo(formData).catchError((Object obj) {
         final res = (obj as DioError).response;
@@ -118,38 +109,9 @@ class _ChildLifeDataState extends State<ChildLifeData> {
       });
   }
 
-  // void _callAijoaEnv() async {
-  //   final client = RestInfoPanel(dio);
-  //   final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-  //
-  //   final responseEnv = await client.getEnvInfo(token).catchError((Object obj) {
-  //     final res = (obj as DioError).response;
-  //     switch (res!.statusCode) {
-  //       case 401:
-  //         debugPrint('401 : 유효하지 않은 토큰21입니다.');
-  //         break;
-  //       case 408:
-  //         debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
-  //         break;
-  //       case 419:
-  //         debugPrint('419 : 토큰이 만료되었습니다.');
-  //         break;
-  //       case 500:
-  //         debugPrint('500 : 서버 에러.');
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //     return obj.response;
-  //   });
-  //
-  //   for(Map value in responseEnv) {
-  //        print(value);
-  //      }
-  // }
 
-  double boyrate = 67;
-  double girlrate = 78;
+  double boyrate = 0.5;
+  double girlrate = 0.7;
 
   int childHeadCount = 8;
   List<String> childClassName = [
@@ -164,7 +126,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
     '카타파',
     '하가나',
   ]; //반 이름입니다.
-  List<double> chartData = [67, 89, 30, 100, 92, 94, 89, 90];
+  List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
 
   @override
   Widget build(BuildContext context) {
@@ -874,65 +836,51 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                       children: [
                         ///남아
                         Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 남아-02
-                            Row(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 182.w,
-                                  height: 105.w,
-                                  margin: EdgeInsets.only(left: 26.w, top: 16.w),
-                                  child: const Image(
-                                      image: AssetImage(
-                                          'assets/childlifedata/02_3.jpg')),
-                                ),
-                                Text("남아",
-                                    style: TextStyle(
-                                      fontFamily: 'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 30.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-
-
-                                    )
-                                )
-                              ],
-                            ),
                             Container(
-                              width: 203.w,//336
+                                width: 182.w,
+                                height: 110.w,
+                                margin: EdgeInsets.only(left: 26.w, top: 16.w),
+                                decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(
+                                          'assets/childlifedata/02_3.jpg'),
+                                    )),
+                                child: Container(
+                                  margin:
+                                  EdgeInsets.only(left: 130.w, top: 60.w),
+                                  child: Text("남아",
+                                      style: TextStyle(
+                                        fontFamily: 'GamjaFlower',
+                                        color: const Color(0xff39605f),
+                                        fontSize: 30.sp,
+                                        fontWeight: FontWeight.w400,
+                                        fontStyle: FontStyle.normal,
+                                      )),
+                                )),
+                            Container(
+                              width: 336 * boyrate.w,
                               height: 20.w,
                               margin: EdgeInsets.only(left: 40.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.w),
-                                color: const Color(0xFF80DB68),
+                                color: const Color(0x4d63e66d),
                               ),
-                              child: Text("67%", style: TextStyle(fontSize: 16.sp),textAlign: TextAlign.right,),
+                              child: Text(
+                                (100 * boyrate).toString() + "%",
+                                style: TextStyle(fontSize: 16.sp),
+                                textAlign: TextAlign.right,
+                              ),
                             )
-                            // Stack(
-                            //   children: <Widget>[
-                            //     Transform.rotate(
-                            //       angle: radians,
-                            //       child: Container(
-                            //         width: 0.w,
-                            //         height: 50.w,
-                            //         //margin: EdgeInsets.only(bottom: 40.w),
-                            //         child: BarChart(
-                            //           ChildBarData(boyrate),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // )
                             //남아
                           ],
                         ),
+
                         ///남아
-                        SizedBox(
-                          width: 210.w,
-                        ),
+                        SizedBox(width: 50.w),
 
                         ///여아
                         Column(
@@ -941,50 +889,43 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                             Row(
                               children: [
                                 Container(
-                                  width: 182.w,
-                                  height: 105.w,
-                                  margin: EdgeInsets.only(top: 16.w),
-                                  child: const Image(
-                                      image: AssetImage(
-                                          'assets/childlifedata/02_4.jpg')),
-                                ),
-                                Text("여아",
-                                    style: TextStyle(
-                                      fontFamily: 'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 30.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-
-
-                                    )
-                                )
+                                    width: 182.w,
+                                    height: 105.w,
+                                    margin: EdgeInsets.only(top: 16.w),
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage(
+                                              'assets/childlifedata/02_4.jpg'),
+                                        )),
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 130.w, top: 60.w),
+                                      child: Text("여아",
+                                          style: TextStyle(
+                                            fontFamily: 'GamjaFlower',
+                                            color: const Color(0xff39605f),
+                                            fontSize: 30.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    )),
                               ],
                             ),
                             Container(
-                              width: 256.w,//336
+                              width: 336 * girlrate.w,
+                              //336
                               height: 20.w,
-                              //margin: EdgeInsets.only(left: 40.w),
+                              margin: EdgeInsets.only(left: 20.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18.w),
-                                  color: const Color(0xCEFF74B8)
+                                  color: const Color(0xffffc9c9)),
+                              child: Text(
+                                (100 * girlrate).toString() + "%",
+                                style: TextStyle(fontSize: 16.sp),
+                                textAlign: TextAlign.right,
                               ),
-                              child: Text("78%", style: TextStyle(fontSize: 16.sp),textAlign: TextAlign.right,),
                             )
-                            // Stack(
-                            //   children: <Widget>[
-                            //     Transform.rotate(
-                            //       angle: radians,
-                            //       child: SizedBox(
-                            //         width: 0.w,
-                            //         height: 50.w,
-                            //         child: BarChart(
-                            //           ChildBarData(girlrate),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // )
                           ],
                         )
 
@@ -993,78 +934,87 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                     ),
 
                     ///학급별그래프
-                    SizedBox(
-                      width: 748.w,
-                      height: 309.w,
-                      child: AspectRatio(
-                        //그래프의 배경크기(?)인데 정확한 크기 측정 방법을 모르겠어요
-                        //그냥 상위 위젯이 500 크기라 거기에 맞춰서 소숫점 바꿔봤습니다.
-                        aspectRatio: 1.603.w,
-                        //배경 설정
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18.w),
-                            color: const Color(0xffffffff),
-                          ),
-                          //그래프와 그래프 이름
-                          child: Stack(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    Text(
-                                      '학급별',
-                                      style: TextStyle(
-                                        color: const Color(0xff39605f),
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 38.w,
-                                    ),
-                                    //반이름 나오던게 갑자기 안나와서 일단 보고있습니다.
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8.w),
-                                        child: BarChart(
-                                          ClassBarData(),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.w,
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              //이걸 제거해보시면 바로 뭔지 아실텐데
-                              //디자인 상 넣은거라 위치와 크기 디자인 넣을 때 잡아주시면 될듯 합니다.
-                              Positioned(
-                                  top: 222.w,
-                                  left: 36.w,
-                                  child: Column(
+                    Container(
+                        width: 70.w,
+                        height: 29.w,
+                        margin: EdgeInsets.only(left: 40.w,top: 40.w),
+                        child: // 학급별
+                        Text(
+                            "학급별",
+                            style:  TextStyle(
+                                color:   Color(0xff39605f),
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "NotoSansKR",
+                                fontStyle:  FontStyle.normal,
+                                fontSize: 20.sp
+                            ),
+                            textAlign: TextAlign.left
+                        )
+                    ),
+                    Container(
+                        width: 748.w,
+                        height: 160.w,
+                        margin: EdgeInsets.only(left: 40.w, top: 20.w),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children:[
+                              for(int i=0;i<chartRate.length;i++)...[
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
-                                        height: 10.w,
-                                        width: 745.w,
-                                        color: const Color(0xff63e6d7),
+                                        margin: EdgeInsets.only(bottom: 2.w),
+                                        child: Text((100*chartRate[i]).toString()+"%",
+                                            style: TextStyle(
+                                              fontFamily: 'NotoSansKR',
+                                              color: Color(0xff393838),
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w400,
+                                              fontStyle: FontStyle.normal,
+                                            )
+                                        ),
                                       ),
-                                      // Container(
-                                      //   height: 0.w,
-                                      //   width: 700.w,
-                                      //   color: Color(0xff63e6d7),
-                                      // )
-                                    ],
-                                  ))
-                            ],
-                          ),
-                        ),
+                                      Container(
+                                          width: 20.w,
+                                          height: 135 * chartRate[i].w,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffc7f7f5),
+                                            borderRadius: BorderRadius.only(topRight: Radius.circular(10.w), topLeft:Radius.circular(10.w)),
+                                          )
+                                      ),
+                                    ]
+                                ),
+                              ]
+                            ]
+                        )
+                    ),
+                    Container(
+                        width: 748.w,
+                        height: 3.w,
+                        margin: EdgeInsets.only(left: 40.w),
+                        decoration: BoxDecoration(
+                            color: Color(0xff63e6d7)
+                        )
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 40.w),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            for(int i=0;i<chartRate.length;i++)...[
+                              Text(childClassName[i],
+                                  style: TextStyle(
+                                    fontFamily: '.AppleSystemUIFont',
+                                    color: Color(0xff000000),
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    fontStyle: FontStyle.normal,
+                                  )
+                              )
+                            ]
+                          ]
                       ),
                     )
                   ],
@@ -1223,211 +1173,4 @@ class _ChildLifeDataState extends State<ChildLifeData> {
     );
   }
 
-  ///유아그래프
-  BarChartGroupData makeGroupData(
-    int x,
-    double y, {
-    bool isTouched = false,
-    Color barColor = Colors.white,
-    double width = 22,
-    List<int> showTooltips = const [],
-  }) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          color: Color(0x4d63e66d),
-          width: 22.w,
-          borderSide: BorderSide(color: Color(0x4d63e66d), width: 1.w),
-          backDrawRodData: BackgroundBarChartRodData(
-            show: true,
-            toY: 100,
-            color: Colors.white, //배경
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<BarChartGroupData> showingChildGroups() => List.generate(1, (i) {
-        return makeGroupData(0, 50);
-      });
-
-  BarChartData ChildBarData(double value) {
-    return BarChartData(
-      alignment: BarChartAlignment.start,
-      maxY: 100,
-      barTouchData: BarTouchData(
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey,
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {},
-        ),
-      ),
-      titlesData: FlTitlesData(
-        show: false,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-            getTitlesWidget: getTitles,
-            reservedSize: 0.w,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: showingChildGroups(),
-      gridData: FlGridData(show: false),
-    );
-  }
-
-  Widget getTitles(double value, TitleMeta meta) {
-    TextStyle style = TextStyle(
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-      fontSize: 14.w,
-    );
-    Widget text = Text('', style: style);
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16,
-      child: text,
-    );
-  }
-
-  ///유아그래프
-  ///
-  ///
-  ///반그래프
-  //그래프 데이터중 막대 그래프 하나입니다
-  BarChartGroupData makeClassGroupData(
-    int x,
-    double y, {
-    // 이부분은 생성자로 사실 안 쓰입니다
-    bool isTouched = false,
-    Color barColor = const Color(0xffc7f7f5),
-    double width = 22,
-    List<int> showTooltips = const [],
-  }) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y, //y값
-          color: barColor, //색상
-          width: 20.w, //두께
-          borderSide: BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
-        ),
-      ],
-      showingTooltipIndicators: [0],
-    );
-  }
-
-  //그래프 데이터를 만들때 사용하는 막대그래프에 데이터 넣어주는 역할입니다
-  //사람 수만큼 만든다음에
-  //데이터를 넣어주면 완성됩니다.
-  List<BarChartGroupData> showingClassGroups() =>
-      List.generate(childHeadCount, (i) {
-        return makeClassGroupData(i, chartData[i]);
-      });
-
-  //데이터를 표시하는 역할입니다
-  //원래는 터치를 해야만 나오는 데이터지만 위에 막대그래프 생성할때 showingTooltipIndicators: [0],로 설정을 해서 항시 표시합니다.
-  BarChartData ClassBarData() {
-    return BarChartData(
-      //최대치 설정
-      maxY: 100,
-      barTouchData: BarTouchData(
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
-          tooltipMargin: 0.w,
-          tooltipPadding: EdgeInsets.only(bottom: 0.w),
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-            //여기에서 몇퍼센트인지 표기를 합니다.
-            String attendance = chartData[group.x].toString() + '%';
-            //꼭 이 형식을 지켜야 하나 봅니다?
-            //아래 children은 없어도 되지만 글씨가 떠서 넣었습니다.
-            return BarTooltipItem(
-              '',
-              TextStyle(
-                color: Color(0xff393838),
-                fontWeight: FontWeight.bold,
-                fontSize: 18.sp,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: attendance,
-                  style: TextStyle(
-                    color: Color(0xff393838),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-      //그래프의 위아래, 양옆에 데이터를 표기하고 싶으면 각각의 showtitles를 true로 바꿈됩니다.
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: getTitles,
-            reservedSize: 38.w,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: showingClassGroups(),
-      gridData: FlGridData(show: false),
-    );
-  }
-
-  //아래 반 이름을 나오게 하는 설정입니다.
-  //value값은 인원수 만큼 알아서 넣어지더라고요.
-  Widget getClassTitles(double value, TitleMeta meta) {
-    TextStyle style = TextStyle(
-      color: Color(0xff000000),
-      fontFamily: '.AppleSystemUIFont',
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      fontSize: 14.w,
-    );
-    Widget text;
-    text = Text(childClassName[value.toInt()], style: style);
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16.w,
-      child: text,
-    );
-  }
-
-  ///반데이터
 }

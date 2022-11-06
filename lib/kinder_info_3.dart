@@ -706,10 +706,10 @@ class _KinderInfo3State extends State<KinderInfo3> {
                     Container(
                       width: 748.w,
                       height: 160.w,
-                      margin: EdgeInsets.only(left: 40.w,top: 20.w),
+                      margin: EdgeInsets.only(left: 40.w, top: 20.w),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          // crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                         children:[
                           for(int i=0;i<chartRate.length;i++)...[
                             Column(
@@ -748,81 +748,27 @@ class _KinderInfo3State extends State<KinderInfo3> {
                         decoration: BoxDecoration(
                             color: Color(0xff63e6d7)
                         )
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 40.w),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          for(int i=0;i<chartRate.length;i++)...[
+                            Text(childClassName[i],
+                                style: TextStyle(
+                                  fontFamily: '.AppleSystemUIFont',
+                                  color: Color(0xff000000),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            )
+                          ]
+                        ]
+                      ),
                     )
-                    // SizedBox(
-                    //   width: 748.w,
-                    //   height: 299.w,
-                    //   child: AspectRatio(
-                    //     //그래프의 배경크기(?)인데 정확한 크기 측정 방법을 모르겠어요
-                    //     //그냥 상위 위젯이 500 크기라 거기에 맞춰서 소숫점 바꿔봤습니다.
-                    //     aspectRatio: 1.603.w,
-                    //     //배경 설정
-                    //     child: Container(
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(18.w),
-                    //         color: const Color(0xffffffff),
-                    //       ),
-                    //       //그래프와 그래프 이름
-                    //       child: Stack(
-                    //         children: <Widget>[
-                    //           Padding(
-                    //             padding: const EdgeInsets.all(16),
-                    //             child: Column(
-                    //               crossAxisAlignment:
-                    //               CrossAxisAlignment.stretch,
-                    //               children: <Widget>[
-                    //                 Text(
-                    //                   '학급별',
-                    //                   style: TextStyle(
-                    //                     color: const Color(0xff39605f),
-                    //                     fontSize: 20.sp,
-                    //                     fontWeight: FontWeight.bold,
-                    //                   ),
-                    //                 ),
-                    //                 SizedBox(
-                    //                   height: 38.w,
-                    //                 ),
-                    //                 //반이름 나오던게 갑자기 안나와서 일단 보고있습니다.
-                    //                 Expanded(
-                    //                   child: Padding(
-                    //                     padding: EdgeInsets.symmetric(
-                    //                         horizontal: 8.w),
-                    //                     child: BarChart(
-                    //                       ClassBarData(),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //                 SizedBox(
-                    //                   height: 10.w,
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           ),
-                    //
-                    //           //이걸 제거해보시면 바로 뭔지 아실텐데
-                    //           //디자인 상 넣은거라 위치와 크기 디자인 넣을 때 잡아주시면 될듯 합니다.
-                    //           Positioned(
-                    //               top: 222.w,
-                    //               left: 36.w,
-                    //               child: Column(
-                    //                 children: [
-                    //                   Container(
-                    //                     height: 10.w,
-                    //                     width: 745.w,
-                    //                     color: const Color(0xff63e6d7),
-                    //                   ),
-                    //                   // Container(
-                    //                   //   height: 0.w,
-                    //                   //   width: 700.w,
-                    //                   //   color: Color(0xff63e6d7),
-                    //                   // )
-                    //                 ],
-                    //               ))
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // )
                     ///학급별그래프
                   ],
                 ),
@@ -982,215 +928,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
     );
   }
 
-  ///유아그래프
-  //그냥 Container로 대체하면서 안쓰게됨
-  BarChartGroupData makeGroupData(
-    int x,
-    double y, {
-    bool isTouched = false,
-    Color barColor = Colors.white,
-    double width = 22,
-    List<int> showTooltips = const [],
-  }) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          color: const Color(0x4d63e66d),
-          width: 22.w,
-          borderSide: BorderSide(color: const Color(0x4d63e66d), width: 1.w),
-          backDrawRodData: BackgroundBarChartRodData(
-            show: true,
-            toY: 100,
-            color: Colors.white, //배경
-          ),
-        ),
-      ],
-    );
-  }
 
-  List<BarChartGroupData> showingChildGroups() => List.generate(1, (i) {
-        return makeGroupData(0, 50);
-      });
-
-  BarChartData ChildBarData(double value) {
-    return BarChartData(
-      alignment: BarChartAlignment.end,
-      maxY: 100,
-      barTouchData: BarTouchData(
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey,
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {},
-        ),
-      ),
-      titlesData: FlTitlesData(
-        show: false,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-            getTitlesWidget: getTitles,
-            reservedSize: 0.w,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: showingChildGroups(),
-      gridData: FlGridData(show: false),
-    );
-  }
-
-  Widget getTitles(double value, TitleMeta meta) {
-    TextStyle style = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: 14.sp,
-    );
-    Widget text = Text('', style: style);
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16,
-      child: text,
-    );
-  }
-
-  ///유아그래프
-  ///
-  ///
-  ///반그래프
-  //그래프 데이터중 막대 그래프 하나입니다
-  BarChartGroupData makeClassGroupData(
-    int x,
-    double y, {
-    // 이부분은 생성자로 사실 안 쓰입니다
-    bool isTouched = false,
-    Color barColor = const Color(0xffc7f7f5),
-    double width = 22,
-    List<int> showTooltips = const [],
-  }) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y, //y값
-          color: barColor, //색상
-          width: 20.w, //두께
-          borderSide:
-              const BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
-        ),
-      ],
-      showingTooltipIndicators: [0],
-    );
-  }
-
-  //그래프 데이터를 만들때 사용하는 막대그래프에 데이터 넣어주는 역할입니다
-  //사람 수만큼 만든다음에
-  //데이터를 넣어주면 완성됩니다.
-  List<BarChartGroupData> showingClassGroups() =>
-      List.generate(childHeadCount, (i) {
-        return makeClassGroupData(i, chartRate[i]);
-      });
-
-  //데이터를 표시하는 역할입니다
-  //원래는 터치를 해야만 나오는 데이터지만 위에 막대그래프 생성할때 showingTooltipIndicators: [0],로 설정을 해서 항시 표시합니다.
-  BarChartData ClassBarData() {
-    return BarChartData(
-      //최대치 설정
-      maxY: 100,
-      barTouchData: BarTouchData(
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
-          tooltipMargin: 0.w,
-          tooltipPadding: EdgeInsets.only(bottom: 0.w),
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-            //여기에서 몇퍼센트인지 표기를 합니다.
-            String attendance = chartRate[group.x].toString() + '%';
-            //꼭 이 형식을 지켜야 하나 봅니다?
-            //아래 children은 없어도 되지만 글씨가 떠서 넣었습니다.
-            return BarTooltipItem(
-              '',
-              TextStyle(
-                color: const Color(0xff393838),
-                fontWeight: FontWeight.bold,
-                fontSize: 18.sp,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: attendance,
-                  style: TextStyle(
-                    color: const Color(0xff393838),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-      //그래프의 위아래, 양옆에 데이터를 표기하고 싶으면 각각의 showtitles를 true로 바꿈됩니다.
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: getClassTitles,
-            reservedSize: 38.w,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: showingClassGroups(),
-      gridData: FlGridData(show: false),
-    );
-  }
-
-  //아래 반 이름을 나오게 하는 설정입니다.
-  //value값은 인원수 만큼 알아서 넣어지더라고요.
-  Widget getClassTitles(double value, TitleMeta meta) {
-    TextStyle style = TextStyle(
-      color: const Color(0xff000000),
-      fontFamily: '.AppleSystemUIFont',
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      fontSize: 14.sp,
-    );
-    Widget text;
-    text = Text(childClassName[value.toInt()], style: style);
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16.w,
-      child: text,
-    );
-  }
-
-  ///반데이터
   ///
   /// 원형그래프
   List<PieChartSectionData> showingSections(int num) {
