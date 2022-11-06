@@ -4,6 +4,7 @@ import 'package:smart_info_panel/childlifedata.dart';
 import 'package:smart_info_panel/classinfo30.dart';
 import 'package:smart_info_panel/classinfo20.dart';
 import 'package:smart_info_panel/kinder_info_2.dart';
+import 'package:smart_info_panel/kinder_info_3.dart';
 //import 'package:easy_localization/easy_localization.dart';
 
 import 'classinfo10.dart';
@@ -68,7 +69,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10())); //건희
               //Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
-              Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
+              Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo3())); //영호
               // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
             },
             child: Text('데모 시작'),
