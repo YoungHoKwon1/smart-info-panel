@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:http/http.dart' as http;
 
 import 'dart:math' as math;
 
@@ -28,11 +27,11 @@ class _KinderInfo2State extends State<KinderInfo2> {
   late int classNumTotal;
   List<int> classNumEach = [1, 3, 3, 1, 1];
   List<Color> classGraphColor = [
-    Color(0xffc7f7f5),
-    Color(0xffc6d0f4),
-    Color(0xfff4dac6),
-    Color(0xfff4f4c6),
-    Color(0xfff4c6ed)
+    const Color(0xffc7f7f5),
+    const Color(0xffc6d0f4),
+    const Color(0xfff4dac6),
+    const Color(0xfff4f4c6),
+    const Color(0xfff4c6ed)
   ];
 
   int childNumTotal = 40;
@@ -90,8 +89,8 @@ class _KinderInfo2State extends State<KinderInfo2> {
   ];
   List<int> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
 
-  double boyrate = 67;
-  double girlrate = 78;
+  double boyrate = 0.5;
+  double girlrate = 0.78;
 
   int childHeadCount = 8;
   List<String> childClassName = [
@@ -180,7 +179,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                       EdgeInsets.only(left: 76.w, top: 122.w),
                                   child: Text("학급수",
                                       style: TextStyle(
-                                          color: Color(0xff393838),
+                                          color: const Color(0xff393838),
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "NotoSansKR",
                                           fontStyle: FontStyle.normal,
@@ -260,7 +259,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 'NotoSansKR',
-                                                            color: Color(
+                                                            color: const Color(
                                                                 0xff393838),
                                                             fontSize: 14.sp,
                                                             fontWeight:
@@ -299,7 +298,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                       EdgeInsets.only(left: 40.w, top: 122.w),
                                   child: Text("유아수",
                                       style: TextStyle(
-                                          color: Color(0xff393838),
+                                          color: const Color(0xff393838),
                                           fontWeight: FontWeight.w700,
                                           fontFamily: "NotoSansKR",
                                           fontStyle: FontStyle.normal,
@@ -362,7 +361,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                                       '명',
                                                   style: TextStyle(
                                                     fontFamily: 'NotoSansKR',
-                                                    color: Color(0xff393838),
+                                                    color: const Color(0xff393838),
                                                     fontSize: 14.sp,
                                                     fontWeight: FontWeight.w400,
                                                     fontStyle: FontStyle.normal,
@@ -389,60 +388,124 @@ class _KinderInfo2State extends State<KinderInfo2> {
                               height: 150.w,
                               margin: EdgeInsets.only(left: 43.w, top: 30.w),
                               decoration: BoxDecoration(
-                                color: Color(0xffffffff),
+                                color: const Color(0xffffffff),
                                 borderRadius: BorderRadius.circular(20.w),
-                                boxShadow: [BoxShadow(
-                                    color: Color(0x29b1b1b1),
-                                    offset: Offset(-2,2),
-                                    blurRadius: 6.w,
-                                    spreadRadius: 0
-
-                                ),BoxShadow(
-                                    color: Color(0x29dbdbdb),
-                                    offset: Offset(-2,-4),
-                                    blurRadius: 6.w,
-                                    spreadRadius: 0
-
-                                ) ],
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: const Color(0x29b1b1b1),
+                                      offset: const Offset(-2, 2),
+                                      blurRadius: 6.w,
+                                      spreadRadius: 0),
+                                  BoxShadow(
+                                      color: const Color(0x29dbdbdb),
+                                      offset: const Offset(-2, -4),
+                                      blurRadius: 6.w,
+                                      spreadRadius: 0)
+                                ],
                                 border: Border.all(
-                                    color: const Color(0x6663e6d7),
-                                    width: 1
-                                ),
+                                    color: const Color(0x6663e6d7), width: 1),
                               ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 93.w, top: 23.w),
-                                  child: Text("교사당/학급당 유아수",
-                                      style: TextStyle(
-                                        fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                      )
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(left: 93.w, top: 23.w),
+                                    child: Text("교사당/학급당 유아수",
+                                        style: TextStyle(
+                                          fontFamily: 'NotoSansKR',
+                                          color: const Color(0xff393838),
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w700,
+                                          fontStyle: FontStyle.normal,
+                                        )),
                                   ),
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(left: 93.w, top: 20.w),
-                                      child: Text("교사당 유아수",
-                                          style: TextStyle(
-                                            fontFamily: 'NotoSansKR',
-                                            color: Color(0xff393838),
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                            fontStyle: FontStyle.normal,
-                                          )
+                                  Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                left: 93.w, top: 20.w),
+                                            child: Text("교사당 유아수",
+                                                style: TextStyle(
+                                                  fontFamily: 'NotoSansKR',
+                                                  color: const Color(0xff393838),
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                )),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                left: 93.w, top: 20.w),
+                                            child: Text("학급당 유아수",
+                                                style: TextStyle(
+                                                  fontFamily: 'NotoSansKR',
+                                                  color: const Color(0xff393838),
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                )),
+                                          ),
+                                        ],
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )
-                          ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 200*boyrate.w,
+                                            height: 20.w,
+                                            margin: EdgeInsets.only(left: 20.w, top: 20.w),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(topRight: Radius.circular(10.w), bottomRight:Radius.circular(10.w)),
+                                              color: const Color(0xffc7f7f5),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 200*girlrate.w,
+                                            height: 20.w,
+                                            margin: EdgeInsets.only(left: 20.w, top: 20.w),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(topRight: Radius.circular(10.w), bottomRight:Radius.circular(10.w)),
+                                              color: const Color(0xff39605f),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(left: 40.w, top: 20.w),
+                                            child: Text("81명",
+                                                style: TextStyle(
+                                                  fontFamily: 'NotoSansKR',
+                                                  color: Color(0xff393838),
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                )
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 40.w, top: 20.w),
+                                            child: Text("8명",
+                                                style: TextStyle(
+                                                  fontFamily: 'NotoSansKR',
+                                                  color: Color(0xff393838),
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                )
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              )),
                         ])
 
                         ///학급수, 유아수 그래프>
@@ -1221,70 +1284,49 @@ class _KinderInfo2State extends State<KinderInfo2> {
                       children: [
                         ///남아
                         Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 남아-02
-                            Row(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 182.w,
-                                  height: 105.w,
-                                  margin:
-                                      EdgeInsets.only(left: 26.w, top: 16.w),
-                                  child: const Image(
-                                      image: AssetImage(
-                                          'assets/childlifedata/02_3.jpg')),
-                                ),
-                                Text("남아",
+                            Container(
+                              width: 182.w,
+                              height: 110.w,
+                              margin: EdgeInsets.only(left: 26.w,top: 16.w),
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('assets/childlifedata/02_3.jpg'),
+                                  )),
+                              child: Container(
+                                margin: EdgeInsets.only(left: 130.w, top: 60.w),
+                                child: Text("남아",
                                     style: TextStyle(
                                       fontFamily: 'GamjaFlower',
                                       color: const Color(0xff39605f),
                                       fontSize: 30.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
-                                    ))
-                              ],
+                                    )),
+                              )
                             ),
                             Container(
-                              width: 203.w,
-                              //336
+                              width: 336*boyrate.w,
                               height: 20.w,
                               margin: EdgeInsets.only(left: 40.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.w),
-                                color: const Color(0xFF80DB68),
+                                color: const Color(0x4d63e66d),
                               ),
                               child: Text(
-                                "67%",
+                                (100*boyrate).toString()+"%",
                                 style: TextStyle(fontSize: 16.sp),
                                 textAlign: TextAlign.right,
                               ),
                             )
-                            // Stack(
-                            //   children: <Widget>[
-                            //     Transform.rotate(
-                            //       angle: radians,
-                            //       child: Container(
-                            //         width: 0.w,
-                            //         height: 50.w,
-                            //         //margin: EdgeInsets.only(bottom: 40.w),
-                            //         child: BarChart(
-                            //           ChildBarData(boyrate),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // )
                             //남아
                           ],
                         ),
-
                         ///남아
-                        SizedBox(
-                          width: 210.w,
-                        ),
-
+                        SizedBox(width:50.w),
                         ///여아
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1295,47 +1337,38 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                   width: 182.w,
                                   height: 105.w,
                                   margin: EdgeInsets.only(top: 16.w),
-                                  child: const Image(
-                                      image: AssetImage(
-                                          'assets/childlifedata/02_4.jpg')),
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage('assets/childlifedata/02_4.jpg'),
+                                        )),
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 130.w, top: 60.w),
+                                      child: Text("여아",
+                                          style: TextStyle(
+                                            fontFamily: 'GamjaFlower',
+                                            color: const Color(0xff39605f),
+                                            fontSize: 30.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    )
                                 ),
-                                Text("여아",
-                                    style: TextStyle(
-                                      fontFamily: 'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 30.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
                               ],
                             ),
                             Container(
-                              width: 256.w, //336
+                              width: 336*girlrate.w, //336
                               height: 20.w,
-                              //margin: EdgeInsets.only(left: 40.w),
+                              margin: EdgeInsets.only(left: 20.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18.w),
-                                  color: const Color(0xCEFF74B8)),
+                                  color: const Color(0xffffc9c9)),
                               child: Text(
-                                "78%",
+                                (100*girlrate).toString()+"%",
                                 style: TextStyle(fontSize: 16.sp),
                                 textAlign: TextAlign.right,
                               ),
                             )
-                            // Stack(
-                            //   children: <Widget>[
-                            //     Transform.rotate(
-                            //       angle: radians,
-                            //       child: SizedBox(
-                            //         width: 0.w,
-                            //         height: 50.w,
-                            //         child: BarChart(
-                            //           ChildBarData(girlrate),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // )
                           ],
                         )
 
@@ -1346,7 +1379,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                     ///학급별그래프
                     SizedBox(
                       width: 748.w,
-                      height: 309.w,
+                      height: 299.w,
                       child: AspectRatio(
                         //그래프의 배경크기(?)인데 정확한 크기 측정 방법을 모르겠어요
                         //그냥 상위 위젯이 500 크기라 거기에 맞춰서 소숫점 바꿔봤습니다.
@@ -1607,7 +1640,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
 
   BarChartData ChildBarData(double value) {
     return BarChartData(
-      alignment: BarChartAlignment.start,
+      alignment: BarChartAlignment.end,
       maxY: 100,
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -1792,10 +1825,10 @@ class _KinderInfo2State extends State<KinderInfo2> {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: Color(0xffc7f7f5),
+            color: const Color(0xffc7f7f5),
             value: classGraphValue[0],
             radius: radius,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
               //강제로 fontSize: 0 지정해줘야 숫자 안뜸
               fontSize: 0,
               fontWeight: FontWeight.bold,
@@ -1804,10 +1837,10 @@ class _KinderInfo2State extends State<KinderInfo2> {
           );
         case 1:
           return PieChartSectionData(
-            color: Color(0xffc6d0f4),
+            color: const Color(0xffc6d0f4),
             value: classGraphValue[1],
             radius: radius,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
               fontSize: 0,
               fontWeight: FontWeight.bold,
               color: Color(0xffffffff),
@@ -1815,22 +1848,22 @@ class _KinderInfo2State extends State<KinderInfo2> {
           );
         case 2:
           return PieChartSectionData(
-            color: Color(0xfff4dac5),
+            color: const Color(0xfff4dac5),
             value: classGraphValue[2],
             radius: radius,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
               fontSize: 0,
               fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
+              color: Color(0xffffffff),
             ),
           );
         case 3:
           return PieChartSectionData(
-            color: Color(0xfff4f4c6),
+            color: const Color(0xfff4f4c6),
             value: classGraphValue[3],
             title: '15%',
             radius: radius,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
               fontSize: 0,
               fontWeight: FontWeight.bold,
               color: Color(0xffffffff),
@@ -1838,13 +1871,13 @@ class _KinderInfo2State extends State<KinderInfo2> {
           );
         case 4:
           return PieChartSectionData(
-            color: Color(0xfff4c6ed),
+            color: const Color(0xfff4c6ed),
             value: classGraphValue[4],
             radius: radius,
-            titleStyle: TextStyle(
+            titleStyle: const TextStyle(
               fontSize: 0,
               fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
+              color: Color(0xffffffff),
             ),
           );
         default:
