@@ -49,7 +49,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   String Tvoc='';
 
   String startTime = DateFormat('yyyyMMddHHmm00').format(DateTime.now().subtract(Duration(days: 7,hours: -9,minutes: 10, seconds: 0)));
-  String endTime = DateFormat('yyyyMMddHHmm59').format(DateTime.now().subtract(Duration(days: 7,hours: -9,minutes: 10, seconds: 0)));
+  String endTime = DateFormat('yyyyMMddHHmm00').format(DateTime.now().subtract(Duration(days: 7,hours: -9,minutes: 9, seconds: 0)));
   @override
   void initState() {
     // TODO: implement initState

@@ -4,6 +4,9 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'dart:math' as math;
 
+import 'api/infopanel.dart';
+import 'package:dio/dio.dart';
+
 //왠지는
 class KinderInfo2 extends StatefulWidget {
   const KinderInfo2({Key? key}) : super(key: key);
@@ -13,18 +16,29 @@ class KinderInfo2 extends StatefulWidget {
 }
 
 class _KinderInfo2State extends State<KinderInfo2> {
-  double degrees = 90;
-  double radians = 0;
 
-  List<double> classGraphValue = [20, 20, 20, 20, 20];
-  List<String> classGraphName = [
+
+  int touchedIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    _callBasicApi();
+    _callEnvApi();
+    _callAttendApi();
+  }
+
+  Dio dio = Dio();
+
+  List<double> classGraphRate = [20, 20, 20, 20, 20];
+  List<dynamic> classGraphName = [
     '만 3세반',
     '만 4세반',
     '만 5세반',
     '혼합 3-4세반',
     '혼합 4-5세반'
   ];
-  late int classNumTotal;
+  int classNumTotal=0;
   List<int> classNumEach = [1, 3, 3, 1, 1];
   List<Color> classGraphColor = [
     const Color(0xffc7f7f5),
@@ -33,24 +47,11 @@ class _KinderInfo2State extends State<KinderInfo2> {
     const Color(0xfff4f4c6),
     const Color(0xfff4c6ed)
   ];
-
   int childNumTotal = 40;
-  List<int> childNumEachClass = [
-    12,
-    27,
-    25,
-  ];
-  List<String> ageStr = ['만 3세', '만 4세', '만 5세'];
-
-  @override
-  void initState() {
-    super.initState();
-    radians = degrees * math.pi / 180;
-    setState(() {
-      classNumTotal = classGraphName.length;
-    });
-  }
-
+  List<dynamic> childNumEachAge = [];
+  double childrenperteacher = 0.5;
+  var childrenCountByTeacher;
+  var childrenCountByClass;
   List<String> firstRowStr = [
     "교실수",
     "면적",
@@ -63,7 +64,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
     "인근",
     "면적"
   ];
-  List<int> firstRowInt = [4, 199, 0, 0, 0, 0, 1, 170, 0, 0];
+  List<dynamic> firstRowInt = [4, 199, 0, 0, 0, 0, 1, 170, 0, 0];
 
   List<String> secondRowStr = [
     "수",
@@ -75,7 +76,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
     "수",
     "면적",
   ];
-  List<int> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
+  List<dynamic> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
 
   List<String> thirdRowStr = [
     "수",
@@ -87,13 +88,89 @@ class _KinderInfo2State extends State<KinderInfo2> {
     "수",
     "면적",
   ];
-  List<int> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
+  List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
+  String kinderImagePath='';
+  ///어린이집소개 좌측용
+  void _callBasicApi() async {
+    final client = RestInfoPanel(dio);
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+    final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    print(responseBasic);
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    // print(mapResult["kindergarten"]);
+    setState(() {
+      kinderImagePath = mapResult["kindergarten"]["imagePath"];
+      classNumEach = mapResult["kindergarten"]["classCounts"].cast<int>();//원형그래프:각 나이별 학급 수
+      classGraphName = mapResult["kindergarten"]["classAges"];//원형그래프:학급수
+      childNumEachAge = mapResult["kindergarten"]["childrenCounts"];//원형그래프: 유아수
+      //원형그래프 비율 구하기
+      for(int i=0;i<classGraphName.length;i++) { //총 학급수 계산
+        classNumTotal += classNumEach[i];
+      }
+      for(int i=0;i<classGraphName.length;i++) { //그래프 비율 계산
+        classGraphRate[i] = classNumEach[i] / classNumTotal;
+      }
+      childrenCountByTeacher =mapResult["kindergarten"]["childrenCountByTeacher"];//교사당 유아수
+      childrenCountByClass = mapResult["kindergarten"]["childrenCountByClass"];//학급당 유아수
+      firstRowInt[0] =  mapResult["kindergarten"]["classroomCount"];
+      firstRowInt[1] =  mapResult["kindergarten"]["classroomArea"];
+      firstRowInt[2] =  mapResult["kindergarten"]["indoorgymCount"];
+      firstRowInt[3] =  mapResult["kindergarten"]["indoorgymArea"];
+      firstRowInt[4] =  mapResult["kindergarten"]["outdoorgymCount"];
+      firstRowInt[5] =  mapResult["kindergarten"]["outdoorgymArea"];
+      firstRowInt[6] =  mapResult["kindergarten"]["roofgymCount"];
+      firstRowInt[7] =  mapResult["kindergarten"]["roofgymArea"];
+      firstRowInt[8] =  mapResult["kindergarten"]["neargymCount"];
+      firstRowInt[9] =  mapResult["kindergarten"]["neargymArea"];
+
+      secondRowInt[0] =  mapResult["kindergarten"]["healthroomCount"];
+      secondRowInt[1] =  mapResult["kindergarten"]["healthroomArea"];
+      secondRowInt[2] =  mapResult["kindergarten"]["restroomCount"];
+      secondRowInt[3] =  mapResult["kindergarten"]["restroomArea"];
+      secondRowInt[4] =  mapResult["kindergarten"]["kitchenCount"];
+      secondRowInt[5] =  mapResult["kindergarten"]["kitchenArea"];
+      secondRowInt[6] =  mapResult["kindergarten"]["cafeteriaCount"];
+      secondRowInt[7] =  mapResult["kindergarten"]["cafeteriaArea"];
+
+
+      thirdRowInt[0] =  mapResult["kindergarten"]["directorroomCount"];
+      thirdRowInt[1] =  mapResult["kindergarten"]["directorroomArea"];
+      thirdRowInt[2] =  mapResult["kindergarten"]["teacherroomCount"];
+      thirdRowInt[3] =  mapResult["kindergarten"]["teacherroomArea"];
+      thirdRowInt[4] =  mapResult["kindergarten"]["counselingroomCount"];
+      thirdRowInt[5] =  mapResult["kindergarten"]["counselingroomArea"];
+      thirdRowInt[6] =  mapResult["kindergarten"]["otherplaceCount"];
+      thirdRowInt[7] =  mapResult["kindergarten"]["otherplaceArea"];
+
+    });
+
+  }
+
 
   double boyrate = 0.5;
   double girlrate = 0.78;
 
-  int childHeadCount = 8;
-  List<String> childClassName = [
+  List<dynamic> childClassName = [
     '꽃사랑',
     '개나리',
     '진달래',
@@ -106,13 +183,103 @@ class _KinderInfo2State extends State<KinderInfo2> {
     //'소나무',
   ]; //반 이름입니다.
   List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
-
-  int teacherNum = 3;
-  List<String> teacherName = ['김담임', '김담임', '김담임'];
-  String className = '새싹어린이반';
   List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
+  ///등하원 api
+  void _callAttendApi() async {
+    final client = RestInfoPanel(dio);
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-  int touchedIndex = -1;
+    final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(responseAttend);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      boyrate = mapResult["maleRate"];//
+      girlrate = mapResult["femaleRate"];
+      childClassName = mapResult["classList"];
+      chartRate = mapResult["rateByClass"].cast<double>();
+    });
+  }
+
+
+
+  String weatherTemperature='22';
+  String weatherType='비';
+  String weatherHumidity='85';
+  String weatherPm10='비';
+  String weatherPm25='비';
+  var sensorLocation='비';
+  var sensorTemperature='비';
+  var sensorHumidity='비';
+  var sensorPm25='비';
+  var sensorPm10='비';
+  var sensorCo2='비';
+  var sensorTvoc='비';
+  ///환경데이터 api
+  void _callEnvApi() async {
+    final client = RestInfoPanel(dio);
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+    final response = await client.getEnvInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 408:
+          debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(response);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      weatherTemperature =  mapResult["weatherTemperature"];
+      weatherType =  mapResult["weatherType"];
+      weatherHumidity =  mapResult["weatherHumidity"];
+      weatherPm10 =  mapResult["weatherPm10"];
+      weatherPm25 =  mapResult["weatherPm25"];
+      sensorLocation =  mapResult["sensorLocation"][0];
+      sensorTemperature =  mapResult["sensorTemperature"][0];
+      sensorHumidity =  mapResult["sensorHumidity"][0];
+      sensorPm25 =  mapResult["sensorPm25"][0];
+      sensorPm10 =  mapResult["sensorPm10"][0];
+      sensorCo2 =  mapResult["sensorCo2"][0];
+      sensorTvoc =  mapResult["sensorTvoc"][0];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,8 +373,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                                 ),
                                                 sectionsSpace: 0,
                                                 centerSpaceRadius: 30.w,
-                                                sections: showingSections(
-                                                    classNumTotal),
+                                                sections: showingSections(classGraphName.length),
                                               ),
                                             ),
                                           ),
@@ -218,18 +384,12 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  for (int i = 0;
-                                                      i < classNumTotal;
-                                                      i++) ...[
+                                                  for (int i = 0;i < classGraphName.length;i++) ...[
                                                     Row(
                                                       children: [
                                                         Indicator(
-                                                            color:
-                                                                classGraphColor[
-                                                                    i],
-                                                            text:
-                                                                classGraphName[
-                                                                    i],
+                                                            color: classGraphColor[i],
+                                                            text: classGraphName[i],
                                                             isSquare: true),
                                                       ],
                                                     ),
@@ -248,7 +408,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   for (int i = 0;
-                                                      i < classNumTotal;
+                                                      i < classGraphName.length;
                                                       i++) ...[
                                                     Row(
                                                       children: [
@@ -321,7 +481,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                             sectionsSpace: 0,
                                             centerSpaceRadius: 30.w,
                                             sections:
-                                                showingSections(ageStr.length),
+                                                showingSections(classGraphName.length),
                                           ),
                                         ),
                                       ),
@@ -330,11 +490,11 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           for (int i = 0;
-                                              i < ageStr.length;
+                                              i < classGraphName.length;
                                               i++) ...[
                                             Indicator(
                                                 color: classGraphColor[i],
-                                                text: ageStr[i],
+                                                text: classGraphName[i],
                                                 isSquare: true),
                                             SizedBox(
                                               height: 7.w,
@@ -351,14 +511,11 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           for (int i = 0;
-                                              i < ageStr.length;
+                                              i < classGraphName.length;
                                               i++) ...[
                                             Row(
                                               children: [
-                                                Text(
-                                                  childNumEachClass[i]
-                                                          .toString() +
-                                                      '명',
+                                                Text(childNumEachAge[i].toString() + '명',
                                                   style: TextStyle(
                                                     fontFamily: 'NotoSansKR',
                                                     color: const Color(0xff393838),
@@ -463,7 +620,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                             ),
                                           ),
                                           Container(
-                                            width: 200*girlrate.w,
+                                            width: 200*childrenperteacher.w,
                                             height: 20.w,
                                             margin: EdgeInsets.only(left: 20.w, top: 20.w),
                                             decoration: BoxDecoration(
@@ -478,7 +635,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(left: 40.w, top: 20.w),
-                                            child: Text("81명",
+                                            child: Text(childrenCountByTeacher.toString(),
                                                 style: TextStyle(
                                                   fontFamily: 'NotoSansKR',
                                                   color: Color(0xff393838),
@@ -490,7 +647,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                           ),
                                           Container(
                                             margin: EdgeInsets.only(left: 40.w, top: 20.w),
-                                            child: Text("8명",
+                                            child: Text(childrenCountByClass.toString(),
                                                 style: TextStyle(
                                                   fontFamily: 'NotoSansKR',
                                                   color: Color(0xff393838),
@@ -1452,7 +1609,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             for(int i=0;i<chartRate.length;i++)...[
-                              Text(childClassName[i],
+                              Text(childClassName[i].toString(),
                                   style: TextStyle(
                                     fontFamily: '.AppleSystemUIFont',
                                     color: Color(0xff000000),
@@ -1554,7 +1711,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text("22도",
+                          child: Text(sensorTemperature.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -1565,7 +1722,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                           margin: EdgeInsets.only(top: 50.w),
                         ),
                         Container(
-                          child: Text("52%",
+                          child: Text(sensorHumidity.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -1576,7 +1733,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                           margin: EdgeInsets.only(top: 45.w),
                         ),
                         Container(
-                          child: Text("15",
+                          child: Text(sensorPm10.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -1587,7 +1744,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                           margin: EdgeInsets.only(top: 45.w),
                         ),
                         Container(
-                          child: Text("328ppm",
+                          child: Text(sensorCo2.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -1598,7 +1755,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                           margin: EdgeInsets.only(top: 50.w),
                         ),
                         Container(
-                          child: Text("102ppb",
+                          child: Text(sensorPm25.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -1635,7 +1792,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
         case 0:
           return PieChartSectionData(
             color: const Color(0xffc7f7f5),
-            value: classGraphValue[0],
+            value: classGraphRate[0],
             radius: radius,
             titleStyle: const TextStyle(
               //강제로 fontSize: 0 지정해줘야 숫자 안뜸
@@ -1647,7 +1804,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
         case 1:
           return PieChartSectionData(
             color: const Color(0xffc6d0f4),
-            value: classGraphValue[1],
+            value: classGraphRate[1],
             radius: radius,
             titleStyle: const TextStyle(
               fontSize: 0,
@@ -1658,7 +1815,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
         case 2:
           return PieChartSectionData(
             color: const Color(0xfff4dac5),
-            value: classGraphValue[2],
+            value: classGraphRate[2],
             radius: radius,
             titleStyle: const TextStyle(
               fontSize: 0,
@@ -1669,7 +1826,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
         case 3:
           return PieChartSectionData(
             color: const Color(0xfff4f4c6),
-            value: classGraphValue[3],
+            value: classGraphRate[3],
             title: '15%',
             radius: radius,
             titleStyle: const TextStyle(
@@ -1681,7 +1838,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
         case 4:
           return PieChartSectionData(
             color: const Color(0xfff4c6ed),
-            value: classGraphValue[4],
+            value: classGraphRate[4],
             radius: radius,
             titleStyle: const TextStyle(
               fontSize: 0,
