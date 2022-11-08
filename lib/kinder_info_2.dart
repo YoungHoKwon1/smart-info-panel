@@ -320,7 +320,6 @@ class _KinderInfo2State extends State<KinderInfo2> {
     });
   }
   var length;
-
   @override
   Widget build(BuildContext context) {
     length = weatherType?.length ?? 0; // 리스트 데이터갯수
