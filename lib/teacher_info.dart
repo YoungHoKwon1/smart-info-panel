@@ -1,7 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'api/infopanel.dart';
 
 import 'dart:math' as math;
 
@@ -14,21 +15,173 @@ class TeacherInfo extends StatefulWidget {
 }
 
 class _TeacherInfoState extends State<TeacherInfo> {
-  double degrees = 90;
-  double radians = 0;
+  int touchedIndex = -1;
 
   @override
   void initState() {
-    radians = degrees * math.pi / 180;
-    //row = childNum / column;
     super.initState();
+    _callBasicApi();
+    _callEnvApi();
+    _callAttendApi();
   }
 
-  double boyrate = 67;
-  double girlrate = 78;
+  Dio dio = Dio();
 
-  int childHeadCount = 8;
-  List<String> childClassName = [
+  String url = "http://tmap.aijoa.us:48764/";
+  final token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+  int childNum = 0;
+  int column = 4;
+  int row = 0;
+  int rest = 0; //나머지 아이들
+  String className = '새싹어린이반';
+  int teacherNum = 0;
+  int directorNum = 0;
+  int committeeNum = 0;
+  List<String> directorImagePath = [];
+  List<Image> directorImage = [];
+  List<String> directorName = [
+    '',
+    '',
+    '',
+  ];
+  List<String> directorIntroduction = [
+    '',
+    '',
+    '',
+    '',
+    '',
+  ];
+  List<String> teacherImagePath = [];
+  List<Image> teacherImage = [];
+  List<String> teacherName = [
+    '',
+    '',
+    '',
+    '',
+    '',
+  ];
+  List<String> teacherIntroduction = [
+    '',
+    '',
+    '',
+    '',
+    '',
+  ];
+  List<String> committeeImagePath = [];
+  List<Image> committeeImage = [];
+  List<String> committeeName = [
+    '',
+    '',
+    '',
+    '',
+    '',
+  ];
+  List<String> committeeClassName = [
+    '',
+    '',
+    '',
+    '',
+    '',
+  ];
+
+  void _callBasicApi() async {
+    final client = RestInfoPanel(dio);
+    Map<String, String> headers = Map();
+    headers['authorization'] = token;
+    final responseBasic =
+        await client.getHouseInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    print(responseBasic);
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(
+        responseBasic); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    // print("basic:  "+mapResult["classInfo"].toString());
+    // print(mapResult["committees"]);//학급이벤트
+    // print(mapResult["classInfo"]);//학급소개왼쪽
+    // print(mapResult["classInfo"][0]);
+    setState(() {
+      teacherNum = mapResult["teachers"].length;
+      directorNum = mapResult["directors"].length;
+      committeeNum = mapResult["committees"].length;
+      teacherName.clear();
+      teacherIntroduction.clear();
+      for (int i = 0; i < teacherNum; i++) {
+        teacherName[i] = mapResult["teachers"][i]["name"];
+        teacherIntroduction[i] = mapResult["teachers"][i]["introduction"];
+        // teacherImagePath.add(mapResult["classInfo"][0]["teachers"][i]["imagePath"]);
+        teacherImage.add(
+          Image.network(
+            url + mapResult["teachers"][i]["imagePath"],
+            headers: headers,
+            width: 128.w,
+            height: 146.w,
+            fit: BoxFit.cover,
+          ),
+        );
+      }
+      print(teacherName);
+      classInfo[1] = directorNum;
+      directorName.clear();
+      directorIntroduction.clear();
+      for (int i = 0; i < directorNum; i++) {
+        directorName.add(mapResult["directors"][i]["name"]);
+        directorIntroduction.add(mapResult["directors"][i]["introduction"]);
+        // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+        directorImage.add(
+          Image.network(
+            url + mapResult["directors"][i]["imagePath"],
+            headers: headers,
+            width: 128.w,
+            height: 146.w,
+            fit: BoxFit.cover,
+          ),
+        );
+      }
+      classInfo[1] = committeeNum;
+      committeeName.clear();
+      committeeClassName.clear();
+      for (int i = 0; i < committeeNum; i++) {
+        committeeName.add(mapResult["committees"][i]["name"]);
+        committeeClassName.add(mapResult["committees"][i]["className"]);
+        //       for (int i = 0; i < committeesNum; i++) {
+        //         committeesName.add(mapResult["classInfo"][0]["committees"][i]["name"]);
+        //         // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+        committeeImage.add(
+          Image.network(
+            url + mapResult["committees"][i]["imagePath"],
+            headers: headers,
+            width: 128.w,
+            height: 146.w,
+            fit: BoxFit.cover,
+          ),
+        );
+      }
+    });
+  }
+
+  double boyrate = 0.5;
+  double girlrate = 0.78;
+
+  List<dynamic> childClassName = [
     '꽃사랑',
     '개나리',
     '진달래',
@@ -40,43 +193,109 @@ class _TeacherInfoState extends State<TeacherInfo> {
     //'금잔디',
     //'소나무',
   ]; //반 이름입니다.
-  List<double> chartData = [67, 89, 30, 100, 92, 94, 89, 90];
-
-  int directorNum = 3;
-  List<String> directorName = ['유재석(원장)', '유재석(원장)', '유재석(원장)'];
-  List<String> directorComment = [
-    '"항상 안전하고 행복한 어린이집을 만들겠습니다."',
-    '"항상 안전하고 행복한 어린이집을 만들겠습니다."',
-    '"항상 안전하고 행복한 어린이집을 만들겠습니다."'
-  ];
-  String className = '새싹어린이반';
+  List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
   List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
-  int teacherNum = 5;
-  List<String> teacherName = [
-    '김선생(0세 개나리반)',
-    '이선생(1세 장미반)',
-    '박선생(2세 개나리반)',
-    '최선생(3세 반반)',
-    '황선생(4세 민들레반)'
-  ];
-  List<String> teacherComment = [
-    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
-    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
-    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
-    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
-    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."'
-  ];
-  int parentNum = 5;
-  List<String> parentName = ['김부모', '이부모', '박부모', '최부모', '박부모'];
-  List<String> parentComment = [
-    '0세 개나리반 김지영',
-    '1세 개나리반 김지영',
-    '2세 개나리반 김지영',
-    '3세 개나리반 김지영',
-    '4세 개나리반 김지영'
-  ];
-  int column = 5;
-  double row = 4;
+
+  ///등하원 api
+  void _callAttendApi() async {
+    final client = RestInfoPanel(dio);
+    final token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+    final responseAttend =
+        await client.getAttendInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(responseAttend);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(
+        responseAttend); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      boyrate = mapResult["maleRate"]; //
+      girlrate = mapResult["femaleRate"];
+      childClassName = mapResult["classList"];
+      chartRate = mapResult["rateByClass"].cast<double>();
+    });
+  }
+
+  String weatherTemperature = '22';
+  String weatherType = '비';
+  String weatherHumidity = '85';
+  String weatherPm10 = '비';
+  String weatherPm25 = '비';
+  var sensorLocation = '비';
+  var sensorTemperature = '비';
+  var sensorHumidity = '비';
+  var sensorPm25 = '비';
+  var sensorPm10 = '비';
+  var sensorCo2 = '비';
+  var sensorTvoc = '비';
+
+  ///환경데이터 api
+  void _callEnvApi() async {
+    final client = RestInfoPanel(dio);
+    final token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+    final response = await client.getEnvInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 408:
+          debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(response);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(
+        response); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      weatherTemperature = mapResult["weatherTemperature"];
+      weatherType = mapResult["weatherType"];
+      weatherHumidity = mapResult["weatherHumidity"];
+      weatherPm10 = mapResult["weatherPm10"];
+      weatherPm25 = mapResult["weatherPm25"];
+      sensorLocation = mapResult["sensorLocation"][0];
+      sensorTemperature = mapResult["sensorTemperature"][0];
+      sensorHumidity = mapResult["sensorHumidity"][0];
+      sensorPm25 = mapResult["sensorPm25"][0];
+      sensorPm10 = mapResult["sensorPm10"][0];
+      sensorCo2 = mapResult["sensorCo2"][0];
+      sensorTvoc = mapResult["sensorTvoc"][0];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,14 +342,12 @@ class _TeacherInfoState extends State<TeacherInfo> {
                           Column(
                             children: [
                               Container(
-                                width: 140.w,
-                                height: 140.w,
-                                //페이지에 따라 마진 조절 바람 건희, 성민
-                                margin: EdgeInsets.only(left: 102.w, top: 49.w),
-                                child: const Image(
-                                    image: AssetImage(
-                                        'assets/childlifedata/baby_sample.jpg')),
-                              ),
+                                  width: 140.w,
+                                  height: 140.w,
+                                  //페이지에 따라 마진 조절 바람 건희, 성민
+                                  margin:
+                                      EdgeInsets.only(left: 102.w, top: 49.w),
+                                  child: directorImage[i]),
                               Container(
                                 width: 200.w,
                                 height: 45.w,
@@ -159,7 +376,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 margin: EdgeInsets.only(left: 102.w),
                                 child: Center(
                                   child: Text(
-                                    directorComment[i],
+                                    directorIntroduction[i],
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.sp,
@@ -195,10 +412,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     height: 135.w,
                                     margin:
                                         EdgeInsets.only(left: 23.w, top: 65.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
-                                  ),
+                                      child: teacherImage[i]),
                                   Container(
                                     width: 180.w,
                                     height: 45.w,
@@ -223,7 +437,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 47.w,
                                       margin: EdgeInsets.only(left: 38.w),
                                       child: Center(
-                                          child: Text(teacherComment[i],
+                                          child: Text(teacherIntroduction[i],
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14.sp,
@@ -239,10 +453,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     height: 135.w,
                                     margin:
                                         EdgeInsets.only(left: 13.w, top: 65.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
-                                  ),
+                                      child: teacherImage[i]),
                                   Container(
                                     width: 180.w,
                                     height: 45.w,
@@ -267,7 +478,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 47.w,
                                       margin: EdgeInsets.only(left: 43.w),
                                       child: Center(
-                                          child: Text(teacherComment[j],
+                                          child: Text(teacherIntroduction[j],
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14.sp,
@@ -300,10 +511,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     height: 135.w,
                                     margin:
                                         EdgeInsets.only(left: 23.w, top: 65.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
-                                  ),
+                                      child: committeeImage[i]                                      ),
                                   Container(
                                     width: 180.w,
                                     height: 45.w,
@@ -313,7 +521,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                         borderRadius:
                                             BorderRadius.circular(22.5)),
                                     child: Center(
-                                      child: Text(parentName[j],
+                                      child: Text(committeeName[j],
                                           style: TextStyle(
                                             fontFamily: '.NotoSansKR',
                                             color: Color(0xff000000),
@@ -328,7 +536,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 47.w,
                                       margin: EdgeInsets.only(left: 38.w),
                                       child: Center(
-                                          child: Text(parentComment[i],
+                                          child: Text(committeeClassName[i],
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14.sp,
@@ -340,14 +548,11 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                               ))))
                                 ] else ...[
                                   Container(
-                                    width: 135.w,
-                                    height: 135.w,
-                                    margin:
-                                        EdgeInsets.only(left: 13.w, top: 65.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
-                                  ),
+                                      width: 135.w,
+                                      height: 135.w,
+                                      margin: EdgeInsets.only(
+                                          left: 13.w, top: 65.w),
+                                      child: committeeImage[i]),
                                   Container(
                                     width: 180.w,
                                     height: 45.w,
@@ -357,7 +562,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                         borderRadius:
                                             BorderRadius.circular(17.5)),
                                     child: Center(
-                                      child: Text(parentName[j],
+                                      child: Text(committeeName[j],
                                           style: TextStyle(
                                             fontFamily: 'NotoSansKR',
                                             color: Color(0xff000000),
@@ -372,7 +577,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 47.w,
                                       margin: EdgeInsets.only(left: 33.w),
                                       child: Center(
-                                          child: Text(parentComment[j],
+                                          child: Text(committeeClassName[j],
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14.sp,
@@ -428,7 +633,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 40.w, top: 38.w),
+                      margin: EdgeInsets.only(left: 40.w, top: 40.w),
                       child: Text(
                         '등원유아 수',
                         style: TextStyle(
@@ -448,69 +653,51 @@ class _TeacherInfoState extends State<TeacherInfo> {
                       children: [
                         ///남아
                         Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 남아-02
-                            Row(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 182.w,
-                                  height: 105.w,
-                                  margin:
-                                      EdgeInsets.only(left: 26.w, top: 16.w),
-                                  child: const Image(
-                                      image: AssetImage(
-                                          'assets/childlifedata/02_3.jpg')),
-                                ),
-                                Text("남아",
-                                    style: TextStyle(
-                                      fontFamily: 'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 30.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
-                              ],
-                            ),
                             Container(
-                              width: 203.w,
-                              //336
+                                width: 182.w,
+                                height: 110.w,
+                                margin: EdgeInsets.only(left: 26.w, top: 16.w),
+                                decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                      'assets/childlifedata/02_3.jpg'),
+                                )),
+                                child: Container(
+                                  margin:
+                                      EdgeInsets.only(left: 130.w, top: 60.w),
+                                  child: Text("남아",
+                                      style: TextStyle(
+                                        fontFamily: 'GamjaFlower',
+                                        color: const Color(0xff39605f),
+                                        fontSize: 30.sp,
+                                        fontWeight: FontWeight.w400,
+                                        fontStyle: FontStyle.normal,
+                                      )),
+                                )),
+                            Container(
+                              width: 336 * boyrate.w,
                               height: 20.w,
                               margin: EdgeInsets.only(left: 40.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.w),
-                                color: const Color(0xFF80DB68),
+                                color: const Color(0x4d63e66d),
                               ),
                               child: Text(
-                                "67%",
+                                (100 * boyrate).toString() + "%",
                                 style: TextStyle(fontSize: 16.sp),
                                 textAlign: TextAlign.right,
                               ),
                             )
-                            // Stack(
-                            //   children: <Widget>[
-                            //     Transform.rotate(
-                            //       angle: radians,
-                            //       child: Container(
-                            //         width: 0.w,
-                            //         height: 50.w,
-                            //         //margin: EdgeInsets.only(bottom: 40.w),
-                            //         child: BarChart(
-                            //           ChildBarData(boyrate),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // )
                             //남아
                           ],
                         ),
 
                         ///남아
-                        SizedBox(
-                          width: 210.w,
-                        ),
+                        SizedBox(width: 50.w),
 
                         ///여아
                         Column(
@@ -519,50 +706,43 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             Row(
                               children: [
                                 Container(
-                                  width: 182.w,
-                                  height: 105.w,
-                                  margin: EdgeInsets.only(top: 16.w),
-                                  child: const Image(
+                                    width: 182.w,
+                                    height: 105.w,
+                                    margin: EdgeInsets.only(top: 16.w),
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                      fit: BoxFit.cover,
                                       image: AssetImage(
-                                          'assets/childlifedata/02_4.jpg')),
-                                ),
-                                Text("여아",
-                                    style: TextStyle(
-                                      fontFamily: 'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 30.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
+                                          'assets/childlifedata/02_4.jpg'),
+                                    )),
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 130.w, top: 60.w),
+                                      child: Text("여아",
+                                          style: TextStyle(
+                                            fontFamily: 'GamjaFlower',
+                                            color: const Color(0xff39605f),
+                                            fontSize: 30.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    )),
                               ],
                             ),
                             Container(
-                              width: 256.w, //336
+                              width: 336 * girlrate.w,
+                              //336
                               height: 20.w,
-                              //margin: EdgeInsets.only(left: 40.w),
+                              margin: EdgeInsets.only(left: 20.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18.w),
-                                  color: const Color(0xCEFF74B8)),
+                                  color: const Color(0xffffc9c9)),
                               child: Text(
-                                "78%",
+                                (100 * girlrate).toString() + "%",
                                 style: TextStyle(fontSize: 16.sp),
                                 textAlign: TextAlign.right,
                               ),
                             )
-                            // Stack(
-                            //   children: <Widget>[
-                            //     Transform.rotate(
-                            //       angle: radians,
-                            //       child: SizedBox(
-                            //         width: 0.w,
-                            //         height: 50.w,
-                            //         child: BarChart(
-                            //           ChildBarData(girlrate),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // )
                           ],
                         )
 
@@ -572,79 +752,80 @@ class _TeacherInfoState extends State<TeacherInfo> {
 
                     ///학급별그래프
                     Container(
-                      width: 748.w,
-                      height: 309.w,
-                      child: AspectRatio(
-                        //그래프의 배경크기(?)인데 정확한 크기 측정 방법을 모르겠어요
-                        //그냥 상위 위젯이 500 크기라 거기에 맞춰서 소숫점 바꿔봤습니다.
-                        aspectRatio: 1.603.w,
-                        //배경 설정
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18.w),
-                            color: const Color(0xffffffff),
-                          ),
-                          //그래프와 그래프 이름
-                          child: Stack(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    Text(
-                                      '학급별',
-                                      style: TextStyle(
-                                        color: const Color(0xff39605f),
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 38.w,
-                                    ),
-                                    //반이름 나오던게 갑자기 안나와서 일단 보고있습니다.
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8.w),
-                                        child: BarChart(
-                                          ClassBarData(),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.w,
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              //이걸 제거해보시면 바로 뭔지 아실텐데
-                              //디자인 상 넣은거라 위치와 크기 디자인 넣을 때 잡아주시면 될듯 합니다.
-                              Positioned(
-                                  top: 222.w,
-                                  left: 36.w,
-                                  child: Column(
+                        width: 70.w,
+                        height: 29.w,
+                        margin: EdgeInsets.only(left: 40.w, top: 40.w),
+                        child: // 학급별
+                            Text("학급별",
+                                style: TextStyle(
+                                    color: Color(0xff39605f),
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: "NotoSansKR",
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 20.sp),
+                                textAlign: TextAlign.left)),
+                    Container(
+                        width: 748.w,
+                        height: 160.w,
+                        margin: EdgeInsets.only(left: 40.w, top: 20.w),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              for (int i = 0; i < chartRate.length; i++) ...[
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
-                                        height: 10.w,
-                                        width: 745.w,
-                                        color: const Color(0xff63e6d7),
+                                        margin: EdgeInsets.only(bottom: 2.w),
+                                        child: Text(
+                                            (100 * chartRate[i]).toString() +
+                                                "%",
+                                            style: TextStyle(
+                                              fontFamily: 'NotoSansKR',
+                                              color: Color(0xff393838),
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w400,
+                                              fontStyle: FontStyle.normal,
+                                            )),
                                       ),
-                                      // Container(
-                                      //   height: 0.w,
-                                      //   width: 700.w,
-                                      //   color: Color(0xff63e6d7),
-                                      // )
-                                    ],
+                                      Container(
+                                          width: 20.w,
+                                          height: 135 * chartRate[i].w,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffc7f7f5),
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(10.w),
+                                                topLeft: Radius.circular(10.w)),
+                                          )),
+                                    ]),
+                              ]
+                            ])),
+                    Container(
+                        width: 748.w,
+                        height: 3.w,
+                        margin: EdgeInsets.only(left: 40.w),
+                        decoration: BoxDecoration(color: Color(0xff63e6d7))),
+                    Container(
+                      margin: EdgeInsets.only(left: 40.w),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            for (int i = 0; i < chartRate.length; i++) ...[
+                              Text(childClassName[i],
+                                  style: TextStyle(
+                                    fontFamily: '.AppleSystemUIFont',
+                                    color: Color(0xff000000),
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    fontStyle: FontStyle.normal,
                                   ))
-                            ],
-                          ),
-                        ),
-                      ),
+                            ]
+                          ]),
                     )
+
+                    ///학급별그래프
                   ],
                 ),
 
@@ -659,7 +840,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/airple_weather/snow_only.jpg'),
+                  image: AssetImage('assets/airple_weather/sunny.jpg'),
                 )),
                 child: Row(
                   children: [
@@ -703,7 +884,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("초미세먼지",
+                          child: Text("이산화탄소",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -714,7 +895,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("이산화탄소",
+                          child: Text("초미세먼지",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -726,91 +907,14 @@ class _TeacherInfoState extends State<TeacherInfo> {
                         )
                       ],
                     ),
-                    //SizedBox(width: 26.w,),
+                    SizedBox(
+                      width: 24.w,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text("-273도",
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 40.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 51.w),
-                        ),
-                        Container(
-                          child: Text("52%",
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 40.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 40.w, left: 20.w),
-                        ),
-                        Container(
-                          child: Text.rich(TextSpan(
-                              text: '82',
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              ),
-                              children: [
-                                TextSpan(
-                                    text: ' ㎍/㎥',
-                                    style: TextStyle(
-                                      fontFamily: 'GamjaFlower',
-                                      color: const Color(0xff42372c),
-                                      fontSize: 25.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
-                              ])),
-                          margin: EdgeInsets.only(top: 35.w, left: 8.w),
-                        ),
-                        Container(
-                          child: Text.rich(TextSpan(
-                              text: '88',
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              ),
-                              children: [
-                                TextSpan(
-                                    text: ' ㎍/㎥',
-                                    style: TextStyle(
-                                      fontFamily: 'GamjaFlower',
-                                      color: const Color(0xff42372c),
-                                      fontSize: 25.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
-                              ])),
-                          margin: EdgeInsets.only(top: 35.w, left: 8.w),
-                        ),
-                        // Container(
-                        //   child: Text("88㎍/㎥",
-                        //       style: TextStyle(
-                        //         fontFamily: 'GamjaFlower',
-                        //         color: const Color(0xff42372c),
-                        //         fontSize: 35.sp,
-                        //         fontWeight: FontWeight.w400,
-                        //         fontStyle: FontStyle.normal,
-                        //       )),
-                        //   margin: EdgeInsets.only(top: 35.w, left: 8.w),
-                        // ),
-                        Container(
-                          child: Text("2024ppm",
+                          child: Text(sensorTemperature.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -818,8 +922,52 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 45.w, left: 10.w),
-                        )
+                          margin: EdgeInsets.only(top: 50.w),
+                        ),
+                        Container(
+                          child: Text(sensorHumidity.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 45.w),
+                        ),
+                        Container(
+                          child: Text(sensorPm10.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 45.w),
+                        ),
+                        Container(
+                          child: Text(sensorCo2.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 50.w),
+                        ),
+                        Container(
+                          child: Text(sensorPm25.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 50.w),
+                        ),
                       ],
                     )
                   ],
@@ -835,213 +983,4 @@ class _TeacherInfoState extends State<TeacherInfo> {
       ),
     );
   }
-
-  ///유아그래프
-  BarChartGroupData makeGroupData(
-    int x,
-    double y, {
-    bool isTouched = false,
-    Color barColor = Colors.white,
-    double width = 22,
-    List<int> showTooltips = const [],
-  }) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          color: const Color(0x4d63e66d),
-          width: 22.w,
-          borderSide: BorderSide(color: const Color(0x4d63e66d), width: 1.w),
-          backDrawRodData: BackgroundBarChartRodData(
-            show: true,
-            toY: 100,
-            color: Colors.white, //배경
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<BarChartGroupData> showingChildGroups() => List.generate(1, (i) {
-        return makeGroupData(0, 50);
-      });
-
-  BarChartData ChildBarData(double value) {
-    return BarChartData(
-      alignment: BarChartAlignment.start,
-      maxY: 100,
-      barTouchData: BarTouchData(
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey,
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {},
-        ),
-      ),
-      titlesData: FlTitlesData(
-        show: false,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-            getTitlesWidget: getTitles,
-            reservedSize: 0.w,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: showingChildGroups(),
-      gridData: FlGridData(show: false),
-    );
-  }
-
-  Widget getTitles(double value, TitleMeta meta) {
-    TextStyle style = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: 14.sp,
-    );
-    Widget text = Text('', style: style);
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16,
-      child: text,
-    );
-  }
-
-  ///유아그래프
-  ///
-  ///
-  ///반그래프
-  //그래프 데이터중 막대 그래프 하나입니다
-  BarChartGroupData makeClassGroupData(
-    int x,
-    double y, {
-    // 이부분은 생성자로 사실 안 쓰입니다
-    bool isTouched = false,
-    Color barColor = const Color(0xffc7f7f5),
-    double width = 22,
-    List<int> showTooltips = const [],
-  }) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y, //y값
-          color: barColor, //색상
-          width: 20.w, //두께
-          borderSide:
-              const BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
-        ),
-      ],
-      showingTooltipIndicators: [0],
-    );
-  }
-
-  //그래프 데이터를 만들때 사용하는 막대그래프에 데이터 넣어주는 역할입니다
-  //사람 수만큼 만든다음에
-  //데이터를 넣어주면 완성됩니다.
-  List<BarChartGroupData> showingClassGroups() =>
-      List.generate(childHeadCount, (i) {
-        return makeClassGroupData(i, chartData[i]);
-      });
-
-  //데이터를 표시하는 역할입니다
-  //원래는 터치를 해야만 나오는 데이터지만 위에 막대그래프 생성할때 showingTooltipIndicators: [0],로 설정을 해서 항시 표시합니다.
-  BarChartData ClassBarData() {
-    return BarChartData(
-      //최대치 설정
-      maxY: 100,
-      barTouchData: BarTouchData(
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
-          tooltipMargin: 0.w,
-          tooltipPadding: EdgeInsets.only(bottom: 0.w),
-          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-            //여기에서 몇퍼센트인지 표기를 합니다.
-            String attendance = chartData[group.x].toString() + '%';
-            //꼭 이 형식을 지켜야 하나 봅니다?
-            //아래 children은 없어도 되지만 글씨가 떠서 넣었습니다.
-            return BarTooltipItem(
-              '',
-              TextStyle(
-                color: const Color(0xff393838),
-                fontWeight: FontWeight.bold,
-                fontSize: 18.sp,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: attendance,
-                  style: TextStyle(
-                    color: const Color(0xff393838),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-      //그래프의 위아래, 양옆에 데이터를 표기하고 싶으면 각각의 showtitles를 true로 바꿈됩니다.
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: getClassTitles,
-            reservedSize: 38.w,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: showingClassGroups(),
-      gridData: FlGridData(show: false),
-    );
-  }
-
-  //아래 반 이름을 나오게 하는 설정입니다.
-  //value값은 인원수 만큼 알아서 넣어지더라고요.
-  Widget getClassTitles(double value, TitleMeta meta) {
-    TextStyle style = TextStyle(
-      color: const Color(0xff000000),
-      fontFamily: '.AppleSystemUIFont',
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      fontSize: 14.sp,
-    );
-    Widget text;
-    text = Text(childClassName[value.toInt()], style: style);
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16.w,
-      child: text,
-    );
-  }
-
-  ///반데이터
 }
