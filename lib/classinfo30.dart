@@ -1,9 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fl_chart/fl_chart.dart';
-
-import 'dart:math' as math;
 
 import 'api/infopanel.dart';
 
@@ -29,15 +26,15 @@ class _ClassInfo30State extends State<ClassInfo30> {
   //swagger 참조
   //http://tmap.aijoa.us:48764/api-airple/#/infopanel/get_api_infopanel
   Dio dio = Dio();
-  String url = "http://tmap.aijoa.us:48764/api/image/";
+  String url = "http://tmap.aijoa.us:48764/";
   final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-  int childNum = 28;
+  int childNum = 0;
   int column = 7;
-  int row=4;
+  int row=0;
   int rest=0; //나머지 아이들
   String className = '새싹어린이반';
-  int teacherNum = 3;
+  int teacherNum = 0;
   List<String> teacherName = ['김담임', '김담임', '김담임'];
   List<String> teacherImagePath = [];
   List<Image> teacherImage = [];
@@ -54,7 +51,6 @@ class _ClassInfo30State extends State<ClassInfo30> {
   ///학급소개페이지, 어린이집 소개, 학급공지 페이지  api
   void _callBasicApi() async {
     final client = RestInfoPanel(dio);
-
     Map<String, String> headers = Map();
     headers['authorization'] = token;
     final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
@@ -90,6 +86,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
       for(int i=0;i<teacherNum;i++) {
         teacherName[i] = mapResult["classInfo"][0]["teachers"][i]["name"];
         // teacherImagePath.add(mapResult["classInfo"][0]["teachers"][i]["imagePath"]);
+
         teacherImage.add(Image.network(
             url+mapResult["classInfo"][0]["teachers"][i]["imagePath"],
             headers: headers,
@@ -105,7 +102,14 @@ class _ClassInfo30State extends State<ClassInfo30> {
       childrenName.clear();
       for(int i=0;i<childNum;i++) {
         childrenName.add(mapResult["classInfo"][0]["children"][i]["name"]);
-        childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+        // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+        childrenImage.add(Image.network(
+          url+mapResult["classInfo"][0]["children"][i]["imagePath"],
+          headers: headers,
+          width: 128.w,
+          height: 146.w,
+          fit: BoxFit.cover,
+        ),);
       }
 
       row = childNum ~/ column;
@@ -325,9 +329,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                 height: 66.w,
                                 //페이지에 따라 마진 조절 바람 건희, 성민
                                 margin: EdgeInsets.only(left: 60.w),
-                                child: const Image(
-                                    image: AssetImage(
-                                        'assets/childlifedata/02_2.jpg')),
+                                child: teacherImage[i]
                               ),
                               Container(
                                   width: 160.w,
@@ -368,19 +370,15 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                     width: 110.w,
                                     height: 110.w,
                                     margin: EdgeInsets.only(left: 31.w, top: 30.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
+                                    child:  childrenImage[column*i+j]
                                   )
                                 ] else ...[
                                   Container(
                                     width: 110.w,
                                     height: 110.w,
                                     margin: EdgeInsets.only(left: 36.w, top: 30.w),
-                                    child: const Center(
-                                      child: Image(
-                                          image: AssetImage(
-                                              'assets/childlifedata/baby_sample.png')),
+                                    child: Center(
+                                      child: childrenImage[column*i+j]
                                     ),
                                   )
                                 ],
@@ -423,22 +421,16 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                   width: 110.w,
                                   height: 110.w,
                                   margin: EdgeInsets.only(left: 31.w, top: 30.w),
-                                  child: const Image(
-                                      image: AssetImage(
-                                          'assets/childlifedata/baby_sample.png')
-                                  ),
+                                  child: childrenImage[row*column+j]
                                 )
                               ] else ...[
                                 Container(
                                   width: 110.w,
                                   height: 110.w,
                                   margin: EdgeInsets.only(left: 36.w, top: 30.w),
-                                  child: const Center(
-                                    child: Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
-                                  ),
-                                )
+                                  child: Center(
+                                    child: childrenImage[row*column+j]
+                                ))
                               ],
                               Container(
                                 width: 116.w,
