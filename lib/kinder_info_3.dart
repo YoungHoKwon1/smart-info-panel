@@ -21,12 +21,17 @@ class _KinderInfo3State extends State<KinderInfo3> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(seconds: 3), () {});
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
   }
 
   Dio dio = Dio();
+
+  String url = "http://tmap.aijoa.us:48764/";
+  final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
 
   List<double> classGraphRate = [20, 20, 20, 20, 20];
   List<dynamic> classGraphName = [
@@ -46,17 +51,18 @@ class _KinderInfo3State extends State<KinderInfo3> {
     const Color(0xfff4c6ed)
   ];
   int childNumTotal = 40;
-  List<dynamic> childNumEachAge = [];
+  List<dynamic> childNumEachAge = [12, 6, 11, 12, 1];
   double childrenperteacher = 0.5;
   var childrenCountByTeacher;
   var childrenCountByClass;
 
-  String kinderImagePath='';
+  Image kinderImage = Image.asset("name");
+  Image floorImage = Image.asset("name");
   ///어린이집소개 좌측용
   void _callBasicApi() async {
+    Map<String, String> headers = Map();
+    headers['authorization'] = token;
     final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
     final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       switch (res!.statusCode) {
@@ -81,7 +87,20 @@ class _KinderInfo3State extends State<KinderInfo3> {
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     // print(mapResult["kindergarten"]);
     setState(() {
-      kinderImagePath = mapResult["kindergarten"]["imagePath"];
+      kinderImage = Image.network(
+        url+mapResult["kindergarten"]["imagePath"],
+        headers: headers,
+        width: 128.w,
+        height: 146.w,
+        fit: BoxFit.cover,
+      );
+      floorImage = Image.network(
+        url+mapResult["kindergarten"]["floorPlan"],
+        headers: headers,
+        width: 128.w,
+        height: 146.w,
+        fit: BoxFit.cover,
+      );
       classNumEach = mapResult["kindergarten"]["classCounts"].cast<int>();//원형그래프:각 나이별 학급 수
       classGraphName = mapResult["kindergarten"]["classAges"];//원형그래프:학급수
       childNumEachAge = mapResult["kindergarten"]["childrenCounts"];//원형그래프: 유아수
@@ -262,8 +281,9 @@ class _KinderInfo3State extends State<KinderInfo3> {
                           height: 490.w,
                           margin: EdgeInsets.only(left: 34.w, top: 34.w),
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              // color: Colors.black,
                               borderRadius: BorderRadius.circular(20.w)),
+                          child: kinderImage
                         ),
 
                         ///어린이집 사진>
@@ -407,7 +427,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
                                       textAlign: TextAlign.left),
                                 ),
                                 Container(
-                                  width: 271.w,
+                                  width: 279.w,
                                   height: 143.w,
                                   margin: EdgeInsets.only(top: 15.w),
                                   child: Row(
@@ -595,7 +615,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
                                           Container(
                                             margin: EdgeInsets.only(
                                                 left: 40.w, top: 20.w),
-                                            child: Text("81명",
+                                            child: Text(childrenCountByTeacher.toString(),
                                                 style: TextStyle(
                                                   fontFamily: 'NotoSansKR',
                                                   color: Color(0xff393838),
@@ -607,7 +627,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
                                           Container(
                                             margin: EdgeInsets.only(
                                                 left: 40.w, top: 20.w),
-                                            child: Text("8명",
+                                            child: Text(childrenCountByClass.toString(),
                                                 style: TextStyle(
                                                   fontFamily: 'NotoSansKR',
                                                   color: Color(0xff393838),
@@ -627,13 +647,16 @@ class _KinderInfo3State extends State<KinderInfo3> {
                         ///학급수, 유아수 그래프>
                       ],
                     ),
+                    ///청사진
                     Container(
                         width: 994.w,
                         height: 446.w,
                         margin: EdgeInsets.only(left: 43.w, top: 44.w),
-                        child: Image(
-                          image: AssetImage('assets/class_info_deco/01.png'),
-                        )),
+                        child: floorImage
+                        // Image(
+                        //   image: AssetImage('assets/class_info_deco/01.png'),
+                        // )
+                    ),
 
                     ///
                     /// 각종 차트들>

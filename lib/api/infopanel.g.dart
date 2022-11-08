@@ -72,7 +72,7 @@ class _RestInfoPanel implements RestInfoPanel {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'POST', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/api/infopanel/environment',
+            .compose(_dio.options, '/api/infopanel/child',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
