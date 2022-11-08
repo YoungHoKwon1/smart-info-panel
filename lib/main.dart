@@ -68,6 +68,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     // Timer(Duration(seconds: 20), () {
     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
     // });
+    //각 다트파일의 initState에 다음 순서를 참고하여 사용하시면 될 것 같습니다
   }
 
   void _callApi() async {
@@ -85,12 +86,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             color: Colors.white,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));//영호
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));//영호
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => Notice())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10())); //건희
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
+                Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
                 //
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo3())); //영호
 
