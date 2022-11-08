@@ -2,10 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_info_panel/classinfo10.dart';
 import 'api/infopanel.dart';
 
 import 'dart:math' as math;
+import 'dart:async';
 
+import 'classinfo20.dart';
+import 'classinfo30.dart';
 //왠지는
 class TeacherInfo extends StatefulWidget {
   const TeacherInfo({Key? key}) : super(key: key);
@@ -23,6 +27,15 @@ class _TeacherInfoState extends State<TeacherInfo> {
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
+    Timer(Duration(seconds: 20), () {
+      if(childNum<=10) {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ClassInfo10()));
+      } else if(childNum>10 || childNum<20) {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ClassInfo20()));
+      } else {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ClassInfo30()));
+      }
+    });
   }
 
   Dio dio = Dio();
@@ -950,7 +963,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                         ],
                       ),
                       SizedBox(
-                        width: 24.w,
+                        width: 10.w,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -960,7 +973,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
@@ -971,18 +984,18 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
-                            margin: EdgeInsets.only(top: 45.w),
+                            margin: EdgeInsets.only(top: 55.w),
                           ),
                           Container(
                             child: Text(sensorPm10.toString()+"㎍/㎥",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
@@ -993,7 +1006,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
@@ -1004,7 +1017,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),

@@ -190,6 +190,7 @@ class _NoticeState extends State<Notice> {
   var sensorPm10='비';
   var sensorCo2='비';
   var sensorTvoc='비';
+  String weather_assets = 'assets/airple_weather/sunny.jpg';
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
@@ -220,6 +221,28 @@ class _NoticeState extends State<Notice> {
     // print(response);//데이터 뭐가오나 확인
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
+      weatherTemperature =  mapResult["weatherTemperature"];
+      weatherType =  mapResult["weatherType"];
+      switch(weatherType) {
+        case "구름" :
+          weather_assets = 'assets/airple_weather/cloudy.jpg';
+          break;
+        case "비" :
+          weather_assets = 'assets/airple_weather/rain_only.jpg';
+          break;
+        case "눈" :
+          weather_assets = 'assets/airple_weather/snow_only.jpg';
+          break;
+        case "눈/비" :
+          weather_assets = 'assets/airple_weather/snow_rain.jpg';
+          break;
+        case "맑음" :
+          weather_assets = 'assets/airple_weather/sunny.jpg';
+          break;
+        case "바람" :
+          weather_assets = 'assets/airple_weather/wind.jpg';
+          break;
+      }
       weatherTemperature =  mapResult["weatherTemperature"];
       weatherType =  mapResult["weatherType"];
       weatherHumidity =  mapResult["weatherHumidity"];
@@ -814,10 +837,10 @@ class _NoticeState extends State<Notice> {
                 width: 820.w,
                 height: 518.w,
                 margin: EdgeInsets.only(left: 15.w, top: 12.w),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/airple_weather/01.jpg'),
+                      image: AssetImage(weather_assets),
                     )),
                 child: Row(
                   children: [
@@ -884,61 +907,62 @@ class _NoticeState extends State<Notice> {
                         )
                       ],
                     ),
-                    SizedBox(width: 24.w,
+                    SizedBox(
+                      width: 10.w,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text(sensorTemperature.toString(),
+                          child: Text(sensorTemperature.toString()+"도",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 35.sp,
+                                fontSize: 30.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
                           margin: EdgeInsets.only(top: 50.w),
                         ),
                         Container(
-                          child: Text(sensorHumidity.toString(),
+                          child: Text(sensorHumidity.toString()+"%",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 35.sp,
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 55.w),
+                        ),
+                        Container(
+                          child: Text(sensorPm10.toString()+"㎍/㎥",
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 30.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
                           margin: EdgeInsets.only(top: 45.w),
                         ),
                         Container(
-                          child: Text(sensorPm10.toString(),
+                          child: Text(sensorCo2.toString()+"ppm",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 45.w),
-                        ),
-                        Container(
-                          child: Text(sensorCo2.toString(),
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
+                                fontSize: 30.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
                           margin: EdgeInsets.only(top: 50.w),
                         ),
                         Container(
-                          child: Text(sensorPm25.toString(),
+                          child: Text(sensorPm25.toString()+"㎍/㎥",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 35.sp,
+                                fontSize: 30.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
