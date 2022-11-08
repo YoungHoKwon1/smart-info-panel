@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_info_panel/childlifedata.dart';
 import 'package:smart_info_panel/classinfo20.dart';
 
+import 'package:smart_info_panel/notice.dart';
+
 import 'package:smart_info_panel/classinfo30.dart';
 import 'package:smart_info_panel/teacher_info.dart';
 
@@ -13,6 +15,7 @@ import 'package:smart_info_panel/kinder_info_3.dart';
 import 'classinfo10.dart';
 import 'classinfo30.dart';
 import 'fl_graph_test.dart';
+import 'notice.dart';
 
 import 'dart:async';
 //maindart change test

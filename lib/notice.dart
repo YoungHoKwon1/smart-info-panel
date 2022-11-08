@@ -6,14 +6,14 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
 
 //왠지는
-class ClassInfo20 extends StatefulWidget {
-  const ClassInfo20({Key? key}) : super(key: key);
+class Notice extends StatefulWidget {
+  const Notice({Key? key}) : super(key: key);
 
   @override
-  State<ClassInfo20> createState() => _ClassInfo20State();
+  State<Notice> createState() => _NoticeState();
 }
 
-class _ClassInfo20State extends State<ClassInfo20> {
+class _NoticeState extends State<Notice> {
   double degrees = 90;
   double radians = 0;
 
@@ -63,8 +63,8 @@ class _ClassInfo20State extends State<ClassInfo20> {
             children: [
               Container(
                 width: 1048.w,
-                height: 1048.w,
-                margin: EdgeInsets.only(left: 19.w, top: 10.w),
+                height: 891.w,
+                margin: EdgeInsets.only(left: 18.w, top: 16.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
@@ -92,172 +92,356 @@ class _ClassInfo20State extends State<ClassInfo20> {
                     Row(
                       children: [
                         Container(
-                          width: 368.w,
-                          height: 198.w,
-                          margin: EdgeInsets.only(left: 122.w, top: 41.w),
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      'assets/class_info_deco/age0class.png'))),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 40.w, top: 90.w),
-                                  child: Text(className,
-                                      style: TextStyle(
-                                        fontFamily: 'GamjaFlower',
-                                        color: Color(0xff39605f),
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                      )
-                                  ),
-                                ),
-                                Container(
-                                  width: 270.w,
-                                  height: 40.w,
-                                  margin: EdgeInsets.only(top: 20.w),
-                                  decoration: new BoxDecoration(
-                                      color: Color(0xffc7f7f5),
-                                      borderRadius: BorderRadius.circular(20)
-                                  ),
-                                  child: Center(
-                                    child: Text(classInfo[0].toString() + '세 | '+classInfo[1].toString()+'명 | 남:'
-                                        +classInfo[2].toString()+'명 여:'+classInfo[3].toString()+'명', style: TextStyle(fontSize: 18.sp,color:Colors.black),),
-                                  ),
-                                )
-                              ],
+                          width: 480.w,
+                          height: 300.w,
+                          margin: EdgeInsets.only(left: 32.w, top: 32.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: const Color(0x6663e6d7),
+                              width: 1.w,
                             ),
-                          ),
-                        ),
-
-                        ///담임
-                        for(int i=0;i<teacherNum;i++)...[
-                          Column(
-                            children: [
-                              Container(
-                                width: 180.w,
-                                height: 45.w,
-                                //페이지에 따라 마진 조절 바람 건희, 성민
-                                margin: EdgeInsets.only(left: 20.w),
-                                child: const Image(
-                                    image: AssetImage(
-                                        'assets/childlifedata/02_2.jpg')),
+                            borderRadius: BorderRadius.circular(20.w),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0x29b1b1b1),
+                                offset: Offset(-2.w, 2.w),
+                                blurRadius: 6.w,
+                                spreadRadius: 0.w,
                               ),
-                              Container(
-                                width: 180.w,
-                                height: 45.w,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffc7f7f5),
-                                    borderRadius: BorderRadius.circular(22)
-                                ),
-                                child: Center(
-                                  child: Text(teacherName[i],
+                              BoxShadow(
+                                color: const Color(0x29dbdbdb),
+                                offset: Offset(-2.w, -4.w),
+                                blurRadius: 6.w,
+                                spreadRadius: 0.w,
+                              ),
+                            ],
+                              ),
+                          child:Row(
+                            children: [
+                              Column(
+                          crossAxisAlignment : CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(left: 27.w, top: 29.w),
+                                    child: Text("이번달 행사",
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      fontFamily:'NotSanaKR',
+                                      color: const Color(0xff898989),
                                       fontSize: 18.sp,
-                                      fontFamily: '.AppleSystemUIFont',
-                                    ),
-                                    strutStyle: StrutStyle(
-                                      fontSize: 18.sp,
-                                      forceStrutHeight: true,
-                                    ),
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                    ))
                                   ),
-                                ),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 27.w, top: 30.w),
+                                      child: Text("10월 2주 아이좋아 어린이집 주요행사",
+                                          style: TextStyle(
+                                            fontFamily:'NotSanaKR',
+                                            color: const Color(0xff39605f),
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontStyle: FontStyle.normal,
+                                          ))
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 27.w, top: 15.w),
+                                      child: Text("걷기놀이 구간",
+                                          style: TextStyle(
+                                            fontFamily:'NotSanaKR',
+                                            color: const Color(0xff39605f),
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontStyle: FontStyle.normal,
+                                          ))
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 27.w, top: 20.w),
+                                      child: Text("행사에 대한 내용 최대 20줄",
+                                          style: TextStyle(
+                                            fontFamily:'NotSanaKR',
+                                            color: const Color(0xff000000),
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle: FontStyle.normal,
+                                          ))
+                                  ),
+                                ],
                               )
                             ],
-                          )
-                        ]
-                        ///담임
+                          ),
+                        ),
+                        Container(
+                          width: 480.w,
+                          height: 300.w,
+                          margin: EdgeInsets.only(left: 22.w, top: 32.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: const Color(0x6663e6d7),
+                              width: 1.w,
+                            ),
+                            borderRadius: BorderRadius.circular(20.w),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0x29b1b1b1),
+                                offset: Offset(-2.w, 2.w),
+                                blurRadius: 6.w,
+                                spreadRadius: 0.w,
+                              ),
+                              BoxShadow(
+                                color: const Color(0x29dbdbdb),
+                                offset: Offset(-2.w, -4.w),
+                                blurRadius: 6.w,
+                                spreadRadius: 0.w,
+                              ),
+                            ],
+                          ),
+                          child:Row(
+                            children: [
+                              Column(
+                          crossAxisAlignment : CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      margin: EdgeInsets.only(left: 27.w, top: 29.w),
+                                      child: Text("오늘의 소식",
+                                          style: TextStyle(
+                                            fontFamily:'NotSanaKR',
+                                            color: const Color(0xff898989),
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontStyle: FontStyle.normal,
+                                          ))
+                                  ),
+                                  Row(
+                                    children: [
+                                  Container(
+                                      margin: EdgeInsets.only(left: 27.w, top: 65.w),
+                                      child: Text("오늘은",
+                                          style: TextStyle(
+                                            fontFamily:'GamjaFlower',
+                                            color: const Color(0xff39605f),
+                                            fontSize: 30.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          ))
+                                  ),
+                                      Container(
+                                        width: 70.w,
+                                        height: 70.w,
+                                        margin: EdgeInsets.only(left: 20.w, top: 40.w),
+                                        child: const Center(
+                                          child: Image(
+                                              image: AssetImage(
+                                                  'assets/childlifedata/baby_sample.png')),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 70.w,
+                                        height: 70.w,
+                                        margin: EdgeInsets.only(left: 19.w, top: 40.w),
+                                        child: const Center(
+                                          child: Image(
+                                              image: AssetImage(
+                                                  'assets/childlifedata/baby_sample.png')),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 70.w,
+                                        height: 70.w,
+                                        margin: EdgeInsets.only(left: 19.w, top: 40.w),
+                                        child: const Center(
+                                          child: Image(
+                                              image: AssetImage(
+                                                  'assets/childlifedata/baby_sample.png')),
+                                        ),
+                                      ),
+                                      Container(
+                                          margin: EdgeInsets.only(left: 24.w, top: 65.w),
+                                          child: Text("생일!",
+                                              style: TextStyle(
+                                                fontFamily:'GamjaFlower',
+                                                color: const Color(0xff39605f),
+                                                fontSize: 30.sp,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                              ))
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(left: 130.w, top: 10.w),
+                                          child: Text("김아가",
+                                              style: TextStyle(
+                                                fontFamily:'GamjaFlower',
+                                                color: const Color(0xff39605f),
+                                                fontSize: 20.sp,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                              ))
+                                      ),
+                                      Container(
+                                          margin: EdgeInsets.only(left: 41.w, top: 10.w),
+                                          child: Text("박모세",
+                                              style: TextStyle(
+                                                fontFamily:'GamjaFlower',
+                                                color: const Color(0xff39605f),
+                                                fontSize: 20.sp,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                              ))
+                                      ),
+                                      Container(
+                                          margin: EdgeInsets.only(left: 41.w, top: 10.w),
+                                          child: Text("이자랑",
+                                              style: TextStyle(
+                                                fontFamily:'GamjaFlower',
+                                                color: const Color(0xff39605f),
+                                                fontSize: 20.sp,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                              ))
+                                      ),
+                                    ]
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 20.w, top: 30.w),
+                                      child: Text("친구한테 생일축하한다고 말해주세요!(등의 한마디)",
+                                          style: TextStyle(
+                                            fontFamily:'NotSanaKR',
+                                            color: const Color(0xff000000),
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle: FontStyle.normal,
+                                          ))
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    ///아이들
-                    for(int i=0;i<4;i++) ...[// 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
-                      Row(
+                    Container(
+                        margin: EdgeInsets.only(left: 50.w, top: 50.w),
+                        child: Text("행사제목 (날짜)",
+                            style: TextStyle(
+                              fontFamily:'NotSanaKR',
+                              color: const Color(0xff39605f),
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                            ))
+                    ),
+                    Row(
                         children: [
-                          for(int j=0;j<column;j++)...[
-                            Column(//사진+이름배치를 위해 column으로 시작
-                              children: [
-                                if(j==0)...[
-                                  Container(
-                                    width: 116.w,
-                                    height: 116.w,
-                                    margin: EdgeInsets.only(left: 132.w, top: 30.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
-                                  ),
-                                  Container(
-                                    width: 116.w,
-                                    height: 35.w,
-                                    margin: EdgeInsets.only(left: 132.w),
-                                    decoration: new BoxDecoration(
-                                        color: Color(0xffc7f7f5),
-                                        borderRadius: BorderRadius.circular(17.5)
-                                    ),
-                                    child: Center(
-                                      child: Text("김아가",
-                                          style: TextStyle(
-                                            fontFamily: 'NotoSansKR',
-                                            color: Color(0xff000000),
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w400,
-                                            fontStyle: FontStyle.normal,
-
-
-                                          )
-                                      ),
-                                    ),
-                                  )
-
-                                ] else ...[
-                                  Container(
-                                    width: 110.w,
-                                    height: 110.w,
-                                    margin: EdgeInsets.only(left: 50.w, top: 30.w),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/childlifedata/baby_sample.png')),
-                                  ),
-                                  Container(
-                                    width: 116.w,
-                                    height: 35.w,
-                                    margin: EdgeInsets.only(left: 50.w),
-                                    decoration: new BoxDecoration(
-                                        color: Color(0xffc7f7f5),
-                                        borderRadius: BorderRadius.circular(17.5)
-                                    ),
-                                    child: Center(
-                                      child: Text("김아가",
-                                          style: TextStyle(
-                                            fontFamily: 'NotoSansKR',
-                                            color: Color(0xff000000),
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w400,
-                                            fontStyle: FontStyle.normal,
-
-
-                                          )
-                                      ),
-                                    ),
-                                  )
-                                ],
-
-
-                              ],
-                            )
-                          ]
-                        ],
-                      )
-                    ]
-                    ///아이들
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 98.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 20.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 20.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 20.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                        ]
+                    ),
+                    Row(
+                        children: [
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 98.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 20.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 20.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                          Container(
+                            width: 200.w,
+                            height: 200.w,
+                            margin: EdgeInsets.only(left: 20.w, top: 30.w),
+                            child: const Center(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/childlifedata/baby_sample.png')),
+                            ),
+                          ),
+                        ]
+                    ),
                   ],
                 ),
               ),
-
-
+              Row(
+                children: [
+                  Container(
+                    width: 1047.w,
+                    height: 97.w,
+                    margin: EdgeInsets.only(left: 22.w, top: 33.w),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff707070),
+                      border:Border.all(
+                        color: const Color(0xffffffff),
+                        width: 1.w,
+                      )
+                    ),
+                  )
+                ],
+              )
             ],
           ),
 
@@ -521,7 +705,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/airple_weather/snow_rain.jpg'),
+                      image: AssetImage('assets/airple_weather/01.jpg'),
                     )),
                 child: Row(
                   children: [
