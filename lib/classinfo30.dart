@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'dart:math' as math;
+
+import 'api/infopanel.dart';
 
 //왠지는
 class ClassInfo30 extends StatefulWidget {
@@ -13,20 +16,119 @@ class ClassInfo30 extends StatefulWidget {
 }
 
 class _ClassInfo30State extends State<ClassInfo30> {
-  int childNum = 28;
-  int column = 7;
-  double row=4;
   @override
   void initState() {
-    row = childNum / column;
     super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+    });
+
+    _callBasicApi();
+    _callEnvApi();
+    _callAttendApi();
+  }
+  //swagger 참조
+  //http://tmap.aijoa.us:48764/api-airple/#/infopanel/get_api_infopanel
+  Dio dio = Dio();
+  String url = "http://tmap.aijoa.us:48764/api/image/";
+  final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+  int childNum = 28;
+  int column = 7;
+  int row=4;
+  int rest=0; //나머지 아이들
+  String className = '새싹어린이반';
+  int teacherNum = 3;
+  List<String> teacherName = ['김담임', '김담임', '김담임'];
+  List<String> teacherImagePath = [];
+  List<Image> teacherImage = [];
+  List<String> childrenName = [
+    '','','','','','','',
+    '','','','','','','',
+    '','','','','','','',
+    '','','','','','','',
+  ];
+  List<String> childrenImagePath = [];
+  List<Image> childrenImage = [];
+  //반 나이, 총 인원, 남아 수, 여아 수 순서
+  List<int> classInfo =[0,0,0,0];
+  ///학급소개페이지, 어린이집 소개, 학급공지 페이지  api
+  void _callBasicApi() async {
+    final client = RestInfoPanel(dio);
+
+    Map<String, String> headers = Map();
+    headers['authorization'] = token;
+    final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(responseBasic);
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    // print("basic:  "+mapResult["classInfo"].toString());
+    // print(mapResult["committees"]);//학급이벤트
+    // print(mapResult["classInfo"]);//학급소개왼쪽
+    print(mapResult["classInfo"][0]);
+    setState(() {
+      className = mapResult["classInfo"][0]["name"];
+      className = mapResult["classInfo"][0]["name"];
+      teacherNum = mapResult["classInfo"][0]["teachers"].length;
+      for(int i=0;i<teacherNum;i++) {
+        teacherName[i] = mapResult["classInfo"][0]["teachers"][i]["name"];
+        // teacherImagePath.add(mapResult["classInfo"][0]["teachers"][i]["imagePath"]);
+        teacherImage.add(Image.network(
+            url+mapResult["classInfo"][0]["teachers"][i]["imagePath"],
+            headers: headers,
+          width: 128.w,
+          height: 146.w,
+          fit: BoxFit.cover,
+        ),
+        );
+
+      }
+      childNum = mapResult["classInfo"][0]["children"].length;
+      classInfo[1] = childNum;
+      childrenName.clear();
+      for(int i=0;i<childNum;i++) {
+        childrenName.add(mapResult["classInfo"][0]["children"][i]["name"]);
+        childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+      }
+
+      row = childNum ~/ column;
+      rest = childNum % column;
+      // print("row: " +row.toString());
+      // print("childNum: " +childNum.toString());
+      // print("column: " +column.toString());
+      for(int i=0;i<childNum;i++) {
+        if(mapResult["classInfo"][0]["children"][i]["sex"] == true) {
+          classInfo[2]++;//남+1
+        } else {
+          classInfo[3]++;//여+1
+        }
+      }
+    });
   }
 
-  double boyrate = 0.5;
-  double girlrate = 0.7;
 
-  int childHeadCount = 8;
-  List<String> childClassName = [
+
+  double boyrate = 0.5;
+  double girlrate = 0.78;
+
+  List<dynamic> childClassName = [
     '꽃사랑',
     '개나리',
     '진달래',
@@ -39,11 +141,97 @@ class _ClassInfo30State extends State<ClassInfo30> {
     //'소나무',
   ]; //반 이름입니다.
   List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
+  ///등하원 api
+  void _callAttendApi() async {
+    final client = RestInfoPanel(dio);
+    final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(responseAttend);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      boyrate = mapResult["maleRate"];//
+      girlrate = mapResult["femaleRate"];
+      childClassName = mapResult["classList"];
+      chartRate = mapResult["rateByClass"].cast<double>();
+    });
+  }
 
-  int teacherNum = 3;
-  List<String> teacherName = ['김담임', '김담임', '김담임'];
-  String className = '새싹어린이반';
-  List<int> classInfo =[0,10,6,4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
+
+
+  String weatherTemperature='22';
+  String weatherType='비';
+  String weatherHumidity='85';
+  String weatherPm10='비';
+  String weatherPm25='비';
+  var sensorLocation='비';
+  var sensorTemperature='비';
+  var sensorHumidity='비';
+  var sensorPm25='비';
+  var sensorPm10='비';
+  var sensorCo2='비';
+  var sensorTvoc='비';
+  ///환경데이터 api
+  void _callEnvApi() async {
+    final client = RestInfoPanel(dio);
+    final response = await client.getEnvInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 408:
+          debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(response);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      weatherTemperature =  mapResult["weatherTemperature"];
+      weatherType =  mapResult["weatherType"];
+      weatherHumidity =  mapResult["weatherHumidity"];
+      weatherPm10 =  mapResult["weatherPm10"];
+      weatherPm25 =  mapResult["weatherPm25"];
+      sensorLocation =  mapResult["sensorLocation"][0];
+      sensorTemperature =  mapResult["sensorTemperature"][0];
+      sensorHumidity =  mapResult["sensorHumidity"][0];
+      sensorPm25 =  mapResult["sensorPm25"][0];
+      sensorPm10 =  mapResult["sensorPm10"][0];
+      sensorCo2 =  mapResult["sensorCo2"][0];
+      sensorTvoc =  mapResult["sensorTvoc"][0];
+    });
+  }
 
 
   @override
@@ -169,7 +357,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                       ],
                     ),
                     ///아이들
-                    for(int i=0;i<4;i++) ...[// 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
+                    for(int i=0;i<row;i++) ...[
                       Row(
                         children: [
                           for(int j=0;j<column;j++)...[
@@ -205,7 +393,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                     ),
                                   margin: EdgeInsets.only(left: 28.w),
                                   child: Center(
-                                    child: Text("김아가",
+                                    child: Text(childrenName[column*i+j],
                                         style: TextStyle(
                                           fontFamily: 'NotoSansKR',
                                           color: const Color(0xff000000),
@@ -221,8 +409,63 @@ class _ClassInfo30State extends State<ClassInfo30> {
                           ]
                         ],
                       )
-                    ]
+                    ],
                     ///아이들
+                    ///나머지 아이들
+                    if(rest!=0)...[
+                    Row(
+                      children: [
+                        for(int j=0;j<rest;j++)...[
+                          Column(//사진+이름배치를 위해 column으로 시작
+                            children: [
+                              if(j==0)...[
+                                Container(
+                                  width: 110.w,
+                                  height: 110.w,
+                                  margin: EdgeInsets.only(left: 31.w, top: 30.w),
+                                  child: const Image(
+                                      image: AssetImage(
+                                          'assets/childlifedata/baby_sample.png')
+                                  ),
+                                )
+                              ] else ...[
+                                Container(
+                                  width: 110.w,
+                                  height: 110.w,
+                                  margin: EdgeInsets.only(left: 36.w, top: 30.w),
+                                  child: const Center(
+                                    child: Image(
+                                        image: AssetImage(
+                                            'assets/childlifedata/baby_sample.png')),
+                                  ),
+                                )
+                              ],
+                              Container(
+                                width: 116.w,
+                                height: 35.w,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xffc7f7f5),
+                                    borderRadius: BorderRadius.circular(17.5)
+                                ),
+                                margin: EdgeInsets.only(left: 28.w),
+                                child: Center(
+                                  child: Text(childrenName[row*column+j],
+                                      style: TextStyle(
+                                        fontFamily: 'NotoSansKR',
+                                        color: const Color(0xff000000),
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w400,
+                                        fontStyle: FontStyle.normal,
+                                      )
+                                  ),
+                                ),
+                              )
+                            ],
+                            ///나머지 아이들
+                          )
+                        ]
+                      ],
+                    )]
                   ],
                 ),
               ),
@@ -524,7 +767,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("CO2",
+                          child: Text("이산화탄소",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -535,7 +778,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("VOC",
+                          child: Text("초미세먼지",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -547,64 +790,66 @@ class _ClassInfo30State extends State<ClassInfo30> {
                         )
                       ],
                     ),
-                    //SizedBox(width: 26.w,),
+                    SizedBox(
+                      width: 24.w,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text("22도",
+                          child: Text(sensorTemperature.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 40.w),
+                          margin: EdgeInsets.only(top: 50.w),
                         ),
                         Container(
-                          child: Text("52%",
+                          child: Text(sensorHumidity.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 40.w),
-                        ),
-                        Container(
-                          child: Text("15",
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 40.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 43.w),
-                        ),
-                        Container(
-                          child: Text("328ppm",
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
                           margin: EdgeInsets.only(top: 45.w),
                         ),
                         Container(
-                          child: Text("102ppb",
+                          child: Text(sensorPm10.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 43.w),
+                          margin: EdgeInsets.only(top: 45.w),
+                        ),
+                        Container(
+                          child: Text(sensorCo2.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 50.w),
+                        ),
+                        Container(
+                          child: Text(sensorPm25.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 50.w),
                         ),
                       ],
                     )

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:smart_info_panel/api/airpledemo.dart';
 import 'package:smart_info_panel/api/infopanel.dart';
 import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 
 class ChildLifeData extends StatefulWidget {
   const ChildLifeData({Key? key}) : super(key: key);
@@ -15,119 +15,168 @@ class ChildLifeData extends StatefulWidget {
   State<ChildLifeData> createState() => _ChildLifeDataState();
 }
 
-// class AirQ {
-//   final String Temperature;
-//   final String serialNum = '';
-//   final String Lng = '';
-//   final String Pm25 = '';
-//   final String ip = '';
-//   final String dataType = '';
-//   final String Co2 = '';
-//   final String ReportTime = '';
-//   final String Tvoc = '';
-//   final String Humid = '';
-//   final String Pm10 = '';
-//   final String myreport = '';
-//   final String Lat = '';
-//
-//   AirQ({
-//     required this.Temperature,
-//     //required this.serialNum,
-// });
-// }
-
 class _ChildLifeDataState extends State<ChildLifeData> {
-  double degrees = 90;
-  double radians = 0;
-  Dio dio = Dio();
-  late FormData formData;
-
-  String Temp='';
-  String Humid='';
-  String Pm25='';
-  String Co2='';
-  String Tvoc='';
-
-  String startTime = DateFormat('yyyyMMddHHmm00').format(DateTime.now().subtract(Duration(days: 7,hours: -9,minutes: 10, seconds: 0)));
-  String endTime = DateFormat('yyyyMMddHHmm00').format(DateTime.now().subtract(Duration(days: 7,hours: -9,minutes: 9, seconds: 0)));
-  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    radians = degrees * math.pi / 180;
-    print(startTime);
-    print(endTime);
-    _callAirpleApi();
-    // _callAijoaEnv();
+    _callBasicApi();
+    _callEnvApi();
+    _callAttendApi();
   }
+  Dio dio = Dio();
 
-  void _callAirpleApi() async {
-      final client = RestAirpleDemo(dio);
-      final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-      formData = FormData.fromMap({
-        "serialNum": "AC67B25CC502",
-        "startTime": startTime,
-        "endTime": endTime,
-        "type": "Co2,Humid,Pm10,Pm25,Temperature,Tvoc"
-      });
-      final responseEnv = await client.postEnvInfo(formData).catchError((Object obj) {
-        final res = (obj as DioError).response;
-        switch (res!.statusCode) {
-          case 401:
-            debugPrint('401 : 유효하지 않은 토큰21입니다.');
-            break;
-          case 408:
-            debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
-            break;
-          case 419:
-            debugPrint('419 : 토큰이 만료되었습니다.');
-            break;
-          case 500:
-            debugPrint('500 : 서버 에러.');
-            break;
-          default:
-            break;
-        }
-        return obj.response;
+  int childNum = 28;
+  int column = 7;
+  double row=4;
+  ///학급소개페이지 api
+  void _callBasicApi() async {
+    final client = RestInfoPanel(dio);
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-      });
-      Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseEnv);
-      print(mapResult);
-      print(mapResult["data"][0]["Temperature"]);
-      print(mapResult["data"][0]["Humid"]);
-      print(mapResult["data"][0]["Pm25"]);
-      print(mapResult["data"][0]["Co2"]);
-      print(mapResult["data"][0]["Tvoc"]);
+    final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    print(responseBasic);
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    // print(mapResult["kindergarten"]);
+    setState(() {
 
-      setState(() {
-        Temp = mapResult["data"][0]["Temperature"];
-        Humid = mapResult["data"][0]["Humid"];
-        Pm25 = mapResult["data"][0]["Pm25"];
-        Co2 = mapResult["data"][0]["Co2"];
-        Tvoc = mapResult["data"][0]["Tvoc"];
-      });
+      row = childNum / column;
+    });
+
   }
 
 
   double boyrate = 0.5;
-  double girlrate = 0.7;
+  double girlrate = 0.78;
 
-  int childHeadCount = 8;
-  List<String> childClassName = [
-    '가나다',
-    '라마바',
-    '사아자',
-    '차카타',
-    '파하가',
-    '나다라',
-    '마바사',
-    '아자차',
-    '카타파',
-    '하가나',
+  List<dynamic> childClassName = [
+    '꽃사랑',
+    '개나리',
+    '진달래',
+    '방울꽃',
+    '계란꽃',
+    '아카시아',
+    '튤립',
+    '해바라기',
+    //'금잔디',
+    //'소나무',
   ]; //반 이름입니다.
   List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
+  ///등하원 api
+  void _callAttendApi() async {
+    final client = RestInfoPanel(dio);
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
+    final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(responseAttend);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      boyrate = mapResult["maleRate"];//
+      girlrate = mapResult["femaleRate"];
+      childClassName = mapResult["classList"];
+      chartRate = mapResult["rateByClass"].cast<double>();
+    });
+  }
+
+
+
+  String weatherTemperature='22';
+  String weatherType='비';
+  String weatherHumidity='85';
+  String weatherPm10='비';
+  String weatherPm25='비';
+  var sensorLocation='비';
+  var sensorTemperature='비';
+  var sensorHumidity='비';
+  var sensorPm25='비';
+  var sensorPm10='비';
+  var sensorCo2='비';
+  var sensorTvoc='비';
+  ///환경데이터 api
+  void _callEnvApi() async {
+    final client = RestInfoPanel(dio);
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+    final response = await client.getEnvInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 408:
+          debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    // print(response);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    setState(() {
+      weatherTemperature =  mapResult["weatherTemperature"];
+      weatherType =  mapResult["weatherType"];
+      weatherHumidity =  mapResult["weatherHumidity"];
+      weatherPm10 =  mapResult["weatherPm10"];
+      weatherPm25 =  mapResult["weatherPm25"];
+      sensorLocation =  mapResult["sensorLocation"][0];
+      sensorTemperature =  mapResult["sensorTemperature"][0];
+      sensorHumidity =  mapResult["sensorHumidity"][0];
+      sensorPm25 =  mapResult["sensorPm25"][0];
+      sensorPm10 =  mapResult["sensorPm10"][0];
+      sensorCo2 =  mapResult["sensorCo2"][0];
+      sensorTvoc =  mapResult["sensorTvoc"][0];
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1075,7 +1124,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("CO2",
+                          child: Text("이산화탄소",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -1086,7 +1135,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("VOC",
+                          child: Text("초미세먼지",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -1098,66 +1147,66 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                         )
                       ],
                     ),
-                    //SizedBox(width: 26.w,),
+                    SizedBox(
+                      width: 24.w,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text(Temp+"도",
+                          child: Text(sensorTemperature.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 40.w),
+                          margin: EdgeInsets.only(top: 50.w),
                         ),
                         Container(
-                          child: Text(Humid+"%",
+                          child: Text(sensorHumidity.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 40.w),
-                        ),
-                        Container(
-                          child: Center(
-                            child: Text(Pm25,
-                                style: TextStyle(
-                                  fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 40.sp,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                          ),
-                          margin: EdgeInsets.only(top: 43.w),
-                        ),
-                        Container(
-                          child: Text(Co2+"ppm",
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
                           margin: EdgeInsets.only(top: 45.w),
                         ),
                         Container(
-                          child: Text(Tvoc+"ppb",
+                          child: Text(sensorPm10.toString(),
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 43.w),
+                          margin: EdgeInsets.only(top: 45.w),
+                        ),
+                        Container(
+                          child: Text(sensorCo2.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 50.w),
+                        ),
+                        Container(
+                          child: Text(sensorPm25.toString(),
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 50.w),
                         ),
                       ],
                     )
