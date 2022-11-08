@@ -16,8 +16,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-    });
+    Future.delayed(const Duration(seconds: 3), () {});
 
     _callBasicApi();
     _callEnvApi();

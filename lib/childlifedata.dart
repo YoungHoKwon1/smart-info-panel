@@ -19,23 +19,48 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _callBasicApi();
+    Future.delayed(const Duration(seconds: 3), () {});
+    _callChildApi();
     _callEnvApi();
     _callAttendApi();
   }
   Dio dio = Dio();
 
+  String url = "http://tmap.aijoa.us:48764/";
 
-  int childNum = 28;
-  int column = 7;
-  double row=4;
-  ///학급소개페이지 api
-  void _callBasicApi() async {
+  final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+  Image childImage = Image.asset("name");
+  String childName = "";
+  String childBDay = '';
+  String className = '';
+  String collectionPeriod = '';
+  String attendanceCount = '';
+  String avgAttendTime = '';
+  String avgGoinghomeTime = '';
+  String height = '';
+  String weight = '';
+  String beforeAttendEmotion = '';
+  String beforeGoingHomeEmotion = '';
+  String avgMeal = '';
+  String avgSleep = '';
+  String vomitCount = '';
+  String toiletCount = '';
+  String medicineCount = '';
+  String accidentCount = '';
+
+  String bdayYear='';
+  String bdayMonth='';
+  String bdayDay='';
+
+  ///영유아 정보 요청 api
+  void _callChildApi() async {
+    Map<String, String> headers = Map();
+    headers['authorization'] = token;
     final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
-    final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
+    final responseChild = await client.postChildInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
+      //swagger 참조
       switch (res!.statusCode) {
         case 200:
           debugPrint('200');
@@ -54,17 +79,38 @@ class _ChildLifeDataState extends State<ChildLifeData> {
       }
       return obj.response;
     });
-    print(responseBasic);
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    // print(mapResult["kindergarten"]);
+    print(responseChild);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseChild);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
-
-      row = childNum / column;
+      childImage = Image.network(
+        url+mapResult["imagePath"],
+        headers: headers,
+        width: 128.w,
+        height: 146.w,
+        fit: BoxFit.cover,
+      );
+      childName = mapResult["name"];
+      childBDay = mapResult["birthday"];
+      bdayYear = childBDay.substring(0,4);
+      bdayMonth = childBDay.substring(4,6);
+      bdayDay = childBDay.substring(6,8);
+      className = mapResult["className"];
+      collectionPeriod = mapResult["collectionPeriod"].toString();
+      attendanceCount = mapResult["attendanceCount"].toString();
+      avgAttendTime = mapResult["avgAttendTime"].toString();
+      avgGoinghomeTime = mapResult["avgGoinghomeTime"].toString();
+      height = mapResult["height"].toString();
+      weight = mapResult["weight"].toString();
+      beforeAttendEmotion = mapResult["beforeAttendEmotion"].toString();
+      beforeGoingHomeEmotion = mapResult["beforeGoingHomeEmotion"].toString();
+      avgMeal = mapResult["avgMeal"].toString();
+      avgSleep = mapResult["avgSleep"].toString();
+      vomitCount = mapResult["vomitCount"].toString();
+      toiletCount = mapResult["toiletCount"].toString();
+      medicineCount = mapResult["medicineCount"].toString();
+      accidentCount = mapResult["accidentCount"].toString();
     });
-
-  }
-
-
+  }///
   double boyrate = 0.5;
   double girlrate = 0.78;
 
@@ -84,8 +130,6 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   ///등하원 api
   void _callAttendApi() async {
     final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
     final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       //swagger 참조
@@ -134,8 +178,6 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
     final response = await client.getEnvInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       //swagger 참조
@@ -225,24 +267,28 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage('assets/child_face_deco/age0face.png')
-                            )
+                            ),
                           ),
+                          child: childImage,
                         ),
 
                         ///아이정보
-                        Container(
-                            width: 170.w,
-                            height: 195.w,
-                            margin: EdgeInsets.only(left: 5.w, top: 140.w),
-                            child:
-                                new Text("김사랑\n2018년 5월 3일\n꽃잎사랑반\n수집기간: 6개월",
-                                    style: TextStyle(
-                                      fontFamily: 'NotoSansKR',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 25.sp,
-                                      fontWeight: FontWeight.w700,
-                                      fontStyle: FontStyle.normal,
-                                    ))),
+                        Center(
+                          child: Container(
+                              width: 170.w,
+                              height: 195.w,
+                              margin: EdgeInsets.only(left: 5.w, top: 110.w),
+                              child:
+                                   Text(childName+"\n\n"+bdayYear+"년 "+bdayMonth+"월 "+bdayDay+"일"+"\n\n"+className+
+                                       "\n\n"+collectionPeriod+"개월",
+                                      style: TextStyle(
+                                        fontFamily: 'NotoSansKR',
+                                        color: const Color(0xff39605f),
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w700,
+                                        fontStyle: FontStyle.normal,
+                                      ))),
+                        ),
 
                         ///아이정보
                       ],
@@ -374,7 +420,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                         bottomLeft: Radius.circular(10))),
                                 child: Center(
                                   child: Text(
-                                    '25',
+                                    attendanceCount,
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -399,7 +445,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '08:35',
+                                    avgAttendTime,
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -424,7 +470,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '19:35',
+                                    avgGoinghomeTime,
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -449,7 +495,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "113cm\n22kg",
+                                    height+"cm\n"+weight+"kg",
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -474,7 +520,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '08:35',
+                                    beforeAttendEmotion,
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -500,7 +546,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                         bottomRight: Radius.circular(10))),
                                 child: Center(
                                   child: Text(
-                                    '08:35',
+                                    beforeGoingHomeEmotion,
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -651,7 +697,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '25',
+                                    avgMeal,
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -676,7 +722,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '08:35',
+                                    avgSleep,
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -701,7 +747,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '19:35',
+                                    vomitCount+"회",
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -726,7 +772,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "113cm\n22kg",
+                                    toiletCount+"회",
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -751,7 +797,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '08:35',
+                                    medicineCount+"일",
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,
@@ -778,7 +824,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '08:35',
+                                    accidentCount+"회",
                                     style: TextStyle(
                                       color: Color(0xff39605f),
                                       fontSize: 30.sp,

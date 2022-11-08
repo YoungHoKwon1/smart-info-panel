@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import 'dart:math' as math;
 
 import 'api/infopanel.dart';
 import 'package:dio/dio.dart';
@@ -23,12 +22,17 @@ class _KinderInfo2State extends State<KinderInfo2> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(seconds: 3), () {});
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
   }
 
   Dio dio = Dio();
+
+  String url = "http://tmap.aijoa.us:48764/";
+  final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
 
   List<double> classGraphRate = [20, 20, 20, 20, 20];
   List<dynamic> classGraphName = [
@@ -48,7 +52,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
     const Color(0xfff4c6ed)
   ];
   int childNumTotal = 40;
-  List<dynamic> childNumEachAge = [];
+  List<dynamic> childNumEachAge = [12, 6, 11, 12, 1];
   double childrenperteacher = 0.5;
   var childrenCountByTeacher;
   var childrenCountByClass;
@@ -89,12 +93,12 @@ class _KinderInfo2State extends State<KinderInfo2> {
     "면적",
   ];
   List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
-  String kinderImagePath='';
+  Image kinderImage = Image.asset("name");
   ///어린이집소개 좌측용
   void _callBasicApi() async {
+    Map<String, String> headers = Map();
+    headers['authorization'] = token;
     final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
     final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       switch (res!.statusCode) {
@@ -119,7 +123,13 @@ class _KinderInfo2State extends State<KinderInfo2> {
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     // print(mapResult["kindergarten"]);
     setState(() {
-      kinderImagePath = mapResult["kindergarten"]["imagePath"];
+      kinderImage = Image.network(
+        url+mapResult["kindergarten"]["imagePath"],
+        headers: headers,
+        width: 128.w,
+        height: 146.w,
+        fit: BoxFit.cover,
+      );
       classNumEach = mapResult["kindergarten"]["classCounts"].cast<int>();//원형그래프:각 나이별 학급 수
       classGraphName = mapResult["kindergarten"]["classAges"];//원형그래프:학급수
       childNumEachAge = mapResult["kindergarten"]["childrenCounts"];//원형그래프: 유아수
@@ -328,8 +338,9 @@ class _KinderInfo2State extends State<KinderInfo2> {
                           height: 490.w,
                           margin: EdgeInsets.only(left: 34.w, top: 34.w),
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              // color: Colors.black,
                               borderRadius: BorderRadius.circular(20.w)),
+                          child: kinderImage
                         ),
 
                         ///어린이집 사진>
@@ -466,7 +477,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                                       textAlign: TextAlign.left),
                                 ),
                                 Container(
-                                  width: 271.w,
+                                  width: 279.w,
                                   height: 143.w,
                                   margin: EdgeInsets.only(top: 15.w),
                                   child: Row(
