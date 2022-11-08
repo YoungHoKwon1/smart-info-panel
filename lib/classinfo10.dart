@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'api/infopanel.dart';
+import 'dart:async';
 
 //왠지는
 class ClassInfo10 extends StatefulWidget {
@@ -227,9 +228,12 @@ class _ClassInfo10State extends State<ClassInfo10> {
   var sensorCo2 = '비';
   var sensorTvoc = '비';
 
+  String weather_assets = 'assets/airple_weather/sunny.jpg';
+
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
     final response = await client.getEnvInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       //swagger 참조
@@ -258,6 +262,28 @@ class _ClassInfo10State extends State<ClassInfo10> {
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(
         response); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
+      weatherTemperature =  mapResult["weatherTemperature"];
+      weatherType =  mapResult["weatherType"];
+      switch(weatherType) {
+        case "구름" :
+          weather_assets = 'assets/airple_weather/cloudy.jpg';
+          break;
+        case "비" :
+          weather_assets = 'assets/airple_weather/rain_only.jpg';
+          break;
+        case "눈" :
+          weather_assets = 'assets/airple_weather/snow_only.jpg';
+          break;
+        case "눈/비" :
+          weather_assets = 'assets/airple_weather/snow_rain.jpg';
+          break;
+        case "맑음" :
+          weather_assets = 'assets/airple_weather/sunny.jpg';
+          break;
+        case "바람" :
+          weather_assets = 'assets/airple_weather/wind.jpg';
+          break;
+      }
       weatherTemperature = mapResult["weatherTemperature"];
       weatherType = mapResult["weatherType"];
       weatherHumidity = mapResult["weatherHumidity"];
@@ -272,6 +298,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
       sensorTvoc = mapResult["sensorTvoc"][0];
     });
   }
+  var length;
 
   @override
   Widget build(BuildContext context) {
@@ -814,10 +841,10 @@ class _ClassInfo10State extends State<ClassInfo10> {
                 width: 820.w,
                 height: 518.w,
                 margin: EdgeInsets.only(left: 15.w, top: 12.w),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/airple_weather/sunny.jpg'),
+                      image: AssetImage(weather_assets),
                     )),
                 child: Row(
                   children: [
@@ -891,7 +918,7 @@ class _ClassInfo10State extends State<ClassInfo10> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text(sensorTemperature.toString(),
+                          child: Text(sensorTemperature.toString()+"도",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -899,21 +926,10 @@ class _ClassInfo10State extends State<ClassInfo10> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 50.w),
+                          margin: EdgeInsets.only(top: 53.w),
                         ),
                         Container(
-                          child: Text(sensorHumidity.toString(),
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 45.w),
-                        ),
-                        Container(
-                          child: Text(sensorPm10.toString(),
+                          child: Text(sensorHumidity.toString()+"%",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -924,22 +940,33 @@ class _ClassInfo10State extends State<ClassInfo10> {
                           margin: EdgeInsets.only(top: 45.w),
                         ),
                         Container(
-                          child: Text(sensorCo2.toString(),
+                          child: Text(sensorPm10.toString()+"㎍/㎥",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 35.sp,
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 45.w),
+                        ),
+                        Container(
+                          child: Text(sensorPm25.toString()+"㎍/㎥",
+                              style: TextStyle(
+                                fontFamily: 'GamjaFlower',
+                                color: const Color(0xff42372c),
+                                fontSize: 30.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
                           margin: EdgeInsets.only(top: 50.w),
                         ),
                         Container(
-                          child: Text(sensorPm25.toString(),
+                          child: Text(sensorCo2.toString()+"ppm",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 35.sp,
+                                fontSize: 30.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
