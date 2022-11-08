@@ -319,12 +319,9 @@ class _KinderInfo2State extends State<KinderInfo2> {
       sensorTvoc =  mapResult["sensorTvoc"][0];
     });
   }
-  var length;
 
   @override
   Widget build(BuildContext context) {
-    length = weatherType?.length ?? 0; // 리스트 데이터갯수
-
     if(weatherType=='비') {
       return Scaffold(
         body: Stack(
@@ -1841,7 +1838,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            child: Text(sensorTemperature.toString(),
+                            child: Text(sensorTemperature.toString()+"도",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
@@ -1852,7 +1849,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                             margin: EdgeInsets.only(top: 50.w),
                           ),
                           Container(
-                            child: Text(sensorHumidity.toString(),
+                            child: Text(sensorHumidity.toString()+"%",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
@@ -1863,7 +1860,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                             margin: EdgeInsets.only(top: 45.w),
                           ),
                           Container(
-                            child: Text(sensorPm10.toString(),
+                            child: Text(sensorPm10.toString()+"㎍/㎥",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
@@ -1874,7 +1871,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                             margin: EdgeInsets.only(top: 45.w),
                           ),
                           Container(
-                            child: Text(sensorCo2.toString(),
+                            child: Text(sensorCo2.toString()+"ppm",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
@@ -1885,7 +1882,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                             margin: EdgeInsets.only(top: 50.w),
                           ),
                           Container(
-                            child: Text(sensorPm25.toString(),
+                            child: Text(sensorPm25.toString()+"㎍/㎥",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
