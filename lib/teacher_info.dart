@@ -6,14 +6,14 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
 
 //왠지는
-class ClassInfo20 extends StatefulWidget {
-  const ClassInfo20({Key? key}) : super(key: key);
+class TeacherInfo extends StatefulWidget {
+  const TeacherInfo({Key? key}) : super(key: key);
 
   @override
-  State<ClassInfo20> createState() => _ClassInfo20State();
+  State<TeacherInfo> createState() => _TeacherInfoState();
 }
 
-class _ClassInfo20State extends State<ClassInfo20> {
+class _TeacherInfoState extends State<TeacherInfo> {
   double degrees = 90;
   double radians = 0;
 
@@ -42,14 +42,41 @@ class _ClassInfo20State extends State<ClassInfo20> {
   ]; //반 이름입니다.
   List<double> chartData = [67, 89, 30, 100, 92, 94, 89, 90];
 
-  int teacherNum = 2;
-  List<String> teacherName = ['김담임', '김담임'];
+  int directorNum = 3;
+  List<String> directorName = ['유재석(원장)', '유재석(원장)', '유재석(원장)'];
+  List<String> directorComment = [
+    '"항상 안전하고 행복한 어린이집을 만들겠습니다."',
+    '"항상 안전하고 행복한 어린이집을 만들겠습니다."',
+    '"항상 안전하고 행복한 어린이집을 만들겠습니다."'
+  ];
   String className = '새싹어린이반';
-  List<int> classInfo =[0,10,6,4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
-  int childNum = 20;
+  List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
+  int teacherNum = 5;
+  List<String> teacherName = [
+    '김선생(0세 개나리반)',
+    '이선생(1세 장미반)',
+    '박선생(2세 개나리반)',
+    '최선생(3세 반반)',
+    '황선생(4세 민들레반)'
+  ];
+  List<String> teacherComment = [
+    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
+    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
+    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
+    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."',
+    '"아이들에게 늘 즐겁고 행복한 시간을 주고 싶습니다."'
+  ];
+  int parentNum = 5;
+  List<String> parentName = ['김부모', '이부모', '박부모', '최부모', '박부모'];
+  List<String> parentComment = [
+    '0세 개나리반 김지영',
+    '1세 개나리반 김지영',
+    '2세 개나리반 김지영',
+    '3세 개나리반 김지영',
+    '4세 개나리반 김지영'
+  ];
   int column = 5;
-  double row=4;
-
+  double row = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +90,8 @@ class _ClassInfo20State extends State<ClassInfo20> {
             children: [
               Container(
                 width: 1048.w,
-                height: 1048.w,
-                margin: EdgeInsets.only(left: 19.w, top: 10.w),
+                height: 895.w,
+                margin: EdgeInsets.only(left: 16.w, top: 16.w),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
@@ -91,74 +118,33 @@ class _ClassInfo20State extends State<ClassInfo20> {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          width: 368.w,
-                          height: 198.w,
-                          margin: EdgeInsets.only(left: 122.w, top: 41.w),
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      'assets/class_info_deco/age0class.png'))),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 40.w, top: 90.w),
-                                  child: Text(className,
-                                      style: TextStyle(
-                                        fontFamily: 'GamjaFlower',
-                                        color: Color(0xff39605f),
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                      )
-                                  ),
-                                ),
-                                Container(
-                                  width: 270.w,
-                                  height: 40.w,
-                                  margin: EdgeInsets.only(top: 20.w),
-                                  decoration: new BoxDecoration(
-                                      color: Color(0xffc7f7f5),
-                                      borderRadius: BorderRadius.circular(20)
-                                  ),
-                                  child: Center(
-                                    child: Text(classInfo[0].toString() + '세 | '+classInfo[1].toString()+'명 | 남:'
-                                        +classInfo[2].toString()+'명 여:'+classInfo[3].toString()+'명', style: TextStyle(fontSize: 18.sp,color:Colors.black),),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        ///담임
-                        for(int i=0;i<teacherNum;i++)...[
+                        ///원장
+                        for (int i = 0; i < directorNum; i++) ...[
                           Column(
                             children: [
                               Container(
-                                width: 180.w,
-                                height: 45.w,
+                                width: 140.w,
+                                height: 140.w,
                                 //페이지에 따라 마진 조절 바람 건희, 성민
-                                margin: EdgeInsets.only(left: 20.w),
+                                margin: EdgeInsets.only(left: 102.w, top: 49.w),
                                 child: const Image(
                                     image: AssetImage(
-                                        'assets/childlifedata/02_2.jpg')),
+                                        'assets/childlifedata/baby_sample.jpg')),
                               ),
                               Container(
-                                width: 180.w,
+                                width: 200.w,
                                 height: 45.w,
+                                margin: EdgeInsets.only(left: 102.w),
                                 decoration: BoxDecoration(
-                                    color: Color(0xffc7f7f5),
-                                    borderRadius: BorderRadius.circular(22)
-                                ),
+                                    color: Color(0xff71d8d4),
+                                    borderRadius: BorderRadius.circular(22.5)),
                                 child: Center(
-                                  child: Text(teacherName[i],
+                                  child: Text(
+                                    directorName[i],
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 18.sp,
-                                      fontFamily: '.AppleSystemUIFont',
+                                      fontSize: 20.sp,
+                                      fontFamily: '.NotoSansKR',
                                     ),
                                     strutStyle: StrutStyle(
                                       fontSize: 18.sp,
@@ -166,98 +152,246 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
+                              Container(
+                                width: 200.w,
+                                height: 45.w,
+                                margin: EdgeInsets.only(left: 102.w),
+                                child: Center(
+                                  child: Text(
+                                    directorComment[i],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14.sp,
+                                      fontFamily: '.NotoSansKR',
+                                    ),
+                                    strutStyle: StrutStyle(
+                                      fontSize: 18.sp,
+                                      forceStrutHeight: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           )
                         ]
-                        ///담임
+
+                        ///원장
                       ],
                     ),
-                    ///아이들
-                    for(int i=0;i<4;i++) ...[// 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
+
+                    ///선생님
+                    for (int i = 0; i < 1; i++) ...[
+                      // 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
                       Row(
                         children: [
-                          for(int j=0;j<column;j++)...[
-                            Column(//사진+이름배치를 위해 column으로 시작
+                          for (int j = 0; j < column; j++) ...[
+                            Column(
+                              //사진+이름배치를 위해 column으로 시작
                               children: [
-                                if(j==0)...[
+                                if (j == 0) ...[
                                   Container(
-                                    width: 116.w,
-                                    height: 116.w,
-                                    margin: EdgeInsets.only(left: 132.w, top: 30.w),
+                                    width: 135.w,
+                                    height: 135.w,
+                                    margin:
+                                        EdgeInsets.only(left: 23.w, top: 65.w),
                                     child: const Image(
                                         image: AssetImage(
                                             'assets/childlifedata/baby_sample.png')),
                                   ),
                                   Container(
-                                    width: 116.w,
-                                    height: 35.w,
-                                    margin: EdgeInsets.only(left: 132.w),
+                                    width: 180.w,
+                                    height: 45.w,
+                                    margin: EdgeInsets.only(left: 28.w),
                                     decoration: new BoxDecoration(
                                         color: Color(0xffc7f7f5),
-                                        borderRadius: BorderRadius.circular(17.5)
-                                    ),
+                                        borderRadius:
+                                            BorderRadius.circular(22.5)),
                                     child: Center(
-                                      child: Text("김아가",
+                                      child: Text(teacherName[j],
                                           style: TextStyle(
-                                            fontFamily: 'NotoSansKR',
+                                            fontFamily: '.NotoSansKR',
                                             color: Color(0xff000000),
-                                            fontSize: 15.sp,
+                                            fontSize: 16.sp,
                                             fontWeight: FontWeight.w400,
                                             fontStyle: FontStyle.normal,
-
-
-                                          )
-                                      ),
+                                          )),
                                     ),
-                                  )
-
+                                  ),
+                                  Container(
+                                      width: 160.w,
+                                      height: 47.w,
+                                      margin: EdgeInsets.only(left: 38.w),
+                                      child: Center(
+                                          child: Text(teacherComment[i],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14.sp,
+                                                fontFamily: '.NotoSansKR',
+                                              ),
+                                              strutStyle: StrutStyle(
+                                                fontSize: 18.sp,
+                                                forceStrutHeight: true,
+                                              ))))
                                 ] else ...[
                                   Container(
-                                    width: 110.w,
-                                    height: 110.w,
-                                    margin: EdgeInsets.only(left: 50.w, top: 30.w),
+                                    width: 135.w,
+                                    height: 135.w,
+                                    margin:
+                                        EdgeInsets.only(left: 13.w, top: 65.w),
                                     child: const Image(
                                         image: AssetImage(
                                             'assets/childlifedata/baby_sample.png')),
                                   ),
                                   Container(
-                                    width: 116.w,
-                                    height: 35.w,
-                                    margin: EdgeInsets.only(left: 50.w),
+                                    width: 180.w,
+                                    height: 45.w,
+                                    margin: EdgeInsets.only(left: 23.w),
                                     decoration: new BoxDecoration(
                                         color: Color(0xffc7f7f5),
-                                        borderRadius: BorderRadius.circular(17.5)
-                                    ),
+                                        borderRadius:
+                                            BorderRadius.circular(17.5)),
                                     child: Center(
-                                      child: Text("김아가",
+                                      child: Text(teacherName[j],
                                           style: TextStyle(
                                             fontFamily: 'NotoSansKR',
                                             color: Color(0xff000000),
                                             fontSize: 15.sp,
                                             fontWeight: FontWeight.w400,
                                             fontStyle: FontStyle.normal,
-
-
-                                          )
-                                      ),
+                                          )),
                                     ),
-                                  )
+                                  ),
+                                  Container(
+                                      width: 160.w,
+                                      height: 47.w,
+                                      margin: EdgeInsets.only(left: 43.w),
+                                      child: Center(
+                                          child: Text(teacherComment[j],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14.sp,
+                                                fontFamily: '.NotoSansKR',
+                                              ),
+                                              strutStyle: StrutStyle(
+                                                fontSize: 18.sp,
+                                                forceStrutHeight: true,
+                                              ))))
                                 ],
+                              ],
+                            )
+                          ]
+                        ],
+                      )
+                    ],
 
-
+                    ///학부모
+                    for (int i = 0; i < 1; i++) ...[
+                      // 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
+                      Row(
+                        children: [
+                          for (int j = 0; j < column; j++) ...[
+                            Column(
+                              //사진+이름배치를 위해 column으로 시작
+                              children: [
+                                if (j == 0) ...[
+                                  Container(
+                                    width: 135.w,
+                                    height: 135.w,
+                                    margin:
+                                        EdgeInsets.only(left: 23.w, top: 65.w),
+                                    child: const Image(
+                                        image: AssetImage(
+                                            'assets/childlifedata/baby_sample.png')),
+                                  ),
+                                  Container(
+                                    width: 180.w,
+                                    height: 45.w,
+                                    margin: EdgeInsets.only(left: 28.w),
+                                    decoration: new BoxDecoration(
+                                        color: Color(0xffffc9c9),
+                                        borderRadius:
+                                            BorderRadius.circular(22.5)),
+                                    child: Center(
+                                      child: Text(parentName[j],
+                                          style: TextStyle(
+                                            fontFamily: '.NotoSansKR',
+                                            color: Color(0xff000000),
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    ),
+                                  ),
+                                  Container(
+                                      width: 160.w,
+                                      height: 47.w,
+                                      margin: EdgeInsets.only(left: 38.w),
+                                      child: Center(
+                                          child: Text(parentComment[i],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14.sp,
+                                                fontFamily: '.NotoSansKR',
+                                              ),
+                                              strutStyle: StrutStyle(
+                                                fontSize: 18.sp,
+                                                forceStrutHeight: true,
+                                              ))))
+                                ] else ...[
+                                  Container(
+                                    width: 135.w,
+                                    height: 135.w,
+                                    margin:
+                                        EdgeInsets.only(left: 13.w, top: 65.w),
+                                    child: const Image(
+                                        image: AssetImage(
+                                            'assets/childlifedata/baby_sample.png')),
+                                  ),
+                                  Container(
+                                    width: 180.w,
+                                    height: 45.w,
+                                    margin: EdgeInsets.only(left: 23.w),
+                                    decoration: new BoxDecoration(
+                                        color: Color(0xffffc9c9),
+                                        borderRadius:
+                                            BorderRadius.circular(17.5)),
+                                    child: Center(
+                                      child: Text(parentName[j],
+                                          style: TextStyle(
+                                            fontFamily: 'NotoSansKR',
+                                            color: Color(0xff000000),
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    ),
+                                  ),
+                                  Container(
+                                      width: 160.w,
+                                      height: 47.w,
+                                      margin: EdgeInsets.only(left: 33.w),
+                                      child: Center(
+                                          child: Text(parentComment[j],
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14.sp,
+                                                fontFamily: '.NotoSansKR',
+                                              ),
+                                              strutStyle: StrutStyle(
+                                                fontSize: 18.sp,
+                                                forceStrutHeight: true,
+                                              ))))
+                                ],
                               ],
                             )
                           ]
                         ],
                       )
                     ]
-                    ///아이들
                   ],
                 ),
               ),
-
-
             ],
           ),
 
@@ -276,7 +410,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     border:
-                    Border.all(color: const Color(0x6663e6d7), width: 1),
+                        Border.all(color: const Color(0x6663e6d7), width: 1),
                     boxShadow: const [
                       BoxShadow(
                           color: Color(0x29b1b1b1),
@@ -294,7 +428,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 40.w, top: 40.w),
+                      margin: EdgeInsets.only(left: 40.w, top: 38.w),
                       child: Text(
                         '등원유아 수',
                         style: TextStyle(
@@ -323,7 +457,8 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                 Container(
                                   width: 182.w,
                                   height: 105.w,
-                                  margin: EdgeInsets.only(left: 26.w, top: 16.w),
+                                  margin:
+                                      EdgeInsets.only(left: 26.w, top: 16.w),
                                   child: const Image(
                                       image: AssetImage(
                                           'assets/childlifedata/02_3.jpg')),
@@ -335,21 +470,23 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                       fontSize: 30.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
-
-
-                                    )
-                                )
+                                    ))
                               ],
                             ),
                             Container(
-                              width: 203.w,//336
+                              width: 203.w,
+                              //336
                               height: 20.w,
                               margin: EdgeInsets.only(left: 40.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.w),
                                 color: const Color(0xFF80DB68),
                               ),
-                              child: Text("67%", style: TextStyle(fontSize: 16.sp),textAlign: TextAlign.right,),
+                              child: Text(
+                                "67%",
+                                style: TextStyle(fontSize: 16.sp),
+                                textAlign: TextAlign.right,
+                              ),
                             )
                             // Stack(
                             //   children: <Widget>[
@@ -369,6 +506,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                             //남아
                           ],
                         ),
+
                         ///남아
                         SizedBox(
                           width: 210.w,
@@ -395,21 +533,21 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                       fontSize: 30.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
-
-
-                                    )
-                                )
+                                    ))
                               ],
                             ),
                             Container(
-                              width: 256.w,//336
+                              width: 256.w, //336
                               height: 20.w,
                               //margin: EdgeInsets.only(left: 40.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18.w),
-                                  color: const Color(0xCEFF74B8)
+                                  color: const Color(0xCEFF74B8)),
+                              child: Text(
+                                "78%",
+                                style: TextStyle(fontSize: 16.sp),
+                                textAlign: TextAlign.right,
                               ),
-                              child: Text("78%", style: TextStyle(fontSize: 16.sp),textAlign: TextAlign.right,),
                             )
                             // Stack(
                             //   children: <Widget>[
@@ -453,7 +591,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   crossAxisAlignment:
-                                  CrossAxisAlignment.stretch,
+                                      CrossAxisAlignment.stretch,
                                   children: <Widget>[
                                     Text(
                                       '학급별',
@@ -520,9 +658,9 @@ class _ClassInfo20State extends State<ClassInfo20> {
                 margin: EdgeInsets.only(left: 15.w, top: 12.w),
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/airple_weather/snow_rain.jpg'),
-                    )),
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/airple_weather/snow_only.jpg'),
+                )),
                 child: Row(
                   children: [
                     SizedBox(
@@ -565,7 +703,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("CO2",
+                          child: Text("초미세먼지",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -576,7 +714,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
-                          child: Text("VOC",
+                          child: Text("이산화탄소",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
                                 color: const Color(0xffc45d1a),
@@ -593,7 +731,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text("22도",
+                          child: Text("-273도",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
@@ -601,7 +739,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 40.w),
+                          margin: EdgeInsets.only(top: 51.w),
                         ),
                         Container(
                           child: Text("52%",
@@ -612,41 +750,76 @@ class _ClassInfo20State extends State<ClassInfo20> {
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 40.w),
+                          margin: EdgeInsets.only(top: 40.w, left: 20.w),
                         ),
                         Container(
-                          child: Text("15",
+                          child: Text.rich(TextSpan(
+                              text: '82',
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 43.w),
+                              ),
+                              children: [
+                                TextSpan(
+                                    text: ' ㎍/㎥',
+                                    style: TextStyle(
+                                      fontFamily: 'GamjaFlower',
+                                      color: const Color(0xff42372c),
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    ))
+                              ])),
+                          margin: EdgeInsets.only(top: 35.w, left: 8.w),
                         ),
                         Container(
-                          child: Text("328ppm",
+                          child: Text.rich(TextSpan(
+                              text: '88',
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 45.w),
+                              ),
+                              children: [
+                                TextSpan(
+                                    text: ' ㎍/㎥',
+                                    style: TextStyle(
+                                      fontFamily: 'GamjaFlower',
+                                      color: const Color(0xff42372c),
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    ))
+                              ])),
+                          margin: EdgeInsets.only(top: 35.w, left: 8.w),
                         ),
+                        // Container(
+                        //   child: Text("88㎍/㎥",
+                        //       style: TextStyle(
+                        //         fontFamily: 'GamjaFlower',
+                        //         color: const Color(0xff42372c),
+                        //         fontSize: 35.sp,
+                        //         fontWeight: FontWeight.w400,
+                        //         fontStyle: FontStyle.normal,
+                        //       )),
+                        //   margin: EdgeInsets.only(top: 35.w, left: 8.w),
+                        // ),
                         Container(
-                          child: Text("102ppb",
+                          child: Text("2024ppm",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
                                 color: const Color(0xff42372c),
-                                fontSize: 40.sp,
+                                fontSize: 35.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
                               )),
-                          margin: EdgeInsets.only(top: 43.w),
-                        ),
+                          margin: EdgeInsets.only(top: 45.w, left: 10.w),
+                        )
                       ],
                     )
                   ],
@@ -665,13 +838,13 @@ class _ClassInfo20State extends State<ClassInfo20> {
 
   ///유아그래프
   BarChartGroupData makeGroupData(
-      int x,
-      double y, {
-        bool isTouched = false,
-        Color barColor = Colors.white,
-        double width = 22,
-        List<int> showTooltips = const [],
-      }) {
+    int x,
+    double y, {
+    bool isTouched = false,
+    Color barColor = Colors.white,
+    double width = 22,
+    List<int> showTooltips = const [],
+  }) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -691,8 +864,8 @@ class _ClassInfo20State extends State<ClassInfo20> {
   }
 
   List<BarChartGroupData> showingChildGroups() => List.generate(1, (i) {
-    return makeGroupData(0, 50);
-  });
+        return makeGroupData(0, 50);
+      });
 
   BarChartData ChildBarData(double value) {
     return BarChartData(
@@ -753,14 +926,14 @@ class _ClassInfo20State extends State<ClassInfo20> {
   ///반그래프
   //그래프 데이터중 막대 그래프 하나입니다
   BarChartGroupData makeClassGroupData(
-      int x,
-      double y, {
-        // 이부분은 생성자로 사실 안 쓰입니다
-        bool isTouched = false,
-        Color barColor = const Color(0xffc7f7f5),
-        double width = 22,
-        List<int> showTooltips = const [],
-      }) {
+    int x,
+    double y, {
+    // 이부분은 생성자로 사실 안 쓰입니다
+    bool isTouched = false,
+    Color barColor = const Color(0xffc7f7f5),
+    double width = 22,
+    List<int> showTooltips = const [],
+  }) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -768,7 +941,8 @@ class _ClassInfo20State extends State<ClassInfo20> {
           toY: y, //y값
           color: barColor, //색상
           width: 20.w, //두께
-          borderSide: const BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
+          borderSide:
+              const BorderSide(color: Colors.black, width: 01), //막대그래프 테두리
         ),
       ],
       showingTooltipIndicators: [0],
@@ -869,5 +1043,5 @@ class _ClassInfo20State extends State<ClassInfo20> {
     );
   }
 
-///반데이터
+  ///반데이터
 }

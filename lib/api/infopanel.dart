@@ -28,5 +28,8 @@ abstract class RestInfoPanel {
   Future<dynamic> getEnvInfo(
       @Header('authorization') String token,
       );
-
+  @POST('/api/infopanel/environment')
+  Future<dynamic> postChildInfo(
+      @Header('authorization') String token,
+      );
 }

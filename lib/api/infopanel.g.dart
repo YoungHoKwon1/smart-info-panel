@@ -8,7 +8,7 @@ part of 'infopanel.dart';
 
 class _RestInfoPanel implements RestInfoPanel {
   _RestInfoPanel(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.0.7:8080';
+    baseUrl ??= 'http://tmap.aijoa.us:48764';
   }
 
   final Dio _dio;
@@ -56,6 +56,22 @@ class _RestInfoPanel implements RestInfoPanel {
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
+            .compose(_dio.options, '/api/infopanel/environment',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> postChildInfo(token) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch(_setStreamType<dynamic>(
+        Options(method: 'POST', headers: _headers, extra: _extra)
             .compose(_dio.options, '/api/infopanel/environment',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
