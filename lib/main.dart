@@ -86,6 +86,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             color: Colors.white,
             child: ElevatedButton(
               onPressed: () {
+
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));//영호
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => Notice())); //성민
