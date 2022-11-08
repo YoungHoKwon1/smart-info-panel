@@ -312,10 +312,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
                                     ),
                                   child: Center(
                                     child: Text(classInfo[0].toString() + '세 | '+classInfo[1].toString()+'명 | 남:'
-                                    +classInfo[2].toString()+'명 여:'+classInfo[3].toString()+'명', style: TextStyle(
-                                        fontSize: 20.sp,
-                                        color: Colors.black,
-                                        fontFamily: '.AppleSystemUIFont'),),
+                                    +classInfo[2].toString()+'명 여:'+classInfo[3].toString()+'명', style: TextStyle(fontSize: 18.sp),),
                                   ),
                                 )
                               ],
