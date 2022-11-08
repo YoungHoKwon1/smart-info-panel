@@ -241,12 +241,10 @@ class _ChildLifeDataState extends State<ChildLifeData> {
       sensorTvoc =  mapResult["sensorTvoc"][0];
     });
   }
-  var length;
   @override
   Widget build(BuildContext context) {
-    length = className?.length ?? 0; // 리스트 데이터갯수
 
-    if(className=='') {
+    if(weatherType=='비') {
       return Scaffold(
         body: Stack(
           fit: StackFit.expand,
