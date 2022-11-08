@@ -2,10 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:smart_info_panel/teacher_info.dart';
 
 import 'dart:math' as math;
 
 import 'api/infopanel.dart';
+import 'dart:async';
 
 //왠지는
 class KinderInfo3 extends StatefulWidget {
@@ -25,6 +27,9 @@ class _KinderInfo3State extends State<KinderInfo3> {
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
+    Timer(Duration(seconds: 10), () {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>TeacherInfo()));
+    });
   }
 
   Dio dio = Dio();
@@ -187,6 +192,8 @@ class _KinderInfo3State extends State<KinderInfo3> {
   var sensorPm10='비';
   var sensorCo2='비';
   var sensorTvoc='비';
+
+  String weather_assets = 'assets/airple_weather/sunny.jpg';
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
@@ -221,6 +228,26 @@ class _KinderInfo3State extends State<KinderInfo3> {
     setState(() {
       weatherTemperature =  mapResult["weatherTemperature"];
       weatherType =  mapResult["weatherType"];
+      switch(weatherType) {
+        case "구름" :
+          weather_assets = 'assets/airple_weather/cloudy.jpg';
+          break;
+        case "비" :
+          weather_assets = 'assets/airple_weather/rain_only.jpg';
+          break;
+        case "눈" :
+          weather_assets = 'assets/airple_weather/snow_only.jpg';
+          break;
+        case "눈/비" :
+          weather_assets = 'assets/airple_weather/snow_rain.jpg';
+          break;
+        case "맑음" :
+          weather_assets = 'assets/airple_weather/sunny.jpg';
+          break;
+        case "바람" :
+          weather_assets = 'assets/airple_weather/wind.jpg';
+          break;
+      }
       weatherHumidity =  mapResult["weatherHumidity"];
       weatherPm10 =  mapResult["weatherPm10"];
       weatherPm25 =  mapResult["weatherPm25"];
@@ -236,250 +263,371 @@ class _KinderInfo3State extends State<KinderInfo3> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 1048.w,
-                height: 1048.w,
-                margin: EdgeInsets.only(left: 19.w, top: 10.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: const Color(0x6663e6d7),
-                    width: 1.w,
-                  ),
-                  borderRadius: BorderRadius.circular(20.w),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0x29b1b1b1),
-                      offset: Offset(-2.w, 2.w),
-                      blurRadius: 6.w,
-                      spreadRadius: 0.w,
-                    ),
-                    BoxShadow(
-                      color: const Color(0x29dbdbdb),
-                      offset: Offset(-2.w, -4.w),
-                      blurRadius: 6.w,
-                      spreadRadius: 0.w,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ///<어린이집 사진
-                        Container(
-                          width: 400.w,
-                          height: 490.w,
-                          margin: EdgeInsets.only(left: 34.w, top: 34.w),
-                          decoration: BoxDecoration(
-                              // color: Colors.black,
-                              borderRadius: BorderRadius.circular(20.w)),
-                          child: kinderImage
+
+    if(weatherType=='비') {
+      return Scaffold(
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50.0),
+                      ),
+                      Container(
+                        width: 200.0,
+                        height: 200.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30.0),
+                      ),
+                      Container(
+                        width: 500.0,
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.pink,
                         ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                      ),
+                      Text(
+                        "Loading.....",
+                        style: TextStyle(color: Colors.yellow, fontSize: 18.0, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      );
+    }
+    else{
+      return Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
+            Column(
+              children: [
+                Container(
+                  width: 1048.w,
+                  height: 1048.w,
+                  margin: EdgeInsets.only(left: 19.w, top: 10.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: const Color(0x6663e6d7),
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(20.w),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0x29b1b1b1),
+                        offset: Offset(-2.w, 2.w),
+                        blurRadius: 6.w,
+                        spreadRadius: 0.w,
+                      ),
+                      BoxShadow(
+                        color: const Color(0x29dbdbdb),
+                        offset: Offset(-2.w, -4.w),
+                        blurRadius: 6.w,
+                        spreadRadius: 0.w,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ///<어린이집 사진
+                          Container(
+                              width: 400.w,
+                              height: 490.w,
+                              margin: EdgeInsets.only(left: 34.w, top: 34.w),
+                              decoration: BoxDecoration(
+                                  // color: Colors.black,
+                                  borderRadius: BorderRadius.circular(20.w)),
+                              child: kinderImage),
 
-                        ///어린이집 사진>
+                          ///어린이집 사진>
 
-                        ///<학급수, 유아수 그래프
-                        Column(children: [
-                          Row(children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin:
-                                      EdgeInsets.only(left: 76.w, top: 122.w),
-                                  child: Text("학급수",
-                                      style: TextStyle(
-                                          color: const Color(0xff393838),
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "NotoSansKR",
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: 16.0.sp),
-                                      textAlign: TextAlign.left),
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ///<원형그래프:학급수
-                                    Container(
-                                      width: 279.w,
-                                      height: 143.w,
-                                      margin: EdgeInsets.only(
-                                          left: 40.w, top: 15.w),
-                                      child: Row(
-                                        children: [
-                                          AspectRatio(
-                                            aspectRatio: 1,
-                                            child: PieChart(
-                                              PieChartData(
-                                                borderData: FlBorderData(
-                                                  show: false,
+                          ///<학급수, 유아수 그래프
+                          Column(children: [
+                            Row(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(left: 76.w, top: 122.w),
+                                    child: Text("학급수",
+                                        style: TextStyle(
+                                            color: const Color(0xff393838),
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: "NotoSansKR",
+                                            fontStyle: FontStyle.normal,
+                                            fontSize: 16.0.sp),
+                                        textAlign: TextAlign.left),
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ///<원형그래프:학급수
+                                      Container(
+                                        width: 279.w,
+                                        height: 143.w,
+                                        margin: EdgeInsets.only(
+                                            left: 40.w, top: 15.w),
+                                        child: Row(
+                                          children: [
+                                            AspectRatio(
+                                              aspectRatio: 1,
+                                              child: PieChart(
+                                                PieChartData(
+                                                  borderData: FlBorderData(
+                                                    show: false,
+                                                  ),
+                                                  sectionsSpace: 0,
+                                                  centerSpaceRadius: 30.w,
+                                                  sections: showingSections(
+                                                      classNumTotal),
                                                 ),
-                                                sectionsSpace: 0,
-                                                centerSpaceRadius: 30.w,
-                                                sections: showingSections(
-                                                    classNumTotal),
                                               ),
                                             ),
+                                            Row(
+                                              children: [
+                                                Column(
+                                                  // mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    for (int i = 0;
+                                                        i < classNumTotal;
+                                                        i++) ...[
+                                                      Row(
+                                                        children: [
+                                                          Indicator(
+                                                              color:
+                                                                  classGraphColor[
+                                                                      i],
+                                                              text:
+                                                                  classGraphName[
+                                                                      i],
+                                                              isSquare: true),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 7.w,
+                                                      ),
+                                                    ]
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 10.w,
+                                                ),
+                                                Column(
+                                                  // mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    for (int i = 0;
+                                                        i < classNumTotal;
+                                                        i++) ...[
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            classNumEach[i]
+                                                                    .toString() +
+                                                                '개',
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'NotoSansKR',
+                                                              color: const Color(
+                                                                  0xff393838),
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .normal,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 7.w,
+                                                      ),
+                                                    ]
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      ///원형그래프:학급수>
+                                    ],
+                                  ),
+                                ],
+                              ),
+
+                              ///<원형그래프: 유아수
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(left: 40.w, top: 122.w),
+                                    child: Text("유아수",
+                                        style: TextStyle(
+                                            color: const Color(0xff393838),
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: "NotoSansKR",
+                                            fontStyle: FontStyle.normal,
+                                            fontSize: 16.0.sp),
+                                        textAlign: TextAlign.left),
+                                  ),
+                                  Container(
+                                    width: 279.w,
+                                    height: 143.w,
+                                    margin: EdgeInsets.only(top: 15.w),
+                                    child: Row(
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 1,
+                                          child: PieChart(
+                                            PieChartData(
+                                              borderData: FlBorderData(
+                                                show: false,
+                                              ),
+                                              sectionsSpace: 0,
+                                              centerSpaceRadius: 30.w,
+                                              sections: showingSections(
+                                                  classGraphName.length),
+                                            ),
                                           ),
-                                          Row(
-                                            children: [
-                                              Column(
-                                                // mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            for (int i = 0;
+                                                i < classGraphName.length;
+                                                i++) ...[
+                                              Indicator(
+                                                  color: classGraphColor[i],
+                                                  text: classGraphName[i],
+                                                  isSquare: true),
+                                              SizedBox(
+                                                height: 7.w,
+                                              ),
+                                            ]
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        Column(
+                                          // mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            for (int i = 0;
+                                                i < classGraphName.length;
+                                                i++) ...[
+                                              Row(
                                                 children: [
-                                                  for (int i = 0;
-                                                      i < classNumTotal;
-                                                      i++) ...[
-                                                    Row(
-                                                      children: [
-                                                        Indicator(
-                                                            color:
-                                                                classGraphColor[
-                                                                    i],
-                                                            text:
-                                                                classGraphName[
-                                                                    i],
-                                                            isSquare: true),
-                                                      ],
+                                                  Text(
+                                                    childNumEachAge[i]
+                                                            .toString() +
+                                                        '명',
+                                                    style: TextStyle(
+                                                      fontFamily: 'NotoSansKR',
+                                                      color: const Color(
+                                                          0xff393838),
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontStyle:
+                                                          FontStyle.normal,
                                                     ),
-                                                    SizedBox(
-                                                      height: 7.w,
-                                                    ),
-                                                  ]
+                                                  )
                                                 ],
                                               ),
                                               SizedBox(
-                                                width: 10.w,
+                                                height: 7.w,
                                               ),
-                                              Column(
-                                                // mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  for (int i = 0;
-                                                      i < classNumTotal;
-                                                      i++) ...[
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          classNumEach[i]
-                                                                  .toString() +
-                                                              '개',
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'NotoSansKR',
-                                                            color: const Color(
-                                                                0xff393838),
-                                                            fontSize: 14.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontStyle: FontStyle
-                                                                .normal,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height: 7.w,
-                                                    ),
-                                                  ]
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                            ]
+                                          ],
+                                        ),
+                                      ],
                                     ),
 
-                                    ///원형그래프:학급수>
+                                    ///원형그래프:유아수>
+                                  ),
+                                ],
+                              )
+                            ]),
+                            Container(
+                                width: 544.w,
+                                height: 150.w,
+                                margin: EdgeInsets.only(left: 43.w, top: 30.w),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffffffff),
+                                  borderRadius: BorderRadius.circular(20.w),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: const Color(0x29b1b1b1),
+                                        offset: const Offset(-2, 2),
+                                        blurRadius: 6.w,
+                                        spreadRadius: 0),
+                                    BoxShadow(
+                                        color: const Color(0x29dbdbdb),
+                                        offset: const Offset(-2, -4),
+                                        blurRadius: 6.w,
+                                        spreadRadius: 0)
                                   ],
+                                  border: Border.all(
+                                      color: const Color(0x6663e6d7), width: 1),
                                 ),
-                              ],
-                            ),
-
-                            ///<원형그래프: 유아수
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin:
-                                      EdgeInsets.only(left: 40.w, top: 122.w),
-                                  child: Text("유아수",
-                                      style: TextStyle(
-                                          color: const Color(0xff393838),
-                                          fontWeight: FontWeight.w700,
-                                          fontFamily: "NotoSansKR",
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: 16.0.sp),
-                                      textAlign: TextAlign.left),
-                                ),
-                                Container(
-                                  width: 279.w,
-                                  height: 143.w,
-                                  margin: EdgeInsets.only(top: 15.w),
-                                  child: Row(
-                                    children: [
-                                      AspectRatio(
-                                        aspectRatio: 1,
-                                        child: PieChart(
-                                          PieChartData(
-                                            borderData: FlBorderData(
-                                              show: false,
-                                            ),
-                                            sectionsSpace: 0,
-                                            centerSpaceRadius: 30.w,
-                                            sections:
-                                                showingSections(classGraphName.length),
-                                          ),
-                                        ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          for (int i = 0;
-                                              i < classGraphName.length;
-                                              i++) ...[
-                                            Indicator(
-                                                color: classGraphColor[i],
-                                                text: classGraphName[i],
-                                                isSquare: true),
-                                            SizedBox(
-                                              height: 7.w,
-                                            ),
-                                          ]
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      Column(
-                                        // mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          for (int i = 0;
-                                              i < classGraphName.length;
-                                              i++) ...[
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  childNumEachAge[i]
-                                                          .toString() +
-                                                      '명',
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 93.w, top: 23.w),
+                                      child: Text("교사당/학급당 유아수",
+                                          style: TextStyle(
+                                            fontFamily: 'NotoSansKR',
+                                            color: const Color(0xff393838),
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontStyle: FontStyle.normal,
+                                          )),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 93.w, top: 20.w),
+                                              child: Text("교사당 유아수",
                                                   style: TextStyle(
                                                     fontFamily: 'NotoSansKR',
                                                     color:
@@ -487,576 +635,506 @@ class _KinderInfo3State extends State<KinderInfo3> {
                                                     fontSize: 14.sp,
                                                     fontWeight: FontWeight.w400,
                                                     fontStyle: FontStyle.normal,
-                                                  ),
-                                                )
-                                              ],
+                                                  )),
                                             ),
-                                            SizedBox(
-                                              height: 7.w,
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 93.w, top: 20.w),
+                                              child: Text("학급당 유아수",
+                                                  style: TextStyle(
+                                                    fontFamily: 'NotoSansKR',
+                                                    color:
+                                                        const Color(0xff393838),
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontStyle: FontStyle.normal,
+                                                  )),
                                             ),
-                                          ]
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: 200 * boyrate.w,
+                                              height: 20.w,
+                                              margin: EdgeInsets.only(
+                                                  left: 20.w, top: 20.w),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(10.w),
+                                                    bottomRight:
+                                                        Radius.circular(10.w)),
+                                                color: const Color(0xffc7f7f5),
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 200 * girlrate.w,
+                                              height: 20.w,
+                                              margin: EdgeInsets.only(
+                                                  left: 20.w, top: 20.w),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(10.w),
+                                                    bottomRight:
+                                                        Radius.circular(10.w)),
+                                                color: const Color(0xff39605f),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 40.w, top: 20.w),
+                                              child: Text(
+                                                  childrenCountByTeacher
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontFamily: 'NotoSansKR',
+                                                    color: Color(0xff393838),
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontStyle: FontStyle.normal,
+                                                  )),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 40.w, top: 20.w),
+                                              child: Text(
+                                                  childrenCountByClass
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontFamily: 'NotoSansKR',
+                                                    color: Color(0xff393838),
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontStyle: FontStyle.normal,
+                                                  )),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                          ])
 
-                                  ///원형그래프:유아수>
-                                ),
-                              ],
-                            )
-                          ]),
-                          Container(
-                              width: 544.w,
-                              height: 150.w,
-                              margin: EdgeInsets.only(left: 43.w, top: 30.w),
-                              decoration: BoxDecoration(
-                                color: const Color(0xffffffff),
-                                borderRadius: BorderRadius.circular(20.w),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: const Color(0x29b1b1b1),
-                                      offset: const Offset(-2, 2),
-                                      blurRadius: 6.w,
-                                      spreadRadius: 0),
-                                  BoxShadow(
-                                      color: const Color(0x29dbdbdb),
-                                      offset: const Offset(-2, -4),
-                                      blurRadius: 6.w,
-                                      spreadRadius: 0)
-                                ],
-                                border: Border.all(
-                                    color: const Color(0x6663e6d7), width: 1),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
+                          ///학급수, 유아수 그래프>
+                        ],
+                      ),
+
+                      ///청사진
+                      Container(
+                          width: 994.w,
+                          height: 446.w,
+                          margin: EdgeInsets.only(left: 43.w, top: 44.w),
+                          child: floorImage
+                          // Image(
+                          //   image: AssetImage('assets/class_info_deco/01.png'),
+                          // )
+                          ),
+
+                      ///
+                      /// 각종 차트들>
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            /// 등원유아 수, 공기질
+            /// 가로그래프의 경우 아시다시피 세로그래프를 => 가로그래프 로 회전시킨거라
+            /// 가로그래프의 길이(width)를 넓힐 경우 => 해당 구역의 height가 늘어나 밑에 overflow가 발생합니다
+            /// 이는 차후에 수정해 나가야 할 듯 싶습니다.
+            Column(
+              children: [
+                ///등원유아 수
+                // 사각형 9608
+                Container(
+                  width: 820.w,
+                  height: 518.w,
+                  margin: EdgeInsets.only(left: 15.w, top: 10.w),
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      border:
+                          Border.all(color: const Color(0x6663e6d7), width: 1),
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Color(0x29b1b1b1),
+                            offset: Offset(-2, 2),
+                            blurRadius: 6,
+                            spreadRadius: 0),
+                        BoxShadow(
+                            color: Color(0x29dbdbdb),
+                            offset: Offset(-2, -4),
+                            blurRadius: 6,
+                            spreadRadius: 0)
+                      ],
+                      color: const Color(0xffffffff)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 40.w, top: 40.w),
+                        child: Text(
+                          '등원유아 수',
+                          style: TextStyle(
+                            color: const Color(0xff39605f),
+                            fontSize: 20.sp,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w700,
+                          ),
+                          strutStyle: StrutStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700,
+                            forceStrutHeight: true,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          ///남아
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  width: 182.w,
+                                  height: 110.w,
+                                  margin:
+                                      EdgeInsets.only(left: 26.w, top: 16.w),
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                        'assets/childlifedata/02_3.jpg'),
+                                  )),
+                                  child: Container(
                                     margin:
-                                        EdgeInsets.only(left: 93.w, top: 23.w),
-                                    child: Text("교사당/학급당 유아수",
+                                        EdgeInsets.only(left: 130.w, top: 60.w),
+                                    child: Text("남아",
                                         style: TextStyle(
-                                          fontFamily: 'NotoSansKR',
-                                          color: const Color(0xff393838),
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w700,
+                                          fontFamily: 'GamjaFlower',
+                                          color: const Color(0xff39605f),
+                                          fontSize: 30.sp,
+                                          fontWeight: FontWeight.w400,
                                           fontStyle: FontStyle.normal,
                                         )),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                left: 93.w, top: 20.w),
-                                            child: Text("교사당 유아수",
-                                                style: TextStyle(
-                                                  fontFamily: 'NotoSansKR',
-                                                  color:
-                                                      const Color(0xff393838),
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontStyle: FontStyle.normal,
-                                                )),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                left: 93.w, top: 20.w),
-                                            child: Text("학급당 유아수",
-                                                style: TextStyle(
-                                                  fontFamily: 'NotoSansKR',
-                                                  color:
-                                                      const Color(0xff393838),
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontStyle: FontStyle.normal,
-                                                )),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 200 * boyrate.w,
-                                            height: 20.w,
-                                            margin: EdgeInsets.only(
-                                                left: 20.w, top: 20.w),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight:
-                                                      Radius.circular(10.w),
-                                                  bottomRight:
-                                                      Radius.circular(10.w)),
-                                              color: const Color(0xffc7f7f5),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 200 * girlrate.w,
-                                            height: 20.w,
-                                            margin: EdgeInsets.only(
-                                                left: 20.w, top: 20.w),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight:
-                                                      Radius.circular(10.w),
-                                                  bottomRight:
-                                                      Radius.circular(10.w)),
-                                              color: const Color(0xff39605f),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                left: 40.w, top: 20.w),
-                                            child: Text(childrenCountByTeacher.toString(),
-                                                style: TextStyle(
-                                                  fontFamily: 'NotoSansKR',
-                                                  color: Color(0xff393838),
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontStyle: FontStyle.normal,
-                                                )),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                left: 40.w, top: 20.w),
-                                            child: Text(childrenCountByClass.toString(),
-                                                style: TextStyle(
-                                                  fontFamily: 'NotoSansKR',
-                                                  color: Color(0xff393838),
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontStyle: FontStyle.normal,
-                                                )),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              )),
-                        ])
-
-                        ///학급수, 유아수 그래프>
-                      ],
-                    ),
-                    ///청사진
-                    Container(
-                        width: 994.w,
-                        height: 446.w,
-                        margin: EdgeInsets.only(left: 43.w, top: 44.w),
-                        child: floorImage
-                        // Image(
-                        //   image: AssetImage('assets/class_info_deco/01.png'),
-                        // )
-                    ),
-
-                    ///
-                    /// 각종 차트들>
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          /// 등원유아 수, 공기질
-          /// 가로그래프의 경우 아시다시피 세로그래프를 => 가로그래프 로 회전시킨거라
-          /// 가로그래프의 길이(width)를 넓힐 경우 => 해당 구역의 height가 늘어나 밑에 overflow가 발생합니다
-          /// 이는 차후에 수정해 나가야 할 듯 싶습니다.
-          Column(
-            children: [
-              ///등원유아 수
-              // 사각형 9608
-              Container(
-                width: 820.w,
-                height: 518.w,
-                margin: EdgeInsets.only(left: 15.w, top: 10.w),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    border:
-                        Border.all(color: const Color(0x6663e6d7), width: 1),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Color(0x29b1b1b1),
-                          offset: Offset(-2, 2),
-                          blurRadius: 6,
-                          spreadRadius: 0),
-                      BoxShadow(
-                          color: Color(0x29dbdbdb),
-                          offset: Offset(-2, -4),
-                          blurRadius: 6,
-                          spreadRadius: 0)
-                    ],
-                    color: const Color(0xffffffff)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 40.w, top: 40.w),
-                      child: Text(
-                        '등원유아 수',
-                        style: TextStyle(
-                          color: const Color(0xff39605f),
-                          fontSize: 20.sp,
-                          fontFamily: 'NotoSansKR',
-                          fontWeight: FontWeight.w700,
-                        ),
-                        strutStyle: StrutStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w700,
-                          forceStrutHeight: true,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        ///남아
-                        Column(
-                          // mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                width: 182.w,
-                                height: 110.w,
-                                margin: EdgeInsets.only(left: 26.w, top: 16.w),
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      'assets/childlifedata/02_3.jpg'),
-                                )),
-                                child: Container(
-                                  margin:
-                                      EdgeInsets.only(left: 130.w, top: 60.w),
-                                  child: Text("남아",
-                                      style: TextStyle(
-                                        fontFamily: 'GamjaFlower',
-                                        color: const Color(0xff39605f),
-                                        fontSize: 30.sp,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                      )),
-                                )),
-                            Container(
-                              width: 336 * boyrate.w,
-                              height: 20.w,
-                              margin: EdgeInsets.only(left: 40.w),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18.w),
-                                color: const Color(0x4d63e66d),
-                              ),
-                              child: Text(
-                                (100 * boyrate).toString() + "%",
-                                style: TextStyle(fontSize: 16.sp),
-                                textAlign: TextAlign.right,
-                              ),
-                            )
-                            //남아
-                          ],
-                        ),
-
-                        ///남아
-                        SizedBox(width: 50.w),
-
-                        ///여아
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                    width: 182.w,
-                                    height: 105.w,
-                                    margin: EdgeInsets.only(top: 16.w),
-                                    decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage(
-                                          'assets/childlifedata/02_4.jpg'),
-                                    )),
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: 130.w, top: 60.w),
-                                      child: Text("여아",
-                                          style: TextStyle(
-                                            fontFamily: 'GamjaFlower',
-                                            color: const Color(0xff39605f),
-                                            fontSize: 30.sp,
-                                            fontWeight: FontWeight.w400,
-                                            fontStyle: FontStyle.normal,
-                                          )),
-                                    )),
-                              ],
-                            ),
-                            Container(
-                              width: 336 * girlrate.w,
-                              //336
-                              height: 20.w,
-                              margin: EdgeInsets.only(left: 20.w),
-                              decoration: BoxDecoration(
+                                  )),
+                              Container(
+                                width: 336 * boyrate.w,
+                                height: 20.w,
+                                margin: EdgeInsets.only(left: 40.w),
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18.w),
-                                  color: const Color(0xffffc9c9)),
-                              child: Text(
-                                (100 * girlrate).toString() + "%",
-                                style: TextStyle(fontSize: 16.sp),
-                                textAlign: TextAlign.right,
-                              ),
-                            )
-                          ],
-                        )
-
-                        ///여아
-                      ],
-                    ),
-
-                    ///학급별그래프
-                    Container(
-                      width: 70.w,
-                      height: 29.w,
-                        margin: EdgeInsets.only(left: 40.w,top: 40.w),
-                      child: // 학급별
-                      Text(
-                          "학급별",
-                          style:  TextStyle(
-                              color:   Color(0xff39605f),
-                              fontWeight: FontWeight.w700,
-                              fontFamily: "NotoSansKR",
-                              fontStyle:  FontStyle.normal,
-                              fontSize: 20.sp
+                                  color: const Color(0x4d63e66d),
+                                ),
+                                child: Text(
+                                  (100 * boyrate).toString() + "%",
+                                  style: TextStyle(fontSize: 16.sp),
+                                  textAlign: TextAlign.right,
+                                ),
+                              )
+                              //남아
+                            ],
                           ),
-                          textAlign: TextAlign.left
-                      )
-                    ),
-                    Container(
-                      width: 748.w,
-                      height: 160.w,
-                      margin: EdgeInsets.only(left: 40.w, top: 20.w),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                        children:[
-                          for(int i=0;i<chartRate.length;i++)...[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
+
+                          ///남아
+                          SizedBox(width: 50.w),
+
+                          ///여아
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                      width: 182.w,
+                                      height: 105.w,
+                                      margin: EdgeInsets.only(top: 16.w),
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage(
+                                            'assets/childlifedata/02_4.jpg'),
+                                      )),
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                            left: 130.w, top: 60.w),
+                                        child: Text("여아",
+                                            style: TextStyle(
+                                              fontFamily: 'GamjaFlower',
+                                              color: const Color(0xff39605f),
+                                              fontSize: 30.sp,
+                                              fontWeight: FontWeight.w400,
+                                              fontStyle: FontStyle.normal,
+                                            )),
+                                      )),
+                                ],
+                              ),
+                              Container(
+                                width: 336 * girlrate.w,
+                                //336
+                                height: 20.w,
+                                margin: EdgeInsets.only(left: 20.w),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18.w),
+                                    color: const Color(0xffffc9c9)),
+                                child: Text(
+                                  (100 * girlrate).toString() + "%",
+                                  style: TextStyle(fontSize: 16.sp),
+                                  textAlign: TextAlign.right,
+                                ),
+                              )
+                            ],
+                          )
+
+                          ///여아
+                        ],
+                      ),
+
+                      ///학급별그래프
+                      Container(
+                          width: 70.w,
+                          height: 29.w,
+                          margin: EdgeInsets.only(left: 40.w, top: 40.w),
+                          child: // 학급별
+                              Text("학급별",
+                                  style: TextStyle(
+                                      color: Color(0xff39605f),
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "NotoSansKR",
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 20.sp),
+                                  textAlign: TextAlign.left)),
+                      Container(
+                          width: 748.w,
+                          height: 160.w,
+                          margin: EdgeInsets.only(left: 40.w, top: 20.w),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 2.w),
-                                  child: Text((100*chartRate[i]).toString()+"%",
-                                      style: TextStyle(
-                                        fontFamily: 'NotoSansKR',
-                                        color: Color(0xff393838),
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w400,
-                                        fontStyle: FontStyle.normal,
-                                      )
-                                  ),
-                                ),
-                                Container(
-                                    width: 20.w,
-                                    height: 135 * chartRate[i].w,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffc7f7f5),
-                                      borderRadius: BorderRadius.only(topRight: Radius.circular(10.w), topLeft:Radius.circular(10.w)),
-                                    )
-                                ),
-                              ]
-                            ),
-                          ]
-                        ]
-                      )
-                    ),
-                    Container(
-                        width: 748.w,
-                        height: 3.w,
+                                for (int i = 0; i < chartRate.length; i++) ...[
+                                  Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(bottom: 2.w),
+                                          child: Text(
+                                              (100 * chartRate[i]).toString() +
+                                                  "%",
+                                              style: TextStyle(
+                                                fontFamily: 'NotoSansKR',
+                                                color: Color(0xff393838),
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                              )),
+                                        ),
+                                        Container(
+                                            width: 20.w,
+                                            height: 135 * chartRate[i].w,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xffc7f7f5),
+                                              borderRadius: BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(10.w),
+                                                  topLeft:
+                                                      Radius.circular(10.w)),
+                                            )),
+                                      ]),
+                                ]
+                              ])),
+                      Container(
+                          width: 748.w,
+                          height: 3.w,
+                          margin: EdgeInsets.only(left: 40.w),
+                          decoration: BoxDecoration(color: Color(0xff63e6d7))),
+                      Container(
                         margin: EdgeInsets.only(left: 40.w),
-                        decoration: BoxDecoration(
-                            color: Color(0xff63e6d7)
-                        )
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 40.w),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              for (int i = 0; i < chartRate.length; i++) ...[
+                                Text(childClassName[i],
+                                    style: TextStyle(
+                                      fontFamily: '.AppleSystemUIFont',
+                                      color: Color(0xff000000),
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    ))
+                              ]
+                            ]),
+                      )
+
+                      ///학급별그래프
+                    ],
+                  ),
+
+                  ///등원유아 수
+                ),
+
+                ///공기질
+                Container(
+                  width: 820.w,
+                  height: 518.w,
+                  margin: EdgeInsets.only(left: 15.w, top: 12.w),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(weather_assets),
+                  )),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 594.w,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          for(int i=0;i<chartRate.length;i++)...[
-                            Text(childClassName[i],
+                          Container(
+                            child: Text("온도",
                                 style: TextStyle(
-                                  fontFamily: '.AppleSystemUIFont',
-                                  color: Color(0xff000000),
-                                  fontSize: 14.sp,
+                                  fontFamily: 'NotoSansKR',
+                                  color: const Color(0xffc45d1a),
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 62.w),
+                          ),
+                          Container(
+                            child: Text("습도",
+                                style: TextStyle(
+                                  fontFamily: 'NotoSansKR',
+                                  color: const Color(0xffc45d1a),
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 62.w),
+                          ),
+                          Container(
+                            child: Text("미세먼지",
+                                style: TextStyle(
+                                  fontFamily: 'NotoSansKR',
+                                  color: const Color(0xffc45d1a),
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 62.w),
+                          ),
+                          Container(
+                            child: Text("이산화탄소",
+                                style: TextStyle(
+                                  fontFamily: 'NotoSansKR',
+                                  color: const Color(0xffc45d1a),
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 62.w),
+                          ),
+                          Container(
+                            child: Text("초미세먼지",
+                                style: TextStyle(
+                                  fontFamily: 'NotoSansKR',
+                                  color: const Color(0xffc45d1a),
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 62.w),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: 24.w,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(sensorTemperature.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'GamjaFlower',
+                                  color: const Color(0xff42372c),
+                                  fontSize: 35.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
-                                )
-                            )
-                          ]
-                        ]
-                      ),
-                    )
-                    ///학급별그래프
-                  ],
-                ),
+                                )),
+                            margin: EdgeInsets.only(top: 50.w),
+                          ),
+                          Container(
+                            child: Text(sensorHumidity.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'GamjaFlower',
+                                  color: const Color(0xff42372c),
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 45.w),
+                          ),
+                          Container(
+                            child: Text(sensorPm10.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'GamjaFlower',
+                                  color: const Color(0xff42372c),
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 45.w),
+                          ),
+                          Container(
+                            child: Text(sensorCo2.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'GamjaFlower',
+                                  color: const Color(0xff42372c),
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 50.w),
+                          ),
+                          Container(
+                            child: Text(sensorPm25.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'GamjaFlower',
+                                  color: const Color(0xff42372c),
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 50.w),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
 
-                ///등원유아 수
-              ),
+                ///공기질
+              ],
+            )
 
-              ///공기질
-              Container(
-                width: 820.w,
-                height: 518.w,
-                margin: EdgeInsets.only(left: 15.w, top: 12.w),
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/airple_weather/sunny.jpg'),
-                    )),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 594.w,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Text("온도",
-                              style: TextStyle(
-                                fontFamily: 'NotoSansKR',
-                                color: const Color(0xffc45d1a),
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 62.w),
-                        ),
-                        Container(
-                          child: Text("습도",
-                              style: TextStyle(
-                                fontFamily: 'NotoSansKR',
-                                color: const Color(0xffc45d1a),
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 62.w),
-                        ),
-                        Container(
-                          child: Text("미세먼지",
-                              style: TextStyle(
-                                fontFamily: 'NotoSansKR',
-                                color: const Color(0xffc45d1a),
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 62.w),
-                        ),
-                        Container(
-                          child: Text("이산화탄소",
-                              style: TextStyle(
-                                fontFamily: 'NotoSansKR',
-                                color: const Color(0xffc45d1a),
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 62.w),
-                        ),
-                        Container(
-                          child: Text("초미세먼지",
-                              style: TextStyle(
-                                fontFamily: 'NotoSansKR',
-                                color: const Color(0xffc45d1a),
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 62.w),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: 24.w,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Text(sensorTemperature.toString(),
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 50.w),
-                        ),
-                        Container(
-                          child: Text(sensorHumidity.toString(),
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 45.w),
-                        ),
-                        Container(
-                          child: Text(sensorPm10.toString(),
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 45.w),
-                        ),
-                        Container(
-                          child: Text(sensorCo2.toString(),
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 50.w),
-                        ),
-                        Container(
-                          child: Text(sensorPm25.toString(),
-                              style: TextStyle(
-                                fontFamily: 'GamjaFlower',
-                                color: const Color(0xff42372c),
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 50.w),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )
-
-              ///공기질
-            ],
-          )
-
-          ///등원유아 수, 공기질
-        ],
-      ),
-    );
+            ///등원유아 수, 공기질
+          ],
+        ),
+      );
+    }
   }
 
 
