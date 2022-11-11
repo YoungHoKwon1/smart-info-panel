@@ -29,11 +29,11 @@ class _TeacherInfoState extends State<TeacherInfo> {
     _callAttendApi();
     Timer(Duration(seconds: 20), () {
       if(childNum<=10) {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ClassInfo10()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo10()));
       } else if(childNum>10 || childNum<20) {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ClassInfo20()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo20()));
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ClassInfo30()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo30()));
       }
     });
   }

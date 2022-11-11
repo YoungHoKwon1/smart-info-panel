@@ -28,7 +28,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
     _callEnvApi();
     _callAttendApi();
     Timer(Duration(seconds: 10), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>TeacherInfo()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TeacherInfo()));
     });
   }
 
@@ -264,7 +264,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
   @override
   Widget build(BuildContext context) {
 
-    if(weatherType=='비') {
+    if(kinderImage==Image.asset("name")) {
       return Scaffold(
         body: Stack(
           fit: StackFit.expand,

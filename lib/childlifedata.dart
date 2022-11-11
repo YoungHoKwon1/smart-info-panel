@@ -27,7 +27,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
     _callAttendApi();
 
     Timer(Duration(seconds: 20), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
     });
   }
   Dio dio = Dio();
@@ -250,7 +250,7 @@ class _ChildLifeDataState extends State<ChildLifeData> {
   @override
   Widget build(BuildContext context) {
 
-    if(weatherType=='비') {
+    if(childImage==Image.asset("name")) {
       return Scaffold(
         body: Stack(
           fit: StackFit.expand,

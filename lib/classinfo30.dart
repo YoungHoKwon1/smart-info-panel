@@ -26,7 +26,7 @@ class _ClassInfo30State extends State<ClassInfo30> {
     _callAttendApi();
 
     Timer(Duration(seconds: 20), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChildLifeData()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChildLifeData()));
     });
   }
   //swagger 참조

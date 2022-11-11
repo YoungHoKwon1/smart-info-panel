@@ -31,7 +31,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
     _callAttendApi();
     // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
     Timer(Duration(seconds: 10), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>KinderInfo3()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo3()));
     });
   }
 
@@ -322,7 +322,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
 
   @override
   Widget build(BuildContext context) {
-    if(weatherType=='비') {
+    if(kinderImage==Image.asset("name")) {
       return Scaffold(
         body: Stack(
           fit: StackFit.expand,

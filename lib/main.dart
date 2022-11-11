@@ -66,7 +66,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     _callApi();
     // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
     Timer(Duration(seconds: 20), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
     });
   }
 

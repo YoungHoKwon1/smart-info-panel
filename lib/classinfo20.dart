@@ -25,7 +25,7 @@ class _ClassInfo20State extends State<ClassInfo20> {
     _callEnvApi();
     _callAttendApi();
     Timer(Duration(seconds: 20), () {//학급공지미완성=>아이생활데이터
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChildLifeData()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChildLifeData()));
     });
   }
 
