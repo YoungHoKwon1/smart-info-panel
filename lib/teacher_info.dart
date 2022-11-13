@@ -2,10 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_info_panel/classinfo10.dart';
 import 'api/infopanel.dart';
 
 import 'dart:math' as math;
+import 'dart:async';
 
+import 'classinfo20.dart';
+import 'classinfo30.dart';
 //왠지는
 class TeacherInfo extends StatefulWidget {
   const TeacherInfo({Key? key}) : super(key: key);
@@ -23,6 +27,15 @@ class _TeacherInfoState extends State<TeacherInfo> {
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
+    Timer(Duration(seconds: 20), () {
+      if(childNum<=10) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo10()));
+      } else if(childNum>10 || childNum<20) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo20()));
+      } else {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo30()));
+      }
+    });
   }
 
   Dio dio = Dio();
@@ -216,6 +229,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
   var sensorCo2 = '비';
   var sensorTvoc = '비';
 
+  String weather_assets = 'assets/airple_weather/sunny.jpg';
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
@@ -250,6 +264,28 @@ class _TeacherInfoState extends State<TeacherInfo> {
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(
         response); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
+      weatherTemperature =  mapResult["weatherTemperature"];
+      weatherType =  mapResult["weatherType"];
+      switch(weatherType) {
+        case "구름" :
+          weather_assets = 'assets/airple_weather/cloudy.jpg';
+          break;
+        case "비" :
+          weather_assets = 'assets/airple_weather/rain_only.jpg';
+          break;
+        case "눈" :
+          weather_assets = 'assets/airple_weather/snow_only.jpg';
+          break;
+        case "눈/비" :
+          weather_assets = 'assets/airple_weather/snow_rain.jpg';
+          break;
+        case "맑음" :
+          weather_assets = 'assets/airple_weather/sunny.jpg';
+          break;
+        case "바람" :
+          weather_assets = 'assets/airple_weather/wind.jpg';
+          break;
+      }
       weatherTemperature = mapResult["weatherTemperature"];
       weatherType = mapResult["weatherType"];
       weatherHumidity = mapResult["weatherHumidity"];
@@ -856,11 +892,11 @@ class _TeacherInfoState extends State<TeacherInfo> {
                   width: 820.w,
                   height: 518.w,
                   margin: EdgeInsets.only(left: 15.w, top: 12.w),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/airple_weather/sunny.jpg'),
-                  )),
+                        fit: BoxFit.cover,
+                        image: AssetImage(weather_assets),
+                      )),
                   child: Row(
                     children: [
                       SizedBox(
@@ -927,61 +963,61 @@ class _TeacherInfoState extends State<TeacherInfo> {
                         ],
                       ),
                       SizedBox(
-                        width: 24.w,
+                        width: 10.w,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            child: Text(sensorTemperature.toString(),
+                            child: Text(sensorTemperature.toString()+"도",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
                             margin: EdgeInsets.only(top: 50.w),
                           ),
                           Container(
-                            child: Text(sensorHumidity.toString(),
+                            child: Text(sensorHumidity.toString()+"%",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 55.w),
+                          ),
+                          Container(
+                            child: Text(sensorPm10.toString()+"㎍/㎥",
+                                style: TextStyle(
+                                  fontFamily: 'GamjaFlower',
+                                  color: const Color(0xff42372c),
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
                             margin: EdgeInsets.only(top: 45.w),
                           ),
                           Container(
-                            child: Text(sensorPm10.toString(),
+                            child: Text(sensorCo2.toString()+"ppm",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                            margin: EdgeInsets.only(top: 45.w),
-                          ),
-                          Container(
-                            child: Text(sensorCo2.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
                             margin: EdgeInsets.only(top: 50.w),
                           ),
                           Container(
-                            child: Text(sensorPm25.toString(),
+                            child: Text(sensorPm25.toString()+"㎍/㎥",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),

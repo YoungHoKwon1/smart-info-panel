@@ -28,7 +28,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
     _callEnvApi();
     _callAttendApi();
     Timer(Duration(seconds: 10), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>TeacherInfo()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TeacherInfo()));
     });
   }
 
@@ -264,7 +264,7 @@ class _KinderInfo3State extends State<KinderInfo3> {
   @override
   Widget build(BuildContext context) {
 
-    if(weatherType=='비') {
+    if(kinderImage==Image.asset("name")) {
       return Scaffold(
         body: Stack(
           fit: StackFit.expand,
@@ -991,9 +991,9 @@ class _KinderInfo3State extends State<KinderInfo3> {
                   margin: EdgeInsets.only(left: 15.w, top: 12.w),
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(weather_assets),
-                  )),
+                        fit: BoxFit.cover,
+                        image: AssetImage(weather_assets),
+                      )),
                   child: Row(
                     children: [
                       SizedBox(
@@ -1060,61 +1060,61 @@ class _KinderInfo3State extends State<KinderInfo3> {
                         ],
                       ),
                       SizedBox(
-                        width: 24.w,
+                        width: 10.w,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            child: Text(sensorTemperature.toString(),
+                            child: Text(sensorTemperature.toString()+"도",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
                             margin: EdgeInsets.only(top: 50.w),
                           ),
                           Container(
-                            child: Text(sensorHumidity.toString(),
+                            child: Text(sensorHumidity.toString()+"%",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )),
+                            margin: EdgeInsets.only(top: 55.w),
+                          ),
+                          Container(
+                            child: Text(sensorPm10.toString()+"㎍/㎥",
+                                style: TextStyle(
+                                  fontFamily: 'GamjaFlower',
+                                  color: const Color(0xff42372c),
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
                             margin: EdgeInsets.only(top: 45.w),
                           ),
                           Container(
-                            child: Text(sensorPm10.toString(),
+                            child: Text(sensorCo2.toString()+"ppm",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                            margin: EdgeInsets.only(top: 45.w),
-                          ),
-                          Container(
-                            child: Text(sensorCo2.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
                             margin: EdgeInsets.only(top: 50.w),
                           ),
                           Container(
-                            child: Text(sensorPm25.toString(),
+                            child: Text(sensorPm25.toString()+"㎍/㎥",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: const Color(0xff42372c),
-                                  fontSize: 35.sp,
+                                  fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
