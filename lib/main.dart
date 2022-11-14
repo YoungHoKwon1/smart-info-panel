@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_info_panel/childlifedata.dart';
 import 'package:smart_info_panel/classinfo20.dart';
-
+import 'package:smart_info_panel/facetime.dart';
 import 'package:smart_info_panel/notice.dart';
 
 import 'package:smart_info_panel/classinfo30.dart';
@@ -85,23 +85,17 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             color: Colors.white,
             child: ElevatedButton(
               onPressed: () {
-
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));//영호
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
-
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => Notice())); //성민
-
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));//영호
+                 //Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => Notice())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10())); //건희
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
-
-
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
-                 // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2()));
-
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Facetime())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo3())); //영호
 
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherInfo())); //선생님소개
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherInfo())); //선생님소개
               },
               child: Text('데모 시작'),
             )),

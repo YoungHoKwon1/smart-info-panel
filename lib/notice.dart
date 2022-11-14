@@ -32,21 +32,22 @@ class _NoticeState extends State<Notice> {
   String news = '이번달 행사';
   String today = '오늘의 소식';
   int eventNum = 0;
-  int month = 0;
-  int week = 0;
+  int months = 0;
+  int weeks = 0;
   int row=0;
   int column = 4;
   int rest=0;
+  int newImageNum = 0;
   List<String> childrenImagePath = [];
-  List<Image> iPs = [];
-  String weekNews = '';
-  String weekNewsComment = '';
+  String weekinfo = '';
+  String NewsComment = '';
   List<String> event2 = [];
   String className = '새싹어린이반';
   int teacherNum = 0;
   List<String> teacherName = ['김담임', '김담임', '김담임'];
   List<String> teacherImagePath = [];
   List<Image> teacherImage = [];
+  List<Image> imageList = [];
   List<String> childrenName = [
     '','','','','','','',
     '','','','','','','',
@@ -83,29 +84,30 @@ class _NoticeState extends State<Notice> {
       return obj.response;
     });
     // print(responseBasic);
+    //print(month);
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     // print("basic:  "+mapResult["classInfo"].toString());
-    // print(mapResult["committees"]);//학급이벤트
+    print(mapResult);//학급이벤트
     // print(mapResult["classInfo"]);//학급소개왼쪽
-    print(mapResult["classInfo"][0]);
+    //print(mapResult["classInfo"][0]);
     setState(() {
-      className = mapResult["classInfo"][0]["name"];
-      className = mapResult["classInfo"][0]["name"];
-      teacherNum = mapResult["classInfo"][0]["teachers"].length;
-      for(int i=0;i<teacherNum;i++) {
-        teacherName[i] = mapResult["classInfo"][0]["teachers"][i]["name"];
-        // teacherImagePath.add(mapResult["classInfo"][0]["teachers"][i]["imagePath"]);
-
-        teacherImage.add(Image.network(
-          url+mapResult["classInfo"][0]["teachers"][i]["imagePath"],
-          headers: headers,
-          width: 128.w,
-          height: 146.w,
-          fit: BoxFit.cover,
-        ),
+      weeks = mapResult["news"]["week"];
+      months= mapResult["news"]["month"];
+      weekinfo = mapResult["news"]["weekNews"];
+      NewsComment = mapResult["news"]["weekNewsComment"];
+      newImageNum = mapResult["news"]["imagePaths"].length;
+      for(int q=0;q<newImageNum;q++) {
+        imageList.add(
+          Image.network(
+            url + mapResult["news"]["imagePaths"][q],
+            headers: headers,
+            width: 200.w,
+            height: 200.w,
+            fit: BoxFit.cover,
+          ),
         );
-
       }
+
       childNum = mapResult["classInfo"][0]["children"].length;
       childrenName.clear();
       for(int i=0;i<childNum;i++) {
@@ -120,15 +122,15 @@ class _NoticeState extends State<Notice> {
         ),);
       }
 
-      row = childNum ~/ column;
-      rest = childNum % column;
       // print("row: " +row.toString());
       // print("childNum: " +childNum.toString());
       // print("column: " +column.toString());
-      row = eventNum ~/ column;
-      rest = eventNum % column;
+      row = newImageNum ~/ column;
+      rest = newImageNum % column;
     });
   }
+
+
 
   double boyrate = 0.5;
   double girlrate = 0.78;
@@ -178,6 +180,10 @@ class _NoticeState extends State<Notice> {
       chartRate = mapResult["rateByClass"].cast<double>();
     });
   }
+  List<String> imagePaths = [
+    "api/image/뒷산사진1.png",
+    "api/image/뒷산사진2.png",
+  ];
   String weatherTemperature='22';
   String weatherType='비';
   String weatherHumidity='85';
@@ -300,26 +306,26 @@ class _NoticeState extends State<Notice> {
                                 spreadRadius: 0.w,
                               ),
                             ],
-                              ),
+                          ),
                           child:Row(
                             children: [
                               Column(
-                          crossAxisAlignment : CrossAxisAlignment.start,
+                                crossAxisAlignment : CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(left: 27.w, top: 29.w),
-                                    child: Text(news,
-                                    style: TextStyle(
-                                      fontFamily:'NotSanaKR',
-                                      color: const Color(0xff898989),
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w700,
-                                      fontStyle: FontStyle.normal,
-                                    ))
+                                      margin: EdgeInsets.only(left: 27.w, top: 29.w),
+                                      child: Text(news,
+                                          style: TextStyle(
+                                            fontFamily:'NotSanaKR',
+                                            color: const Color(0xff898989),
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontStyle: FontStyle.normal,
+                                          ))
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(left: 27.w, top: 30.w),
-                                      child: Text(month.toString() +'월'+week.toString()+'주 아이좋아 어린이집 주요행사',
+                                      child: Text(months.toString() +'월'+weeks.toString()+'주 아이좋아 어린이집 주요행사',
                                           style: TextStyle(
                                             fontFamily:'NotSanaKR',
                                             color: const Color(0xff39605f),
@@ -330,7 +336,7 @@ class _NoticeState extends State<Notice> {
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(left: 27.w, top: 15.w),
-                                      child: Text(weekNews,
+                                      child: Text(weekinfo,
                                           style: TextStyle(
                                             fontFamily:'NotSanaKR',
                                             color: const Color(0xff39605f),
@@ -339,16 +345,26 @@ class _NoticeState extends State<Notice> {
                                             fontStyle: FontStyle.normal,
                                           ))
                                   ),
+
                                   Container(
+                                      width: 200,
                                       margin: EdgeInsets.only(left: 27.w, top: 20.w),
-                                      child: Text(weekNewsComment,
-                                          style: TextStyle(
-                                            fontFamily:'NotSanaKR',
-                                            color: const Color(0xff000000),
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: FontStyle.normal,
-                                          ))
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                              child: Text(NewsComment,
+                                                overflow:  TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                  fontFamily:'NotSanaKR',
+                                                  color: const Color(0xff000000),
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle: FontStyle.normal,
+                                                )
+                                              )),
+                                        ],
+                                      )
                                   ),
                                 ],
                               )
@@ -384,7 +400,7 @@ class _NoticeState extends State<Notice> {
                           child:Row(
                             children: [
                               Column(
-                          crossAxisAlignment : CrossAxisAlignment.start,
+                                crossAxisAlignment : CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                       margin: EdgeInsets.only(left: 27.w, top: 29.w),
@@ -399,17 +415,17 @@ class _NoticeState extends State<Notice> {
                                   ),
                                   Row(
                                     children: [
-                                  Container(
-                                      margin: EdgeInsets.only(left: 27.w, top: 65.w),
-                                      child: Text("오늘은",
-                                          style: TextStyle(
-                                            fontFamily:'GamjaFlower',
-                                            color: const Color(0xff39605f),
-                                            fontSize: 30.sp,
-                                            fontWeight: FontWeight.w400,
-                                            fontStyle: FontStyle.normal,
-                                          ))
-                                  ),
+                                      Container(
+                                          margin: EdgeInsets.only(left: 27.w, top: 65.w),
+                                          child: Text("오늘은",
+                                              style: TextStyle(
+                                                fontFamily:'GamjaFlower',
+                                                color: const Color(0xff39605f),
+                                                fontSize: 30.sp,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                              ))
+                                      ),
                                       Container(
                                         width: 70.w,
                                         height: 70.w,
@@ -454,41 +470,41 @@ class _NoticeState extends State<Notice> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(left: 130.w, top: 10.w),
-                                          child: Text("김아가",
-                                              style: TextStyle(
-                                                fontFamily:'GamjaFlower',
-                                                color: const Color(0xff39605f),
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w400,
-                                                fontStyle: FontStyle.normal,
-                                              ))
-                                      ),
-                                      Container(
-                                          margin: EdgeInsets.only(left: 41.w, top: 10.w),
-                                          child: Text("박모세",
-                                              style: TextStyle(
-                                                fontFamily:'GamjaFlower',
-                                                color: const Color(0xff39605f),
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w400,
-                                                fontStyle: FontStyle.normal,
-                                              ))
-                                      ),
-                                      Container(
-                                          margin: EdgeInsets.only(left: 41.w, top: 10.w),
-                                          child: Text("이자랑",
-                                              style: TextStyle(
-                                                fontFamily:'GamjaFlower',
-                                                color: const Color(0xff39605f),
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w400,
-                                                fontStyle: FontStyle.normal,
-                                              ))
-                                      ),
-                                    ]
+                                      children: [
+                                        Container(
+                                            margin: EdgeInsets.only(left: 130.w, top: 10.w),
+                                            child: Text("김아가",
+                                                style: TextStyle(
+                                                  fontFamily:'GamjaFlower',
+                                                  color: const Color(0xff39605f),
+                                                  fontSize: 20.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                ))
+                                        ),
+                                        Container(
+                                            margin: EdgeInsets.only(left: 41.w, top: 10.w),
+                                            child: Text("박모세",
+                                                style: TextStyle(
+                                                  fontFamily:'GamjaFlower',
+                                                  color: const Color(0xff39605f),
+                                                  fontSize: 20.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                ))
+                                        ),
+                                        Container(
+                                            margin: EdgeInsets.only(left: 41.w, top: 10.w),
+                                            child: Text("이자랑",
+                                                style: TextStyle(
+                                                  fontFamily:'GamjaFlower',
+                                                  color: const Color(0xff39605f),
+                                                  fontSize: 20.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal,
+                                                ))
+                                        ),
+                                      ]
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(left: 20.w, top: 30.w),
@@ -521,32 +537,32 @@ class _NoticeState extends State<Notice> {
                     ),
                     for(int i=0;i<row;i++)...[
                       Row(
-                        children: [
-                          for(int j=0;j<column;j++)...[
-                            Column(
-                              children: [
-                                if(j==0)...[
-                                  Container(
-                                    width: 200.w,
-                                    height: 200.w,
-                                    margin: EdgeInsets.only(left: 60.w),
-                                    child: iPs[column*i+j],
-                                  )
-                                ]else ...[
-                                  Container(
-                                    width: 200.w,
-                                    height: 200.w,
-                                    margin: EdgeInsets.only(left: 20.w, top: 109.w),
-                                    child: Center(
-                                        child: iPs[column*i+j]
-                                    ),
-                                  )
+                          children: [
+                            for(int j=0;j<column;j++)...[
+                              Column(
+                                children: [
+                                  if(j==0)...[
+                                    Container(
+                                      width: 200.w,
+                                      height: 200.w,
+                                      margin: EdgeInsets.only(left: 60.w, top:10.w),
+                                      child: imageList[column*i+j],
+                                    )
+                                  ]else ...[
+                                    Container(
+                                      width: 200.w,
+                                      height: 200.w,
+                                      margin: EdgeInsets.only(left: 20.w, top: 20.w),
+                                      child: Center(
+                                          child: imageList[column*i+j]
+                                      ),
+                                    )
+                                  ],
                                 ],
-                              ],
-                            )
+                              )
 
-                          ]]),
-                        ],
+                            ]]),
+                    ],
                   ],
                 ),
               ),
@@ -557,11 +573,11 @@ class _NoticeState extends State<Notice> {
                     height: 97.w,
                     margin: EdgeInsets.only(left: 22.w, top: 33.w),
                     decoration: BoxDecoration(
-                      color: const Color(0xff707070),
-                      border:Border.all(
-                        color: const Color(0xffffffff),
-                        width: 1.w,
-                      )
+                        color: const Color(0xff707070),
+                        border:Border.all(
+                          color: const Color(0xffffffff),
+                          width: 1.w,
+                        )
                     ),
                   )
                 ],
@@ -805,8 +821,6 @@ class _NoticeState extends State<Notice> {
                     )
                   ],
                 ),
-
-                ///등원유아 수
               ),
 
               ///공기질
@@ -817,7 +831,7 @@ class _NoticeState extends State<Notice> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/airple_weather/01.jpg'),
+                      image: AssetImage('assets/airple_weather/cloudy.jpg'),
                     )),
                 child: Row(
                   children: [
