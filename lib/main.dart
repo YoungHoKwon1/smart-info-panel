@@ -56,18 +56,18 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   ///routing 순서, 20초마다 넘김
   ///어린이집소개페이지(KinderInfo2,3)
   ///선생님소개(TeacherInfo)
-  ///학급소개 페이지(ClassInfo10,20,30)
-  ///학급공지 페이지()
-  ///영유아 인식 페이지
+  ///학급소개 페이지(ClassInfo10,20,30) // 유아 수에 따라 routing
+  ///학급공지 페이지(Notice)
+  ///영유아 인식 페이지(facetime)
   ///아이생활 데이터(ChildLifeData)
   @override
   void initState() {
     super.initState();
     _callApi();
     // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
-    // Timer(Duration(seconds: 20), () {
-    //   Navigator.push(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
-    // });
+    Timer(Duration(seconds: 20), () {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
+    });
   }
 
   void _callApi() async {
@@ -90,8 +90,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => Notice())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10())); //건희
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Facetime())); //성민
+
+
+                Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
+                 // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2()));
+
+
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo3())); //영호
 
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
