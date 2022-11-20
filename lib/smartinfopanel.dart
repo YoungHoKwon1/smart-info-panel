@@ -1,75 +1,115 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_info_panel/classinfo10.dart';
-import 'api/infopanel.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
+import 'package:smart_info_panel/widgets/classinfo30_widget.dart';
+import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
 
-import 'dart:math' as math;
+
+import 'api/infopanel.dart';
+import 'package:dio/dio.dart';
 import 'dart:async';
 
-import 'classinfo20.dart';
-import 'classinfo30.dart';
+import 'kinder_info_3.dart';
+
 //왠지는
-class TeacherInfo extends StatefulWidget {
-  const TeacherInfo({Key? key}) : super(key: key);
+class MainPanel extends StatefulWidget {
+  const MainPanel({Key? key}) : super(key: key);
 
   @override
-  State<TeacherInfo> createState() => _TeacherInfoState();
+  State<MainPanel> createState() => _MainPanelState();
 }
 
-class _TeacherInfoState extends State<TeacherInfo> {
+class _MainPanelState extends State<MainPanel> {
+
+
   int touchedIndex = -1;
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(seconds: 3), () {});
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
-    // Timer(Duration(seconds: 20), () {
-    //   if(childNum<=10) {
-    //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo10()));
-    //   } else if(childNum>10 || childNum<20) {
-    //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo20()));
-    //   } else {
-    //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo30()));
-    //   }
+    // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
+    // Timer(Duration(seconds: 10), () {
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo3()));
     // });
   }
 
   Dio dio = Dio();
 
   String url = "http://tmap.aijoa.us:48764/";
-  final token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+  final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-  int childNum = 0;
-  int column = 4;
-  int row = 0;
-  int rest = 0; //나머지 아이들
-  String className = '새싹어린이반';
-  int teacherNum = 0;
-  int directorNum = 0;
-  int committeeNum = 0;
-  List<String> directorImagePath = [];
-  List<Image> directorImage = [];
-  List<String> directorName = [];
-  List<String> directorIntroduction = [];
-  List<Image> teacherImage = [];
-  List<String> teacherName = [];
-  List<String> teacherIntroduction = [];
 
-  List<Image> committeeImage = [];
-  List<String> committeeName = [];
-  List<String> committeeClassName = [];
+  List<double> classGraphRate = [20, 20, 20, 20, 20];
+  List<dynamic> classGraphName = [
+    '만 3세반',
+    '만 4세반',
+    '만 5세반',
+    '혼합 3-4세반',
+    '혼합 4-5세반'
+  ];
+  int classNumTotal=0;
+  List<int> classNumEach = [1, 3, 3, 1, 1];
+  List<Color> classGraphColor = [
+    const Color(0xffc7f7f5),
+    const Color(0xffc6d0f4),
+    const Color(0xfff4dac6),
+    const Color(0xfff4f4c6),
+    const Color(0xfff4c6ed)
+  ];
+  int childNumTotal = 40;
+  List<dynamic> childNumEachAge = [12, 6, 11, 12, 1];
+  double childrenperteacher = 0.5;
+  var childrenCountByTeacher;
+  var childrenCountByClass;
+  List<String> firstRowStr = [
+    "교실수",
+    "면적",
+    "실내",
+    "면적",
+    "실외",
+    "면적",
+    "옥상",
+    "면적",
+    "인근",
+    "면적"
+  ];
+  List<dynamic> firstRowInt = [4, 199, 0, 0, 0, 0, 1, 170, 0, 0];
 
+  List<String> secondRowStr = [
+    "수",
+    "면적",
+    "수",
+    "면적",
+    "수",
+    "면적",
+    "수",
+    "면적",
+  ];
+  List<dynamic> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
+
+  List<String> thirdRowStr = [
+    "수",
+    "면적",
+    "수",
+    "면적",
+    "수",
+    "면적",
+    "수",
+    "면적",
+  ];
+  List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
+  Image kinderImage = Image.asset("name");
+  ///어린이집소개 좌측용
   void _callBasicApi() async {
-    final client = RestInfoPanel(dio);
     Map<String, String> headers = Map();
     headers['authorization'] = token;
-    final responseBasic =
-        await client.getHouseInfo(token).catchError((Object obj) {
+    final client = RestInfoPanel(dio);
+    final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       switch (res!.statusCode) {
         case 200:
@@ -90,74 +130,62 @@ class _TeacherInfoState extends State<TeacherInfo> {
       return obj.response;
     });
     // print(responseBasic);
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(
-        responseBasic); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    // print("basic:  "+mapResult["classInfo"].toString());
-    // print(mapResult["committees"]);//학급이벤트
-    // print(mapResult["classInfo"]);//학급소개왼쪽
-    // print(mapResult["classInfo"][0]);
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    // print(mapResult["kindergarten"]);
     setState(() {
-      teacherNum = mapResult["teachers"].length;
-      directorNum = mapResult["directors"].length;
-      committeeNum = mapResult["committees"].length;
-      // print(teacherNum);
-      print(mapResult["teachers"]);
-      print("before For");
-      for(int i=0;i<teacherNum;i++) {
-        teacherName.add(mapResult["teachers"][i]["name"]);
-        teacherIntroduction.add(mapResult["teachers"][i]["introduction"]);
-        teacherImage.add(
-          Image.network(
-            url + mapResult["teachers"][i]["imagePath"],
-            headers: headers,
-            width: 128.w,
-            height: 146.w,
-            fit: BoxFit.cover,
-          ),
-        );
+      kinderImage = Image.network(
+        url+mapResult["kindergarten"]["imagePath"],
+        headers: headers,
+        width: 128.w,
+        height: 146.w,
+        fit: BoxFit.cover,
+      );
+      classNumEach = mapResult["kindergarten"]["classCounts"].cast<int>();//원형그래프:각 나이별 학급 수
+      classGraphName = mapResult["kindergarten"]["classAges"];//원형그래프:학급수
+      childNumEachAge = mapResult["kindergarten"]["childrenCounts"];//원형그래프: 유아수
+      //원형그래프 비율 구하기
+      for(int i=0;i<classGraphName.length;i++) { //총 학급수 계산
+        classNumTotal += classNumEach[i];
       }
-      print("-----");
-      print(teacherName);
-      print(teacherIntroduction);
-      print("-----");
-      classInfo[1] = directorNum;
-      directorName.clear();
-      directorIntroduction.clear();
-      for (int i = 0; i < directorNum; i++) {
-        directorName.add(mapResult["directors"][i]["name"]);
-        directorIntroduction.add(mapResult["directors"][i]["introduction"]);
-        // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
-        directorImage.add(
-          Image.network(
-            url + mapResult["directors"][i]["imagePath"],
-            headers: headers,
-            width: 128.w,
-            height: 146.w,
-            fit: BoxFit.cover,
-          ),
-        );
+      for(int i=0;i<classGraphName.length;i++) { //그래프 비율 계산
+        classGraphRate[i] = classNumEach[i] / classNumTotal;
       }
-      classInfo[1] = committeeNum;
-      committeeName.clear();
-      committeeClassName.clear();
-      for (int i = 0; i < committeeNum; i++) {
-        committeeName.add(mapResult["committees"][i]["name"]);
-        committeeClassName.add(mapResult["committees"][i]["className"]);
-        //       for (int i = 0; i < committeesNum; i++) {
-        //         committeesName.add(mapResult["classInfo"][0]["committees"][i]["name"]);
-        //         // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
-        committeeImage.add(
-          Image.network(
-            url + mapResult["committees"][i]["imagePath"],
-            headers: headers,
-            width: 128.w,
-            height: 146.w,
-            fit: BoxFit.cover,
-          ),
-        );
-      }
+      childrenCountByTeacher =mapResult["kindergarten"]["childrenCountByTeacher"];//교사당 유아수
+      childrenCountByClass = mapResult["kindergarten"]["childrenCountByClass"];//학급당 유아수
+      firstRowInt[0] =  mapResult["kindergarten"]["classroomCount"];
+      firstRowInt[1] =  mapResult["kindergarten"]["classroomArea"];
+      firstRowInt[2] =  mapResult["kindergarten"]["indoorgymCount"];
+      firstRowInt[3] =  mapResult["kindergarten"]["indoorgymArea"];
+      firstRowInt[4] =  mapResult["kindergarten"]["outdoorgymCount"];
+      firstRowInt[5] =  mapResult["kindergarten"]["outdoorgymArea"];
+      firstRowInt[6] =  mapResult["kindergarten"]["roofgymCount"];
+      firstRowInt[7] =  mapResult["kindergarten"]["roofgymArea"];
+      firstRowInt[8] =  mapResult["kindergarten"]["neargymCount"];
+      firstRowInt[9] =  mapResult["kindergarten"]["neargymArea"];
+
+      secondRowInt[0] =  mapResult["kindergarten"]["healthroomCount"];
+      secondRowInt[1] =  mapResult["kindergarten"]["healthroomArea"];
+      secondRowInt[2] =  mapResult["kindergarten"]["restroomCount"];
+      secondRowInt[3] =  mapResult["kindergarten"]["restroomArea"];
+      secondRowInt[4] =  mapResult["kindergarten"]["kitchenCount"];
+      secondRowInt[5] =  mapResult["kindergarten"]["kitchenArea"];
+      secondRowInt[6] =  mapResult["kindergarten"]["cafeteriaCount"];
+      secondRowInt[7] =  mapResult["kindergarten"]["cafeteriaArea"];
+
+
+      thirdRowInt[0] =  mapResult["kindergarten"]["directorroomCount"];
+      thirdRowInt[1] =  mapResult["kindergarten"]["directorroomArea"];
+      thirdRowInt[2] =  mapResult["kindergarten"]["teacherroomCount"];
+      thirdRowInt[3] =  mapResult["kindergarten"]["teacherroomArea"];
+      thirdRowInt[4] =  mapResult["kindergarten"]["counselingroomCount"];
+      thirdRowInt[5] =  mapResult["kindergarten"]["counselingroomArea"];
+      thirdRowInt[6] =  mapResult["kindergarten"]["otherplaceCount"];
+      thirdRowInt[7] =  mapResult["kindergarten"]["otherplaceArea"];
+
     });
+
   }
+
 
   double boyrate = 0.5;
   double girlrate = 0.78;
@@ -176,15 +204,12 @@ class _TeacherInfoState extends State<TeacherInfo> {
   ]; //반 이름입니다.
   List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
   List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
-
   ///등하원 api
   void _callAttendApi() async {
     final client = RestInfoPanel(dio);
-    final token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-    final responseAttend =
-        await client.getAttendInfo(token).catchError((Object obj) {
+    final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       //swagger 참조
       switch (res!.statusCode) {
@@ -206,35 +231,35 @@ class _TeacherInfoState extends State<TeacherInfo> {
       return obj.response;
     });
     // print(responseAttend);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(
-        responseAttend); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
-      boyrate = mapResult["maleRate"]; //
+      boyrate = mapResult["maleRate"];//
       girlrate = mapResult["femaleRate"];
       childClassName = mapResult["classList"];
       chartRate = mapResult["rateByClass"].cast<double>();
     });
   }
 
-  String weatherTemperature = '22';
-  String weatherType = '비';
-  String weatherHumidity = '85';
-  String weatherPm10 = '비';
-  String weatherPm25 = '비';
-  var sensorLocation = '비';
-  var sensorTemperature = '비';
-  var sensorHumidity = '비';
-  var sensorPm25 = '비';
-  var sensorPm10 = '비';
-  var sensorCo2 = '비';
-  var sensorTvoc = '비';
+
+
+  String weatherTemperature='22';
+  String weatherType='비';
+  String weatherHumidity='85';
+  String weatherPm10='비';
+  String weatherPm25='비';
+  var sensorLocation='비';
+  var sensorTemperature='비';
+  var sensorHumidity='비';
+  var sensorPm25='비';
+  var sensorPm10='비';
+  var sensorCo2='비';
+  var sensorTvoc='비';
 
   String weather_assets = 'assets/airple_weather/sunny.jpg';
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
-    final token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
     final response = await client.getEnvInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
@@ -260,9 +285,8 @@ class _TeacherInfoState extends State<TeacherInfo> {
       }
       return obj.response;
     });
-    // print(response);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(
-        response); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    print(response);//데이터 뭐가오나 확인
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
       weatherTemperature =  mapResult["weatherTemperature"];
       weatherType =  mapResult["weatherType"];
@@ -286,25 +310,22 @@ class _TeacherInfoState extends State<TeacherInfo> {
           weather_assets = 'assets/airple_weather/wind.jpg';
           break;
       }
-      weatherTemperature = mapResult["weatherTemperature"];
-      weatherType = mapResult["weatherType"];
-      weatherHumidity = mapResult["weatherHumidity"];
-      weatherPm10 = mapResult["weatherPm10"];
-      weatherPm25 = mapResult["weatherPm25"];
-      sensorLocation = mapResult["sensorLocation"][0];
-      sensorTemperature = mapResult["sensorTemperature"][0];
-      sensorHumidity = mapResult["sensorHumidity"][0];
-      sensorPm25 = mapResult["sensorPm25"][0];
-      sensorPm10 = mapResult["sensorPm10"][0];
-      sensorCo2 = mapResult["sensorCo2"][0];
-      sensorTvoc = mapResult["sensorTvoc"][0];
+      weatherHumidity =  mapResult["weatherHumidity"];
+      weatherPm10 =  mapResult["weatherPm10"];
+      weatherPm25 =  mapResult["weatherPm25"];
+      sensorLocation =  mapResult["sensorLocation"][0];
+      sensorTemperature =  mapResult["sensorTemperature"][0];
+      sensorHumidity =  mapResult["sensorHumidity"][0];
+      sensorPm25 =  mapResult["sensorPm25"][0];
+      sensorPm10 =  mapResult["sensorPm10"][0];
+      sensorCo2 =  mapResult["sensorCo2"][0];
+      sensorTvoc =  mapResult["sensorTvoc"][0];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(weatherType=='비') {
+    if(kinderImage==Image.asset("name")) {
       return Scaffold(
         body: Stack(
           fit: StackFit.expand,
@@ -317,26 +338,26 @@ class _TeacherInfoState extends State<TeacherInfo> {
                   flex: 1,
                   child: Column(
                     children: <Widget>[
-                      const Padding(
-                        padding: EdgeInsets.only(top: 50.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50.0),
                       ),
                       Container(
                         width: 200.0,
                         height: 200.0,
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 30.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30.0),
                       ),
                       Container(
                         width: 500.0,
-                        child: const LinearProgressIndicator(
+                        child: LinearProgressIndicator(
                           backgroundColor: Colors.pink,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 10.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
                       ),
-                      const Text(
+                      Text(
                         "Loading.....",
                         style: TextStyle(color: Colors.yellow, fontSize: 18.0, fontWeight: FontWeight.bold),
                       )
@@ -360,8 +381,8 @@ class _TeacherInfoState extends State<TeacherInfo> {
               children: [
                 Container(
                   width: 1048.w,
-                  height: 895.w,
-                  margin: EdgeInsets.only(left: 16.w, top: 16.w),
+                  height: 1048.w,
+                  margin: EdgeInsets.only(left: 19.w, top: 10.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
@@ -384,270 +405,12 @@ class _TeacherInfoState extends State<TeacherInfo> {
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          ///원장
-                          for (int i = 0; i < directorNum; i++) ...[
-                            Column(
-                              children: [
-                                Container(
-                                    width: 140.w,
-                                    height: 140.w,
-                                    //페이지에 따라 마진 조절 바람 건희, 성민
-                                    margin:
-                                        EdgeInsets.only(left: 102.w, top: 49.w),
-                                    child: directorImage[i]),
-                                Container(
-                                  width: 200.w,
-                                  height: 45.w,
-                                  margin: EdgeInsets.only(left: 102.w),
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xff71d8d4),
-                                      borderRadius:
-                                          BorderRadius.circular(22.5)),
-                                  child: Center(
-                                    child: Text(
-                                      directorName[i],
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20.sp,
-                                        fontFamily: '.NotoSansKR',
-                                      ),
-                                      strutStyle: StrutStyle(
-                                        fontSize: 18.sp,
-                                        forceStrutHeight: true,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 200.w,
-                                  height: 45.w,
-                                  margin: EdgeInsets.only(left: 102.w),
-                                  child: Center(
-                                    child: Text(
-                                      directorIntroduction[i],
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14.sp,
-                                        fontFamily: '.NotoSansKR',
-                                      ),
-                                      strutStyle: StrutStyle(
-                                        fontSize: 18.sp,
-                                        forceStrutHeight: true,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ]
-
-                          ///원장
-                        ],
-                      ),
-
-                      ///선생님
-                      for (int i = 0; i < 1; i++) ...[
-                        // 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
-                        Row(
-                          children: [
-                            for (int j = 0; j < teacherNum; j++) ...[
-                              Column(
-                                //사진+이름배치를 위해 column으로 시작
-                                children: [
-                                  if (j == 0) ...[
-                                    Container(
-                                        width: 135.w,
-                                        height: 135.w,
-                                        margin: EdgeInsets.only(
-                                            left: 23.w, top: 65.w),
-                                        child: teacherImage[j]),
-                                    Container(
-                                      width: 180.w,
-                                      height: 45.w,
-                                      margin: EdgeInsets.only(left: 28.w),
-                                      decoration: new BoxDecoration(
-                                          color: const Color(0xffc7f7f5),
-                                          borderRadius:
-                                              BorderRadius.circular(22.5)),
-                                      child: Center(
-                                        child: Text(teacherName[j],
-                                            style: TextStyle(
-                                              fontFamily: '.NotoSansKR',
-                                              color: const Color(0xff000000),
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w400,
-                                              fontStyle: FontStyle.normal,
-                                            )),
-                                      ),
-                                    ),
-                                    Container(
-                                        width: 160.w,
-                                        height: 47.w,
-                                        margin: EdgeInsets.only(left: 38.w),
-                                        child: Center(
-                                            child: Text(teacherIntroduction[j],
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14.sp,
-                                                  fontFamily: '.NotoSansKR',
-                                                ),
-                                                strutStyle: StrutStyle(
-                                                  fontSize: 18.sp,
-                                                  forceStrutHeight: true,
-                                                ))))
-                                  ] else ...[
-                                    Container(
-                                        width: 135.w,
-                                        height: 135.w,
-                                        margin: EdgeInsets.only(
-                                            left: 13.w, top: 65.w),
-                                        child: teacherImage[j]),
-                                    Container(
-                                      width: 180.w,
-                                      height: 45.w,
-                                      margin: EdgeInsets.only(left: 23.w),
-                                      decoration: new BoxDecoration(
-                                          color: const Color(0xffc7f7f5),
-                                          borderRadius:
-                                              BorderRadius.circular(17.5)),
-                                      child: Center(
-                                        child: Text(teacherName[j],
-                                            style: TextStyle(
-                                              fontFamily: 'NotoSansKR',
-                                              color: const Color(0xff000000),
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w400,
-                                              fontStyle: FontStyle.normal,
-                                            )),
-                                      ),
-                                    ),
-                                    Container(
-                                        width: 160.w,
-                                        height: 47.w,
-                                        margin: EdgeInsets.only(left: 43.w),
-                                        child: Center(
-                                            child: Text(teacherIntroduction[j],
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14.sp,
-                                                  fontFamily: '.NotoSansKR',
-                                                ),
-                                                strutStyle: StrutStyle(
-                                                  fontSize: 18.sp,
-                                                  forceStrutHeight: true,
-                                                ))))
-                                  ],
-                                ],
-                              )
-                            ]
-                          ],
-                        )
-                      ],
-
-                      ///학부모
-                      for (int i = 0; i < 1; i++) ...[
-                        // 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
-                        Row(
-                          children: [
-                            for (int j = 0; j < committeeNum; j++) ...[
-                              Column(
-                                //사진+이름배치를 위해 column으로 시작
-                                children: [
-                                  if (j == 0) ...[
-                                    Container(
-                                        width: 135.w,
-                                        height: 135.w,
-                                        margin: EdgeInsets.only(
-                                            left: 23.w, top: 65.w),
-                                        child: committeeImage[j]),
-                                    Container(
-                                      width: 180.w,
-                                      height: 45.w,
-                                      margin: EdgeInsets.only(left: 28.w),
-                                      decoration: new BoxDecoration(
-                                          color: const Color(0xffffc9c9),
-                                          borderRadius:
-                                              BorderRadius.circular(22.5)),
-                                      child: Center(
-                                        child: Text(committeeName[j],
-                                            style: TextStyle(
-                                              fontFamily: '.NotoSansKR',
-                                              color: const Color(0xff000000),
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w400,
-                                              fontStyle: FontStyle.normal,
-                                            )),
-                                      ),
-                                    ),
-                                    Container(
-                                        width: 160.w,
-                                        height: 47.w,
-                                        margin: EdgeInsets.only(left: 38.w),
-                                        child: Center(
-                                            child: Text(committeeClassName[j],
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14.sp,
-                                                  fontFamily: '.NotoSansKR',
-                                                ),
-                                                strutStyle: StrutStyle(
-                                                  fontSize: 18.sp,
-                                                  forceStrutHeight: true,
-                                                ))))
-                                  ] else ...[
-                                    Container(
-                                        width: 135.w,
-                                        height: 135.w,
-                                        margin: EdgeInsets.only(
-                                            left: 13.w, top: 65.w),
-                                        child: committeeImage[j]),
-                                    Container(
-                                      width: 180.w,
-                                      height: 45.w,
-                                      margin: EdgeInsets.only(left: 23.w),
-                                      decoration: new BoxDecoration(
-                                          color: const Color(0xffffc9c9),
-                                          borderRadius:
-                                              BorderRadius.circular(17.5)),
-                                      child: Center(
-                                        child: Text(committeeName[j],
-                                            style: TextStyle(
-                                              fontFamily: 'NotoSansKR',
-                                              color: const Color(0xff000000),
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w400,
-                                              fontStyle: FontStyle.normal,
-                                            )),
-                                      ),
-                                    ),
-                                    Container(
-                                        width: 160.w,
-                                        height: 47.w,
-                                        margin: EdgeInsets.only(left: 33.w),
-                                        child: Center(
-                                            child: Text(committeeClassName[j],
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14.sp,
-                                                  fontFamily: '.NotoSansKR',
-                                                ),
-                                                strutStyle: StrutStyle(
-                                                  fontSize: 18.sp,
-                                                  forceStrutHeight: true,
-                                                ))))
-                                  ],
-                                ],
-                              )
-                            ]
-                          ],
-                        )
-                      ]
-                    ],
-                  ),
+                  ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
+                  child:
+                    ClassInfo30Widget()
+                    //ChildLifeDataWidget(),
+                  //KinderInfoWidget(),
+                  ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],
             ),
@@ -667,7 +430,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                   decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       border:
-                          Border.all(color: const Color(0x6663e6d7), width: 1),
+                      Border.all(color: const Color(0x6663e6d7), width: 1),
                       boxShadow: const [
                         BoxShadow(
                             color: Color(0x29b1b1b1),
@@ -712,16 +475,16 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                   width: 182.w,
                                   height: 110.w,
                                   margin:
-                                      EdgeInsets.only(left: 26.w, top: 16.w),
+                                  EdgeInsets.only(left: 26.w, top: 16.w),
                                   decoration: const BoxDecoration(
                                       image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        'assets/childlifedata/02_3.jpg'),
-                                  )),
+                                        fit: BoxFit.cover,
+                                        image: AssetImage(
+                                            'assets/childlifedata/02_3.jpg'),
+                                      )),
                                   child: Container(
                                     margin:
-                                        EdgeInsets.only(left: 130.w, top: 60.w),
+                                    EdgeInsets.only(left: 130.w, top: 60.w),
                                     child: Text("남아",
                                         style: TextStyle(
                                           fontFamily: 'GamjaFlower',
@@ -764,10 +527,10 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       margin: EdgeInsets.only(top: 16.w),
                                       decoration: const BoxDecoration(
                                           image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage(
-                                            'assets/childlifedata/02_4.jpg'),
-                                      )),
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                'assets/childlifedata/02_4.jpg'),
+                                          )),
                                       child: Container(
                                         margin: EdgeInsets.only(
                                             left: 130.w, top: 60.w),
@@ -809,14 +572,14 @@ class _TeacherInfoState extends State<TeacherInfo> {
                           height: 29.w,
                           margin: EdgeInsets.only(left: 40.w, top: 40.w),
                           child: // 학급별
-                              Text("학급별",
-                                  style: TextStyle(
-                                      color: const Color(0xff39605f),
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: "NotoSansKR",
-                                      fontStyle: FontStyle.normal,
-                                      fontSize: 20.sp),
-                                  textAlign: TextAlign.left)),
+                          Text("학급별",
+                              style: TextStyle(
+                                  color: Color(0xff39605f),
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "NotoSansKR",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 20.sp),
+                              textAlign: TextAlign.left)),
                       Container(
                           width: 748.w,
                           height: 160.w,
@@ -836,7 +599,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                                   "%",
                                               style: TextStyle(
                                                 fontFamily: 'NotoSansKR',
-                                                color: const Color(0xff393838),
+                                                color: Color(0xff393838),
                                                 fontSize: 12.sp,
                                                 fontWeight: FontWeight.w400,
                                                 fontStyle: FontStyle.normal,
@@ -846,12 +609,12 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                             width: 20.w,
                                             height: 135 * chartRate[i].w,
                                             decoration: BoxDecoration(
-                                              color: const Color(0xffc7f7f5),
+                                              color: Color(0xffc7f7f5),
                                               borderRadius: BorderRadius.only(
                                                   topRight:
-                                                      Radius.circular(10.w),
+                                                  Radius.circular(10.w),
                                                   topLeft:
-                                                      Radius.circular(10.w)),
+                                                  Radius.circular(10.w)),
                                             )),
                                       ]),
                                 ]
@@ -860,7 +623,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                           width: 748.w,
                           height: 3.w,
                           margin: EdgeInsets.only(left: 40.w),
-                          decoration: const BoxDecoration(color: Color(0xff63e6d7))),
+                          decoration: BoxDecoration(color: Color(0xff63e6d7))),
                       Container(
                         margin: EdgeInsets.only(left: 40.w),
                         child: Row(
@@ -868,10 +631,10 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               for (int i = 0; i < chartRate.length; i++) ...[
-                                Text(childClassName[i],
+                                Text(childClassName[i].toString(),
                                     style: TextStyle(
                                       fontFamily: '.AppleSystemUIFont',
-                                      color: const Color(0xff000000),
+                                      color: Color(0xff000000),
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
@@ -1040,3 +803,5 @@ class _TeacherInfoState extends State<TeacherInfo> {
     }
   }
 }
+
+

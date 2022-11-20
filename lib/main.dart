@@ -6,6 +6,7 @@ import 'package:smart_info_panel/facetime.dart';
 import 'package:smart_info_panel/notice.dart';
 
 import 'package:smart_info_panel/classinfo30.dart';
+import 'package:smart_info_panel/smartinfopanel.dart';
 import 'package:smart_info_panel/teacher_info.dart';
 
 import 'package:smart_info_panel/kinder_info_2.dart';
@@ -65,9 +66,9 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     super.initState();
     _callApi();
     // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
-    Timer(Duration(seconds: 20), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
-    });
+    // Timer(Duration(seconds: 20), () {
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
+    // });
   }
 
   void _callApi() async {
@@ -85,14 +86,14 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             color: Colors.white,
             child: ElevatedButton(
               onPressed: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));//영호
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => ChildLifeData()));//영호
                  //Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => Notice())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10())); //건희
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
 
 
-                Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
                  // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2()));
 
 
@@ -100,6 +101,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => GraphTest()));
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherInfo())); //선생님소개
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MainPanel()));
               },
               child: Text('데모 시작'),
             )),
