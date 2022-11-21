@@ -15,16 +15,9 @@ class ClassInfo30Widget extends StatefulWidget {
 class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-    });
-
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
-
-    // Timer(Duration(seconds: 20), () {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChildLifeData()));
-    // });
   }
   //swagger 참조
   //http://tmap.aijoa.us:48764/api-airple/#/infopanel/get_api_infopanel
@@ -81,7 +74,7 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
     // print("basic:  "+mapResult["classInfo"].toString());
     // print(mapResult["committees"]);//학급이벤트
     // print(mapResult["classInfo"]);//학급소개왼쪽
-    print(mapResult["classInfo"][0]);
+    // print(mapResult["classInfo"][0]);
     setState(() {
       className = mapResult["classInfo"][0]["name"];
       className = mapResult["classInfo"][0]["name"];
@@ -171,14 +164,12 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
       }
       return obj.response;
     });
-    // print(responseAttend);//데이터 뭐가오나 확인
+    print(responseAttend);//데이터 뭐가오나 확인
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    setState(() {
       boyrate = mapResult["maleRate"];//
       girlrate = mapResult["femaleRate"];
       childClassName = mapResult["classList"];
       chartRate = mapResult["rateByClass"].cast<double>();
-    });
   }
 
 

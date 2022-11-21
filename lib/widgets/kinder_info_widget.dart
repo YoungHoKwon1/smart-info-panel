@@ -6,6 +6,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
 import 'package:smart_info_panel/api/infopanel.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/kinder_data.dart';
 class KinderInfoWidget extends StatefulWidget {
   const KinderInfoWidget({Key? key}) : super(key: key);
 
@@ -22,14 +25,6 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {});
-    _callBasicApi();
-    _callEnvApi();
-    _callAttendApi();
-    // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
-    // Timer(Duration(seconds: 10), () {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo3()));
-    // });
   }
 
   Dio dio = Dio();
@@ -38,16 +33,6 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
   final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
 
-  List<double> classGraphRate = [20, 20, 20, 20, 20];
-  List<dynamic> classGraphName = [
-    '만 3세반',
-    '만 4세반',
-    '만 5세반',
-    '혼합 3-4세반',
-    '혼합 4-5세반'
-  ];
-  int classNumTotal=0;
-  List<int> classNumEach = [1, 3, 3, 1, 1];
   List<Color> classGraphColor = [
     const Color(0xffc7f7f5),
     const Color(0xffc6d0f4),
@@ -55,11 +40,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
     const Color(0xfff4f4c6),
     const Color(0xfff4c6ed)
   ];
-  int childNumTotal = 40;
-  List<dynamic> childNumEachAge = [12, 6, 11, 12, 1];
-  double childrenperteacher = 0.5;
-  var childrenCountByTeacher;
-  var childrenCountByClass;
+
   List<String> firstRowStr = [
     "교실수",
     "면적",
@@ -72,7 +53,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
     "인근",
     "면적"
   ];
-  List<dynamic> firstRowInt = [4, 199, 0, 0, 0, 0, 1, 170, 0, 0];
+
 
   List<String> secondRowStr = [
     "수",
@@ -84,8 +65,6 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
     "수",
     "면적",
   ];
-  List<dynamic> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
-
   List<String> thirdRowStr = [
     "수",
     "면적",
@@ -96,90 +75,6 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
     "수",
     "면적",
   ];
-  List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
-  Image kinderImage = Image.asset("name");
-  ///어린이집소개 좌측용
-  void _callBasicApi() async {
-    Map<String, String> headers = Map();
-    headers['authorization'] = token;
-    final client = RestInfoPanel(dio);
-    final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    // print(responseBasic);
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    // print(mapResult["kindergarten"]);
-    setState(() {
-      kinderImage = Image.network(
-        url+mapResult["kindergarten"]["imagePath"],
-        headers: headers,
-        width: 128.w,
-        height: 146.w,
-        fit: BoxFit.cover,
-      );
-      classNumEach = mapResult["kindergarten"]["classCounts"].cast<int>();//원형그래프:각 나이별 학급 수
-      classGraphName = mapResult["kindergarten"]["classAges"];//원형그래프:학급수
-      childNumEachAge = mapResult["kindergarten"]["childrenCounts"];//원형그래프: 유아수
-      //원형그래프 비율 구하기
-      for(int i=0;i<classGraphName.length;i++) { //총 학급수 계산
-        classNumTotal += classNumEach[i];
-      }
-      for(int i=0;i<classGraphName.length;i++) { //그래프 비율 계산
-        classGraphRate[i] = classNumEach[i] / classNumTotal;
-      }
-      childrenCountByTeacher =mapResult["kindergarten"]["childrenCountByTeacher"];//교사당 유아수
-      childrenCountByClass = mapResult["kindergarten"]["childrenCountByClass"];//학급당 유아수
-      firstRowInt[0] =  mapResult["kindergarten"]["classroomCount"];
-      firstRowInt[1] =  mapResult["kindergarten"]["classroomArea"];
-      firstRowInt[2] =  mapResult["kindergarten"]["indoorgymCount"];
-      firstRowInt[3] =  mapResult["kindergarten"]["indoorgymArea"];
-      firstRowInt[4] =  mapResult["kindergarten"]["outdoorgymCount"];
-      firstRowInt[5] =  mapResult["kindergarten"]["outdoorgymArea"];
-      firstRowInt[6] =  mapResult["kindergarten"]["roofgymCount"];
-      firstRowInt[7] =  mapResult["kindergarten"]["roofgymArea"];
-      firstRowInt[8] =  mapResult["kindergarten"]["neargymCount"];
-      firstRowInt[9] =  mapResult["kindergarten"]["neargymArea"];
-
-      secondRowInt[0] =  mapResult["kindergarten"]["healthroomCount"];
-      secondRowInt[1] =  mapResult["kindergarten"]["healthroomArea"];
-      secondRowInt[2] =  mapResult["kindergarten"]["restroomCount"];
-      secondRowInt[3] =  mapResult["kindergarten"]["restroomArea"];
-      secondRowInt[4] =  mapResult["kindergarten"]["kitchenCount"];
-      secondRowInt[5] =  mapResult["kindergarten"]["kitchenArea"];
-      secondRowInt[6] =  mapResult["kindergarten"]["cafeteriaCount"];
-      secondRowInt[7] =  mapResult["kindergarten"]["cafeteriaArea"];
-
-
-      thirdRowInt[0] =  mapResult["kindergarten"]["directorroomCount"];
-      thirdRowInt[1] =  mapResult["kindergarten"]["directorroomArea"];
-      thirdRowInt[2] =  mapResult["kindergarten"]["teacherroomCount"];
-      thirdRowInt[3] =  mapResult["kindergarten"]["teacherroomArea"];
-      thirdRowInt[4] =  mapResult["kindergarten"]["counselingroomCount"];
-      thirdRowInt[5] =  mapResult["kindergarten"]["counselingroomArea"];
-      thirdRowInt[6] =  mapResult["kindergarten"]["otherplaceCount"];
-      thirdRowInt[7] =  mapResult["kindergarten"]["otherplaceArea"];
-
-    });
-
-  }
-
 
   double boyrate = 0.5;
   double girlrate = 0.78;
@@ -196,126 +91,8 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
     //'금잔디',
     //'소나무',
   ]; //반 이름입니다.
-  List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
-  List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
-  ///등하원 api
-  void _callAttendApi() async {
-    final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
-    final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      //swagger 참조
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    // print(responseAttend);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    setState(() {
-      boyrate = mapResult["maleRate"];//
-      girlrate = mapResult["femaleRate"];
-      childClassName = mapResult["classList"];
-      chartRate = mapResult["rateByClass"].cast<double>();
-    });
-  }
 
 
-
-  String weatherTemperature='22';
-  String weatherType='비';
-  String weatherHumidity='85';
-  String weatherPm10='비';
-  String weatherPm25='비';
-  var sensorLocation='비';
-  var sensorTemperature='비';
-  var sensorHumidity='비';
-  var sensorPm25='비';
-  var sensorPm10='비';
-  var sensorCo2='비';
-  var sensorTvoc='비';
-
-  String weather_assets = 'assets/airple_weather/sunny.jpg';
-  ///환경데이터 api
-  void _callEnvApi() async {
-    final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
-    final response = await client.getEnvInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      //swagger 참조
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 408:
-          debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    print(response);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    setState(() {
-      weatherTemperature =  mapResult["weatherTemperature"];
-      weatherType =  mapResult["weatherType"];
-      switch(weatherType) {
-        case "구름" :
-          weather_assets = 'assets/airple_weather/cloudy.jpg';
-          break;
-        case "비" :
-          weather_assets = 'assets/airple_weather/rain_only.jpg';
-          break;
-        case "눈" :
-          weather_assets = 'assets/airple_weather/snow_only.jpg';
-          break;
-        case "눈/비" :
-          weather_assets = 'assets/airple_weather/snow_rain.jpg';
-          break;
-        case "맑음" :
-          weather_assets = 'assets/airple_weather/sunny.jpg';
-          break;
-        case "바람" :
-          weather_assets = 'assets/airple_weather/wind.jpg';
-          break;
-      }
-      weatherHumidity =  mapResult["weatherHumidity"];
-      weatherPm10 =  mapResult["weatherPm10"];
-      weatherPm25 =  mapResult["weatherPm25"];
-      sensorLocation =  mapResult["sensorLocation"][0];
-      sensorTemperature =  mapResult["sensorTemperature"][0];
-      sensorHumidity =  mapResult["sensorHumidity"][0];
-      sensorPm25 =  mapResult["sensorPm25"][0];
-      sensorPm10 =  mapResult["sensorPm10"][0];
-      sensorCo2 =  mapResult["sensorCo2"][0];
-      sensorTvoc =  mapResult["sensorTvoc"][0];
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -331,7 +108,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                 decoration: BoxDecoration(
                   // color: Colors.black,
                     borderRadius: BorderRadius.circular(20.w)),
-                child: kinderImage),
+                child: context.watch<KinderDataProvider>().kinderImage),
 
             ///어린이집 사진>
 
@@ -376,7 +153,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                     sectionsSpace: 0,
                                     centerSpaceRadius: 30.w,
                                     sections: showingSections(
-                                        classGraphName.length),
+                                        context.watch<KinderDataProvider>().classGraphName.length),
                                   ),
                                 ),
                               ),
@@ -389,18 +166,13 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                     children: [
                                       for (int i = 0;
                                       i <
-                                          classGraphName
-                                              .length;
+                                          context.watch<KinderDataProvider>().classGraphName.length;
                                       i++) ...[
                                         Row(
                                           children: [
                                             Indicator(
-                                                color:
-                                                classGraphColor[
-                                                i],
-                                                text:
-                                                classGraphName[
-                                                i],
+                                                color: classGraphColor[i],
+                                                text: context.watch<KinderDataProvider>().classGraphName[i],
                                                 isSquare: true),
                                           ],
                                         ),
@@ -420,13 +192,12 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                     children: [
                                       for (int i = 0;
                                       i <
-                                          classGraphName
-                                              .length;
+                                          context.watch<KinderDataProvider>().classGraphName.length;
                                       i++) ...[
                                         Row(
                                           children: [
                                             Text(
-                                              classNumEach[i]
+                                              context.watch<KinderDataProvider>().classNumEach[i]
                                                   .toString() +
                                                   '개',
                                               style: TextStyle(
@@ -496,7 +267,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                 sectionsSpace: 0,
                                 centerSpaceRadius: 30.w,
                                 sections: showingSections(
-                                    classGraphName.length),
+                                    context.watch<KinderDataProvider>().classGraphName.length),
                               ),
                             ),
                           ),
@@ -505,11 +276,11 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             CrossAxisAlignment.start,
                             children: [
                               for (int i = 0;
-                              i < classGraphName.length;
+                              i < context.watch<KinderDataProvider>().classGraphName.length;
                               i++) ...[
                                 Indicator(
                                     color: classGraphColor[i],
-                                    text: classGraphName[i],
+                                    text: context.watch<KinderDataProvider>().classGraphName[i],
                                     isSquare: true),
                                 SizedBox(
                                   height: 7.w,
@@ -526,12 +297,12 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             CrossAxisAlignment.start,
                             children: [
                               for (int i = 0;
-                              i < classGraphName.length;
+                              i < context.watch<KinderDataProvider>().classGraphName.length;
                               i++) ...[
                                 Row(
                                   children: [
                                     Text(
-                                      childNumEachAge[i]
+                                      context.watch<KinderDataProvider>().childNumEachAge[i]
                                           .toString() +
                                           '명',
                                       style: TextStyle(
@@ -635,7 +406,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 200 * boyrate.w,
+                                width: 200.0 * context.watch<KinderDataProvider>().childrenCountByTeacher/100.w,
                                 height: 20.w,
                                 margin: EdgeInsets.only(
                                     left: 20.w, top: 20.w),
@@ -649,7 +420,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                 ),
                               ),
                               Container(
-                                width: 200 * childrenperteacher.w,
+                                width: 200.0 * context.watch<KinderDataProvider>().childrenCountByClass/100.w,
                                 height: 20.w,
                                 margin: EdgeInsets.only(
                                     left: 20.w, top: 20.w),
@@ -672,7 +443,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                 margin: EdgeInsets.only(
                                     left: 40.w, top: 20.w),
                                 child: Text(
-                                    childrenCountByTeacher
+                                    context.watch<KinderDataProvider>().childrenCountByTeacher
                                         .toString(),
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
@@ -686,7 +457,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                 margin: EdgeInsets.only(
                                     left: 40.w, top: 20.w),
                                 child: Text(
-                                    childrenCountByClass
+                                    context.watch<KinderDataProvider>().childrenCountByClass
                                         .toString(),
                                     style: TextStyle(
                                       fontFamily: 'NotoSansKR',
@@ -832,7 +603,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             bottomLeft: Radius.circular(20.w)),
                       ),
                       child: Center(
-                        child: Text(firstRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().firstRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -854,7 +625,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                         ),
                       ),
                       child: Center(
-                        child: Text(firstRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().firstRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -881,7 +652,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             bottomRight: Radius.circular(20.w)),
                       ),
                       child: Center(
-                        child: Text(firstRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().firstRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -903,7 +674,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                         ),
                       ),
                       child: Center(
-                        child: Text(firstRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().firstRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1086,7 +857,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             bottomLeft: Radius.circular(20.w)),
                       ),
                       child: Center(
-                        child: Text(secondRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().secondRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1108,7 +879,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                         ),
                       ),
                       child: Center(
-                        child: Text(secondRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().secondRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1135,7 +906,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             bottomRight: Radius.circular(20.w)),
                       ),
                       child: Center(
-                        child: Text(secondRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().secondRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1157,7 +928,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                         ),
                       ),
                       child: Center(
-                        child: Text(secondRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().secondRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1340,7 +1111,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             bottomLeft: Radius.circular(20.w)),
                       ),
                       child: Center(
-                        child: Text(thirdRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().thirdRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1362,7 +1133,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                         ),
                       ),
                       child: Center(
-                        child: Text(thirdRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().thirdRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1389,7 +1160,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             bottomRight: Radius.circular(20.w)),
                       ),
                       child: Center(
-                        child: Text(thirdRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().thirdRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1411,7 +1182,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                         ),
                       ),
                       child: Center(
-                        child: Text(thirdRowInt[i].toString(),
+                        child: Text(context.watch<KinderDataProvider>().thirdRowInt[i].toString(),
                             style: TextStyle(
                               fontFamily: 'NotoSansKR',
                               color: const Color(0xff393838),
@@ -1444,7 +1215,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
         case 0:
           return PieChartSectionData(
             color: const Color(0xffc7f7f5),
-            value: classGraphRate[0],
+            value: context.watch<KinderDataProvider>().classGraphRate[0],
             radius: radius,
             titleStyle: const TextStyle(
               //강제로 fontSize: 0 지정해줘야 숫자 안뜸
@@ -1456,7 +1227,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
         case 1:
           return PieChartSectionData(
             color: const Color(0xffc6d0f4),
-            value: classGraphRate[1],
+            value: context.watch<KinderDataProvider>().classGraphRate[1],
             radius: radius,
             titleStyle: const TextStyle(
               fontSize: 0,
@@ -1467,7 +1238,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
         case 2:
           return PieChartSectionData(
             color: const Color(0xfff4dac5),
-            value: classGraphRate[2],
+            value: context.watch<KinderDataProvider>().classGraphRate[2],
             radius: radius,
             titleStyle: const TextStyle(
               fontSize: 0,
@@ -1478,7 +1249,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
         case 3:
           return PieChartSectionData(
             color: const Color(0xfff4f4c6),
-            value: classGraphRate[3],
+            value: context.watch<KinderDataProvider>().classGraphRate[3],
             title: '15%',
             radius: radius,
             titleStyle: const TextStyle(
@@ -1490,7 +1261,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
         case 4:
           return PieChartSectionData(
             color: const Color(0xfff4c6ed),
-            value: classGraphRate[4],
+            value: context.watch<KinderDataProvider>().classGraphRate[4],
             radius: radius,
             titleStyle: const TextStyle(
               fontSize: 0,

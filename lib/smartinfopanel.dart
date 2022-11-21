@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo30_widget.dart';
 import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
@@ -8,6 +9,7 @@ import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
 
 import 'api/infopanel.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 
 import 'kinder_info_3.dart';
@@ -21,21 +23,10 @@ class MainPanel extends StatefulWidget {
 }
 
 class _MainPanelState extends State<MainPanel> {
-
-
-  int touchedIndex = -1;
-
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {});
-    _callBasicApi();
     _callEnvApi();
-    _callAttendApi();
-    // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
-    // Timer(Duration(seconds: 10), () {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo3()));
-    // });
   }
 
   Dio dio = Dio();
@@ -43,202 +34,6 @@ class _MainPanelState extends State<MainPanel> {
   String url = "http://tmap.aijoa.us:48764/";
   final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-
-  List<double> classGraphRate = [20, 20, 20, 20, 20];
-  List<dynamic> classGraphName = [
-    '만 3세반',
-    '만 4세반',
-    '만 5세반',
-    '혼합 3-4세반',
-    '혼합 4-5세반'
-  ];
-  int classNumTotal=0;
-  List<int> classNumEach = [1, 3, 3, 1, 1];
-  List<Color> classGraphColor = [
-    const Color(0xffc7f7f5),
-    const Color(0xffc6d0f4),
-    const Color(0xfff4dac6),
-    const Color(0xfff4f4c6),
-    const Color(0xfff4c6ed)
-  ];
-  int childNumTotal = 40;
-  List<dynamic> childNumEachAge = [12, 6, 11, 12, 1];
-  double childrenperteacher = 0.5;
-  var childrenCountByTeacher;
-  var childrenCountByClass;
-  List<String> firstRowStr = [
-    "교실수",
-    "면적",
-    "실내",
-    "면적",
-    "실외",
-    "면적",
-    "옥상",
-    "면적",
-    "인근",
-    "면적"
-  ];
-  List<dynamic> firstRowInt = [4, 199, 0, 0, 0, 0, 1, 170, 0, 0];
-
-  List<String> secondRowStr = [
-    "수",
-    "면적",
-    "수",
-    "면적",
-    "수",
-    "면적",
-    "수",
-    "면적",
-  ];
-  List<dynamic> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
-
-  List<String> thirdRowStr = [
-    "수",
-    "면적",
-    "수",
-    "면적",
-    "수",
-    "면적",
-    "수",
-    "면적",
-  ];
-  List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
-  Image kinderImage = Image.asset("name");
-  ///어린이집소개 좌측용
-  void _callBasicApi() async {
-    Map<String, String> headers = Map();
-    headers['authorization'] = token;
-    final client = RestInfoPanel(dio);
-    final responseBasic = await client.getHouseInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    // print(responseBasic);
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseBasic);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    // print(mapResult["kindergarten"]);
-    setState(() {
-      kinderImage = Image.network(
-        url+mapResult["kindergarten"]["imagePath"],
-        headers: headers,
-        width: 128.w,
-        height: 146.w,
-        fit: BoxFit.cover,
-      );
-      classNumEach = mapResult["kindergarten"]["classCounts"].cast<int>();//원형그래프:각 나이별 학급 수
-      classGraphName = mapResult["kindergarten"]["classAges"];//원형그래프:학급수
-      childNumEachAge = mapResult["kindergarten"]["childrenCounts"];//원형그래프: 유아수
-      //원형그래프 비율 구하기
-      for(int i=0;i<classGraphName.length;i++) { //총 학급수 계산
-        classNumTotal += classNumEach[i];
-      }
-      for(int i=0;i<classGraphName.length;i++) { //그래프 비율 계산
-        classGraphRate[i] = classNumEach[i] / classNumTotal;
-      }
-      childrenCountByTeacher =mapResult["kindergarten"]["childrenCountByTeacher"];//교사당 유아수
-      childrenCountByClass = mapResult["kindergarten"]["childrenCountByClass"];//학급당 유아수
-      firstRowInt[0] =  mapResult["kindergarten"]["classroomCount"];
-      firstRowInt[1] =  mapResult["kindergarten"]["classroomArea"];
-      firstRowInt[2] =  mapResult["kindergarten"]["indoorgymCount"];
-      firstRowInt[3] =  mapResult["kindergarten"]["indoorgymArea"];
-      firstRowInt[4] =  mapResult["kindergarten"]["outdoorgymCount"];
-      firstRowInt[5] =  mapResult["kindergarten"]["outdoorgymArea"];
-      firstRowInt[6] =  mapResult["kindergarten"]["roofgymCount"];
-      firstRowInt[7] =  mapResult["kindergarten"]["roofgymArea"];
-      firstRowInt[8] =  mapResult["kindergarten"]["neargymCount"];
-      firstRowInt[9] =  mapResult["kindergarten"]["neargymArea"];
-
-      secondRowInt[0] =  mapResult["kindergarten"]["healthroomCount"];
-      secondRowInt[1] =  mapResult["kindergarten"]["healthroomArea"];
-      secondRowInt[2] =  mapResult["kindergarten"]["restroomCount"];
-      secondRowInt[3] =  mapResult["kindergarten"]["restroomArea"];
-      secondRowInt[4] =  mapResult["kindergarten"]["kitchenCount"];
-      secondRowInt[5] =  mapResult["kindergarten"]["kitchenArea"];
-      secondRowInt[6] =  mapResult["kindergarten"]["cafeteriaCount"];
-      secondRowInt[7] =  mapResult["kindergarten"]["cafeteriaArea"];
-
-
-      thirdRowInt[0] =  mapResult["kindergarten"]["directorroomCount"];
-      thirdRowInt[1] =  mapResult["kindergarten"]["directorroomArea"];
-      thirdRowInt[2] =  mapResult["kindergarten"]["teacherroomCount"];
-      thirdRowInt[3] =  mapResult["kindergarten"]["teacherroomArea"];
-      thirdRowInt[4] =  mapResult["kindergarten"]["counselingroomCount"];
-      thirdRowInt[5] =  mapResult["kindergarten"]["counselingroomArea"];
-      thirdRowInt[6] =  mapResult["kindergarten"]["otherplaceCount"];
-      thirdRowInt[7] =  mapResult["kindergarten"]["otherplaceArea"];
-
-    });
-
-  }
-
-
-  double boyrate = 0.5;
-  double girlrate = 0.78;
-
-  List<dynamic> childClassName = [
-    '꽃사랑',
-    '개나리',
-    '진달래',
-    '방울꽃',
-    '계란꽃',
-    '아카시아',
-    '튤립',
-    '해바라기',
-    //'금잔디',
-    //'소나무',
-  ]; //반 이름입니다.
-  List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
-  List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
-  ///등하원 api
-  void _callAttendApi() async {
-    final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
-    final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      //swagger 참조
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    // print(responseAttend);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    setState(() {
-      boyrate = mapResult["maleRate"];//
-      girlrate = mapResult["femaleRate"];
-      childClassName = mapResult["classList"];
-      chartRate = mapResult["rateByClass"].cast<double>();
-    });
-  }
 
 
 
@@ -285,7 +80,7 @@ class _MainPanelState extends State<MainPanel> {
       }
       return obj.response;
     });
-    print(response);//데이터 뭐가오나 확인
+    // print(response);//데이터 뭐가오나 확인
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
       weatherTemperature =  mapResult["weatherTemperature"];
@@ -325,52 +120,6 @@ class _MainPanelState extends State<MainPanel> {
 
   @override
   Widget build(BuildContext context) {
-    if(kinderImage==Image.asset("name")) {
-      return Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
-                      ),
-                      Container(
-                        width: 200.0,
-                        height: 200.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
-                      ),
-                      Container(
-                        width: 500.0,
-                        child: LinearProgressIndicator(
-                          backgroundColor: Colors.pink,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                      ),
-                      Text(
-                        "Loading.....",
-                        style: TextStyle(color: Colors.yellow, fontSize: 18.0, fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    }
-    else{
       return Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -407,9 +156,9 @@ class _MainPanelState extends State<MainPanel> {
                   ),
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
-                    ClassInfo30Widget()
-                    //ChildLifeDataWidget(),
-                  //KinderInfoWidget(),
+                    // ClassInfo30Widget()
+                    ChildLifeDataWidget(),
+                  // KinderInfoWidget(),
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],
@@ -495,7 +244,7 @@ class _MainPanelState extends State<MainPanel> {
                                         )),
                                   )),
                               Container(
-                                width: 336 * boyrate.w,
+                                width: 336 * context.watch<AttendanceDataProvider>().boyrate.w,
                                 height: 20.w,
                                 margin: EdgeInsets.only(left: 40.w),
                                 decoration: BoxDecoration(
@@ -503,7 +252,7 @@ class _MainPanelState extends State<MainPanel> {
                                   color: const Color(0x4d63e66d),
                                 ),
                                 child: Text(
-                                  (100 * boyrate).toString() + "%",
+                                  (100 * context.watch<AttendanceDataProvider>().boyrate).toString() + "%",
                                   style: TextStyle(fontSize: 16.sp),
                                   textAlign: TextAlign.right,
                                 ),
@@ -546,7 +295,7 @@ class _MainPanelState extends State<MainPanel> {
                                 ],
                               ),
                               Container(
-                                width: 336 * girlrate.w,
+                                width: 336.0 * context.watch<AttendanceDataProvider>().girlrate.w,
                                 //336
                                 height: 20.w,
                                 margin: EdgeInsets.only(left: 20.w),
@@ -554,7 +303,7 @@ class _MainPanelState extends State<MainPanel> {
                                     borderRadius: BorderRadius.circular(18.w),
                                     color: const Color(0xffffc9c9)),
                                 child: Text(
-                                  (100 * girlrate).toString() + "%",
+                                  (100 * context.watch<AttendanceDataProvider>().girlrate).toString() + "%",
                                   style: TextStyle(fontSize: 16.sp),
                                   textAlign: TextAlign.right,
                                 ),
@@ -588,14 +337,14 @@ class _MainPanelState extends State<MainPanel> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                for (int i = 0; i < chartRate.length; i++) ...[
+                                for (int i = 0; i < context.watch<AttendanceDataProvider>().chartRate.length; i++) ...[
                                   Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(bottom: 2.w),
                                           child: Text(
-                                              (100 * chartRate[i]).toString() +
+                                              (100.0 * context.watch<AttendanceDataProvider>().chartRate[i]).toString() +
                                                   "%",
                                               style: TextStyle(
                                                 fontFamily: 'NotoSansKR',
@@ -607,7 +356,7 @@ class _MainPanelState extends State<MainPanel> {
                                         ),
                                         Container(
                                             width: 20.w,
-                                            height: 135 * chartRate[i].w,
+                                            height: 135.0 * context.watch<AttendanceDataProvider>().chartRate[i].w,
                                             decoration: BoxDecoration(
                                               color: Color(0xffc7f7f5),
                                               borderRadius: BorderRadius.only(
@@ -630,8 +379,9 @@ class _MainPanelState extends State<MainPanel> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              for (int i = 0; i < chartRate.length; i++) ...[
-                                Text(childClassName[i].toString(),
+                              for (int i = 0; i < context.watch<AttendanceDataProvider>().chartRate.length; i++) ...[
+                                Text(
+                                    context.watch<AttendanceDataProvider>().childClassName[i].toString(),
                                     style: TextStyle(
                                       fontFamily: '.AppleSystemUIFont',
                                       color: Color(0xff000000),
@@ -800,7 +550,7 @@ class _MainPanelState extends State<MainPanel> {
           ],
         ),
       );
-    }
+
   }
 }
 

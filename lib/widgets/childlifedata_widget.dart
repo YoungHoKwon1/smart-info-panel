@@ -8,6 +8,8 @@ import 'package:smart_info_panel/api/infopanel.dart';
 import 'package:dio/dio.dart';
 import 'package:smart_info_panel/kinder_info_2.dart';
 import 'dart:async';
+import 'package:provider/provider.dart';
+import '../provider/chlid_life_data.dart';
 
 class ChildLifeDataWidget extends StatefulWidget {
   const ChildLifeDataWidget({Key? key}) : super(key: key);
@@ -20,231 +22,6 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {});
-    _callChildApi();
-    _callEnvApi();
-    _callAttendApi();
-
-    // Timer(Duration(seconds: 20), () {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
-    // });
-  }
-  Dio dio = Dio();
-
-  String url = "http://tmap.aijoa.us:48764/";
-
-  final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
-  Image childImage = Image.asset("name");
-  String childName = "";
-  String childBDay = '';
-  String className = '';
-  String collectionPeriod = '';
-  String attendanceCount = '';
-  String avgAttendTime = '';
-  String avgGoinghomeTime = '';
-  String height = '';
-  String weight = '';
-  String beforeAttendEmotion = '';
-  String beforeGoingHomeEmotion = '';
-  String avgMeal = '';
-  String avgSleep = '';
-  String vomitCount = '';
-  String toiletCount = '';
-  String medicineCount = '';
-  String accidentCount = '';
-
-  String bdayYear='';
-  String bdayMonth='';
-  String bdayDay='';
-
-  ///영유아 정보 요청 api
-  void _callChildApi() async {
-    Map<String, String> headers = Map();
-    headers['authorization'] = token;
-    final client = RestInfoPanel(dio);
-    final responseChild = await client.postChildInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      //swagger 참조
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    print(responseChild);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseChild);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    setState(() {
-      childImage = Image.network(
-        url+mapResult["imagePath"],
-        headers: headers,
-        width: 128.w,
-        height: 146.w,
-        fit: BoxFit.cover,
-      );
-      childName = mapResult["name"];
-      childBDay = mapResult["birthday"];
-      bdayYear = childBDay.substring(0,4);
-      bdayMonth = childBDay.substring(4,6);
-      bdayDay = childBDay.substring(6,8);
-      className = mapResult["className"];
-      collectionPeriod = mapResult["collectionPeriod"].toString();
-      attendanceCount = mapResult["attendanceCount"].toString();
-      avgAttendTime = mapResult["avgAttendTime"].toString();
-      avgGoinghomeTime = mapResult["avgGoinghomeTime"].toString();
-      height = mapResult["height"].toString();
-      weight = mapResult["weight"].toString();
-      beforeAttendEmotion = mapResult["beforeAttendEmotion"].toString();
-      beforeGoingHomeEmotion = mapResult["beforeGoingHomeEmotion"].toString();
-      avgMeal = mapResult["avgMeal"].toString();
-      avgSleep = mapResult["avgSleep"].toString();
-      vomitCount = mapResult["vomitCount"].toString();
-      toiletCount = mapResult["toiletCount"].toString();
-      medicineCount = mapResult["medicineCount"].toString();
-      accidentCount = mapResult["accidentCount"].toString();
-    });
-  }///
-  double boyrate = 0.5;
-  double girlrate = 0.78;
-
-  List<dynamic> childClassName = [
-    '꽃사랑',
-    '개나리',
-    '진달래',
-    '방울꽃',
-    '계란꽃',
-    '아카시아',
-    '튤립',
-    '해바라기',
-    //'금잔디',
-    //'소나무',
-  ]; //반 이름입니다.
-  List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
-  ///등하원 api
-  void _callAttendApi() async {
-    final client = RestInfoPanel(dio);
-    final responseAttend = await client.getAttendInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      //swagger 참조
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    // print(responseAttend);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    setState(() {
-      boyrate = mapResult["maleRate"];//
-      girlrate = mapResult["femaleRate"];
-      childClassName = mapResult["classList"];
-      chartRate = mapResult["rateByClass"].cast<double>();
-    });
-  }
-
-
-
-  String weatherTemperature='22';
-  String weatherType='비';
-  String weatherHumidity='85';
-  String weatherPm10='비';
-  String weatherPm25='비';
-  var sensorLocation='비';
-  var sensorTemperature='비';
-  var sensorHumidity='비';
-  var sensorPm25='비';
-  var sensorPm10='비';
-  var sensorCo2='비';
-  var sensorTvoc='비';
-
-  String weather_assets = 'assets/airple_weather/sunny.jpg';
-  ///환경데이터 api
-  void _callEnvApi() async {
-    final client = RestInfoPanel(dio);
-    final response = await client.getEnvInfo(token).catchError((Object obj) {
-      final res = (obj as DioError).response;
-      //swagger 참조
-      switch (res!.statusCode) {
-        case 200:
-          debugPrint('200');
-          break;
-        case 401:
-          debugPrint('401 : 유효하지 않은 토큰입니다.');
-          break;
-        case 408:
-          debugPrint('408 : 외부 api 연동 실패.(timeout of 5000ms exceeded)');
-          break;
-        case 419:
-          debugPrint('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          debugPrint('500 : 심각한 서버 문제.');
-          break;
-        default:
-          break;
-      }
-      return obj.response;
-    });
-    // print(response);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    setState(() {
-      weatherTemperature =  mapResult["weatherTemperature"];
-      weatherType =  mapResult["weatherType"];
-      switch(weatherType) {
-        case "구름" :
-          weather_assets = 'assets/airple_weather/cloudy.jpg';
-          break;
-        case "비" :
-          weather_assets = 'assets/airple_weather/rain_only.jpg';
-          break;
-        case "눈" :
-          weather_assets = 'assets/airple_weather/snow_only.jpg';
-          break;
-        case "눈/비" :
-          weather_assets = 'assets/airple_weather/snow_rain.jpg';
-          break;
-        case "맑음" :
-          weather_assets = 'assets/airple_weather/sunny.jpg';
-          break;
-        case "바람" :
-          weather_assets = 'assets/airple_weather/wind.jpg';
-          break;
-      }
-      weatherHumidity =  mapResult["weatherHumidity"];
-      weatherPm10 =  mapResult["weatherPm10"];
-      weatherPm25 =  mapResult["weatherPm25"];
-      sensorLocation =  mapResult["sensorLocation"][0];
-      sensorTemperature =  mapResult["sensorTemperature"][0];
-      sensorHumidity =  mapResult["sensorHumidity"][0];
-      sensorPm25 =  mapResult["sensorPm25"][0];
-      sensorPm10 =  mapResult["sensorPm10"][0];
-      sensorCo2 =  mapResult["sensorCo2"][0];
-      sensorTvoc =  mapResult["sensorTvoc"][0];
-    });
   }
   @override
   Widget build(BuildContext context) {
@@ -262,7 +39,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     image: AssetImage(
                         'assets/child_face_deco/age0face.png')),
               ),
-              child: childImage,
+              child: context.watch<ChildLifeProvider>().childImage,
             ),
 
             ///아이정보
@@ -272,18 +49,18 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                   height: 195.w,
                   margin: EdgeInsets.only(left: 5.w, top: 110.w),
                   child: Text(
-                      childName +
+                      context.watch<ChildLifeProvider>().childName +
                           "\n\n" +
-                          bdayYear +
+                          context.watch<ChildLifeProvider>().bdayYear +
                           "년 " +
-                          bdayMonth +
+                          context.watch<ChildLifeProvider>().bdayMonth +
                           "월 " +
-                          bdayDay +
+                          context.watch<ChildLifeProvider>().bdayDay +
                           "일" +
                           "\n\n" +
-                          className +
+                          context.watch<ChildLifeProvider>().className +
                           "\n\n" +
-                          collectionPeriod +
+                          context.watch<ChildLifeProvider>().collectionPeriod +
                           "개월",
                       style: TextStyle(
                         fontFamily: 'NotoSansKR',
@@ -424,7 +201,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                             bottomLeft: Radius.circular(10))),
                     child: Center(
                       child: Text(
-                        attendanceCount,
+                        context.watch<ChildLifeProvider>().attendanceCount,
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -449,7 +226,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        avgAttendTime,
+                        context.watch<ChildLifeProvider>().avgAttendTime,
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -474,7 +251,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        avgGoinghomeTime,
+                        context.watch<ChildLifeProvider>().avgGoinghomeTime,
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -499,7 +276,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        height + "cm\n" + weight + "kg",
+                        context.watch<ChildLifeProvider>().height + "cm\n" + context.watch<ChildLifeProvider>().weight + "kg",
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -524,7 +301,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        beforeAttendEmotion,
+                        context.watch<ChildLifeProvider>().beforeAttendEmotion,
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -550,7 +327,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                             bottomRight: Radius.circular(10))),
                     child: Center(
                       child: Text(
-                        beforeGoingHomeEmotion,
+                        context.watch<ChildLifeProvider>().beforeGoingHomeEmotion,
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -701,7 +478,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        avgMeal,
+                        context.watch<ChildLifeProvider>().avgMeal,
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -726,7 +503,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        avgSleep,
+                        context.watch<ChildLifeProvider>().avgSleep,
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -751,7 +528,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        vomitCount + "회",
+                        context.watch<ChildLifeProvider>().vomitCount + "회",
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -776,7 +553,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        toiletCount + "회",
+                        context.watch<ChildLifeProvider>().toiletCount + "회",
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -801,7 +578,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        medicineCount + "일",
+                        context.watch<ChildLifeProvider>().medicineCount + "일",
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
@@ -828,7 +605,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                     ),
                     child: Center(
                       child: Text(
-                        accidentCount + "회",
+                        context.watch<ChildLifeProvider>().accidentCount + "회",
                         style: TextStyle(
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
