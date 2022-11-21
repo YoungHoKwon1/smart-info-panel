@@ -65,15 +65,17 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     super.initState();
     _callApi();
     // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
-    Timer(Duration(seconds: 20), () {
+   /* Timer(Duration(seconds: 20), () {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
-    });
+    });*/
   }
 
   void _callApi() async {
 
   }
-  @override
+
+
+ @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Container(
@@ -89,10 +91,10 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
                  //Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo20())); //성민
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => Notice())); //성민
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo10())); //건희
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => ClassInfo30())); //영호
 
 
-                Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2())); //영호
                  // Navigator.push(context, MaterialPageRoute(builder: (context) => KinderInfo2()));
 
 
