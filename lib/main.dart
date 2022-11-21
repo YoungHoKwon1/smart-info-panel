@@ -271,6 +271,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
     });
+
   }
   Image childImage = Image.asset("name");
   String childName = "";
@@ -494,6 +495,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -506,8 +508,10 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             color: Colors.white,
             child: ElevatedButton(
               onPressed: () {
+
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => MainPanel()));
+
               },
               child: Text('데모 시작'),
             )),

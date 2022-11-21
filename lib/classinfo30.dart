@@ -25,9 +25,6 @@ class _ClassInfo30State extends State<ClassInfo30> {
     _callEnvApi();
     _callAttendApi();
 
-    // Timer(Duration(seconds: 20), () {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChildLifeData()));
-    // });
   }
   //swagger 참조
   //http://tmap.aijoa.us:48764/api-airple/#/infopanel/get_api_infopanel
