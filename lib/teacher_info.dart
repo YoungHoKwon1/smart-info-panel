@@ -27,15 +27,15 @@ class _TeacherInfoState extends State<TeacherInfo> {
     _callBasicApi();
     _callEnvApi();
     _callAttendApi();
-    Timer(Duration(seconds: 20), () {
-      if(childNum<=10) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo10()));
-      } else if(childNum>10 || childNum<20) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo20()));
-      } else {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo30()));
-      }
-    });
+    // Timer(Duration(seconds: 20), () {
+    //   if(childNum<=10) {
+    //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo10()));
+    //   } else if(childNum>10 || childNum<20) {
+    //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo20()));
+    //   } else {
+    //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ClassInfo30()));
+    //   }
+    // });
   }
 
   Dio dio = Dio();
@@ -317,26 +317,26 @@ class _TeacherInfoState extends State<TeacherInfo> {
                   flex: 1,
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 50.0),
                       ),
                       Container(
                         width: 200.0,
                         height: 200.0,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 30.0),
                       ),
                       Container(
                         width: 500.0,
-                        child: LinearProgressIndicator(
+                        child: const LinearProgressIndicator(
                           backgroundColor: Colors.pink,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10.0),
                       ),
-                      Text(
+                      const Text(
                         "Loading.....",
                         style: TextStyle(color: Colors.yellow, fontSize: 18.0, fontWeight: FontWeight.bold),
                       )
@@ -404,7 +404,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                   height: 45.w,
                                   margin: EdgeInsets.only(left: 102.w),
                                   decoration: BoxDecoration(
-                                      color: Color(0xff71d8d4),
+                                      color: const Color(0xff71d8d4),
                                       borderRadius:
                                           BorderRadius.circular(22.5)),
                                   child: Center(
@@ -470,14 +470,14 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 45.w,
                                       margin: EdgeInsets.only(left: 28.w),
                                       decoration: new BoxDecoration(
-                                          color: Color(0xffc7f7f5),
+                                          color: const Color(0xffc7f7f5),
                                           borderRadius:
                                               BorderRadius.circular(22.5)),
                                       child: Center(
                                         child: Text(teacherName[j],
                                             style: TextStyle(
                                               fontFamily: '.NotoSansKR',
-                                              color: Color(0xff000000),
+                                              color: const Color(0xff000000),
                                               fontSize: 16.sp,
                                               fontWeight: FontWeight.w400,
                                               fontStyle: FontStyle.normal,
@@ -511,14 +511,14 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 45.w,
                                       margin: EdgeInsets.only(left: 23.w),
                                       decoration: new BoxDecoration(
-                                          color: Color(0xffc7f7f5),
+                                          color: const Color(0xffc7f7f5),
                                           borderRadius:
                                               BorderRadius.circular(17.5)),
                                       child: Center(
                                         child: Text(teacherName[j],
                                             style: TextStyle(
                                               fontFamily: 'NotoSansKR',
-                                              color: Color(0xff000000),
+                                              color: const Color(0xff000000),
                                               fontSize: 15.sp,
                                               fontWeight: FontWeight.w400,
                                               fontStyle: FontStyle.normal,
@@ -569,14 +569,14 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 45.w,
                                       margin: EdgeInsets.only(left: 28.w),
                                       decoration: new BoxDecoration(
-                                          color: Color(0xffffc9c9),
+                                          color: const Color(0xffffc9c9),
                                           borderRadius:
                                               BorderRadius.circular(22.5)),
                                       child: Center(
                                         child: Text(committeeName[j],
                                             style: TextStyle(
                                               fontFamily: '.NotoSansKR',
-                                              color: Color(0xff000000),
+                                              color: const Color(0xff000000),
                                               fontSize: 16.sp,
                                               fontWeight: FontWeight.w400,
                                               fontStyle: FontStyle.normal,
@@ -610,14 +610,14 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                       height: 45.w,
                                       margin: EdgeInsets.only(left: 23.w),
                                       decoration: new BoxDecoration(
-                                          color: Color(0xffffc9c9),
+                                          color: const Color(0xffffc9c9),
                                           borderRadius:
                                               BorderRadius.circular(17.5)),
                                       child: Center(
                                         child: Text(committeeName[j],
                                             style: TextStyle(
                                               fontFamily: 'NotoSansKR',
-                                              color: Color(0xff000000),
+                                              color: const Color(0xff000000),
                                               fontSize: 15.sp,
                                               fontWeight: FontWeight.w400,
                                               fontStyle: FontStyle.normal,
@@ -811,7 +811,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                           child: // 학급별
                               Text("학급별",
                                   style: TextStyle(
-                                      color: Color(0xff39605f),
+                                      color: const Color(0xff39605f),
                                       fontWeight: FontWeight.w700,
                                       fontFamily: "NotoSansKR",
                                       fontStyle: FontStyle.normal,
@@ -836,7 +836,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                                   "%",
                                               style: TextStyle(
                                                 fontFamily: 'NotoSansKR',
-                                                color: Color(0xff393838),
+                                                color: const Color(0xff393838),
                                                 fontSize: 12.sp,
                                                 fontWeight: FontWeight.w400,
                                                 fontStyle: FontStyle.normal,
@@ -846,7 +846,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                             width: 20.w,
                                             height: 135 * chartRate[i].w,
                                             decoration: BoxDecoration(
-                                              color: Color(0xffc7f7f5),
+                                              color: const Color(0xffc7f7f5),
                                               borderRadius: BorderRadius.only(
                                                   topRight:
                                                       Radius.circular(10.w),
@@ -860,7 +860,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                           width: 748.w,
                           height: 3.w,
                           margin: EdgeInsets.only(left: 40.w),
-                          decoration: BoxDecoration(color: Color(0xff63e6d7))),
+                          decoration: const BoxDecoration(color: Color(0xff63e6d7))),
                       Container(
                         margin: EdgeInsets.only(left: 40.w),
                         child: Row(
@@ -871,7 +871,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 Text(childClassName[i],
                                     style: TextStyle(
                                       fontFamily: '.AppleSystemUIFont',
-                                      color: Color(0xff000000),
+                                      color: const Color(0xff000000),
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
