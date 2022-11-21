@@ -45,6 +45,9 @@ void main() async {
       ChangeNotifierProvider(
         create: (_) => ChildLifeProvider(),
       ),
+      ChangeNotifierProvider(
+        create: (_) => ClassDataProvider(),
+      ),
     ], child: SmartInfoPanel()),
   );
 }
@@ -112,6 +115,19 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   List<dynamic> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   Image kinderImage = Image.asset("name");
+
+  int childNum = 0;
+  int column = 7;
+  int row=0;
+  int rest=0; //나머지 아이들
+  String className = '새싹어린이반';
+  int teacherNum = 0;
+  List<String> teacherName = ['김담임', '김담임', '김담임'];
+  List<Image> teacherImage = [];
+  List<String> childrenName = [];
+  List<Image> childrenImage = [];
+  //반 나이, 총 인원, 남아 수, 여아 수 순서
+  List<int> classInfo =[0,0,0,0];
 
   ///어린이집소개 좌측용
   void _callBasicApi() async {
@@ -209,12 +225,57 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           secondRowInt,
           thirdRowInt
       );
+      className = mapResult["classInfo"][0]["name"];
+      className = mapResult["classInfo"][0]["name"];
+      teacherNum = mapResult["classInfo"][0]["teachers"].length;
+      for(int i=0;i<teacherNum;i++) {
+        teacherName[i] = mapResult["classInfo"][0]["teachers"][i]["name"];
+        teacherImage.add(Image.network(
+          url+mapResult["classInfo"][0]["teachers"][i]["imagePath"],
+          headers: headers,
+          width: 128.w,
+          height: 146.w,
+          fit: BoxFit.cover,
+        ),
+        );
+
+      }
+      childNum = mapResult["classInfo"][0]["children"].length;
+      classInfo[1] = childNum;
+      childrenName.clear();
+      print(mapResult["classInfo"]);
+      for(int i=0;i<childNum;i++) {
+        childrenName.add(mapResult["classInfo"][0]["children"][i]["name"]);
+        // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+        childrenImage.add(Image.network(
+          url+mapResult["classInfo"][0]["children"][i]["imagePath"],
+          headers: headers,
+          width: 128.w,
+          height: 146.w,
+          fit: BoxFit.cover,
+        ),);
+      }
+
+      row = childNum ~/ column;
+      rest = childNum % column;
+      print("row: " +row.toString());
+      print("childNum: " +childNum.toString());
+      print("column: " +column.toString());
+      for(int i=0;i<childNum;i++) {
+        if(mapResult["classInfo"][0]["children"][i]["sex"] == true) {
+          classInfo[2]++;//남+1
+        } else {
+          classInfo[3]++;//여+1
+        }
+      }
+      context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
+          teacherName, teacherImage, childrenName, childrenImage, classInfo);
     });
   }
   Image childImage = Image.asset("name");
   String childName = "";
   String childBDay = '';
-  String className = '';
+  String oneClassName = '';
   String collectionPeriod = '';
   String attendanceCount = '';
   String avgAttendTime = '';
@@ -260,7 +321,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       }
       return obj.response;
     });
-    print(responseChild);//데이터 뭐가오나 확인
+    // print(responseChild);//데이터 뭐가오나 확인
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseChild);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
       childImage = Image.network(
@@ -275,7 +336,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       bdayYear = childBDay.substring(0,4);
       bdayMonth = childBDay.substring(4,6);
       bdayDay = childBDay.substring(6,8);
-      className = mapResult["className"];
+      oneClassName = mapResult["className"];
       collectionPeriod = mapResult["collectionPeriod"].toString();
       attendanceCount = mapResult["attendanceCount"].toString();
       avgAttendTime = mapResult["avgAttendTime"].toString();
@@ -290,7 +351,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       toiletCount = mapResult["toiletCount"].toString();
       medicineCount = mapResult["medicineCount"].toString();
       accidentCount = mapResult["accidentCount"].toString();
-      context.read<ChildLifeProvider>().updateData(childImage, childName, childBDay, className, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
+      context.read<ChildLifeProvider>().updateData(childImage, childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
     });
   }///
 
@@ -310,7 +371,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     //'소나무',
   ]; //반 이름입니다.
   List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
-  List<int> classInfo = [0, 10, 6, 4]; //반 나이, 총 인원, 남아 수, 여아 수 순서
   ///등하원 api
   void _callAttendApi() async {
     final client = RestInfoPanel(dio);
@@ -339,7 +399,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       return obj.response;
     });
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    print(mapResult);
+    // print(mapResult);
     setState(() {
       //값이 0이 들어와서 현재 제대로 그릴수없어서 임의로 대체
       //boyrate = mapResult["maleRate"];
