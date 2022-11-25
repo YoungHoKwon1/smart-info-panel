@@ -65,7 +65,7 @@ class TeacherDataProvider with ChangeNotifier {
     _committeeName = committeeName;
     _committeeImage = committeeImage;
     _committeeClassName = committeeClassName;
-    print("Class Data Upate1");
+    print("Teacher Data Update1");
     notifyListeners();
   }
 }

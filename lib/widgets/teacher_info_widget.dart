@@ -21,41 +21,7 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-      Column(
-      children: [
-      Container(
-      width: 1048.w,
-        height: 895.w,
-        margin: EdgeInsets.only(left: 16.w, top: 16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: const Color(0x6663e6d7),
-            width: 1.w,
-          ),
-          borderRadius: BorderRadius.circular(20.w),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0x29b1b1b1),
-              offset: Offset(-2.w, 2.w),
-              blurRadius: 6.w,
-              spreadRadius: 0.w,
-            ),
-            BoxShadow(
-              color: const Color(0x29dbdbdb),
-              offset: Offset(-2.w, -4.w),
-              blurRadius: 6.w,
-              spreadRadius: 0.w,
-            ),
-          ],
-        ),
-        child: Column(
+    return Column(
           children: [
             Row(
               children: [
@@ -120,7 +86,7 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
             ),
 
             ///선생님
-            for (int i = 0; i < context.watch<TeacherDataProvider>().row; i++) ...[
+            for (int i = 0; i < 1; i++) ...[
               Row(
                 children: [
                   for (int j = 0; j < context.watch<TeacherDataProvider>().teacherNum; j++) ...[
@@ -218,7 +184,7 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
             ],
 
             ///학부모
-            for (int i = 0; i < context.watch<TeacherDataProvider>().row; i++) ...[
+            for (int i = 0; i < 1; i++) ...[
               Row(
                 children: [
                   for (int j = 0; j < context.watch<TeacherDataProvider>().committeeNum; j++) ...[
@@ -315,12 +281,6 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
               )
             ]
           ],
-        ),
-      ),
-      ],
-    )
-    ]
-    ),
     );
   }
 }
