@@ -117,7 +117,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   Image kinderImage = Image.asset("name");
 
   int childNum = 0;
-  int column = 7;
+  int column = 5;
   int row=0;
   int rest=0; //나머지 아이들
   String className = '새싹어린이반';
@@ -241,6 +241,13 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
       }
       childNum = mapResult["classInfo"][0]["children"].length;
+      if(childNum<10) {
+        column=4;
+      } else if(childNum<20) {
+        column=5;
+      } else {
+        column=7;
+      }
       classInfo[1] = childNum;
       childrenName.clear();
       print(mapResult["classInfo"]);
@@ -268,7 +275,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           classInfo[3]++;//여+1
         }
       }
-      context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
+      context.read<ClassDataProvider>().dataUpdate(childNum, column,row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
     });
 
