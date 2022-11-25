@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TeacherDataProvider with ChangeNotifier {
   int _column = 7;
   int _row=0;
-  int _rest=0; //나머지 아이들
+  int _rest=0;
 
   int _teacherNum = 0;
   int _directorNum = 0;

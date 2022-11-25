@@ -60,7 +60,7 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
             Row(
               children: [
                 ///원장
-                for (int i = 0; i < context.watch<TeacherDataProvider>().teacherNum; i++) ...[
+                for (int i = 0; i < context.watch<TeacherDataProvider>().directorNum; i++) ...[
                   Column(
                     children: [
                       Container(
@@ -120,8 +120,7 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
             ),
 
             ///선생님
-            for (int i = 0; i < 1; i++) ...[
-              // 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
+            for (int i = 0; i < context.watch<TeacherDataProvider>().row; i++) ...[
               Row(
                 children: [
                   for (int j = 0; j < context.watch<TeacherDataProvider>().teacherNum; j++) ...[
@@ -219,8 +218,7 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
             ],
 
             ///학부모
-            for (int i = 0; i < 1; i++) ...[
-              // 총 row줄, row column 잘 안먹으면 일단 그냥 정수 박으세요
+            for (int i = 0; i < context.watch<TeacherDataProvider>().row; i++) ...[
               Row(
                 children: [
                   for (int j = 0; j < context.watch<TeacherDataProvider>().committeeNum; j++) ...[
