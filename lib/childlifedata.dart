@@ -26,9 +26,9 @@ class _ChildLifeDataState extends State<ChildLifeData> {
     _callEnvApi();
     _callAttendApi();
 
-    Timer(Duration(seconds: 20), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
-    });
+    // Timer(Duration(seconds: 20), () {
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo2()));
+    // });
   }
   Dio dio = Dio();
 
@@ -330,7 +330,8 @@ class _ChildLifeDataState extends State<ChildLifeData> {
                       ),
                     ],
                   ),
-                  child: Column(
+                  child:
+                  Column(
                     children: [
                       Row(
                         children: [
