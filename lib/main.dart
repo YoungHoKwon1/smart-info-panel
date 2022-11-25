@@ -11,6 +11,7 @@ import 'package:smart_info_panel/provider/chlid_life_data.dart';
 import 'package:smart_info_panel/provider/class_data.dart';
 import 'package:smart_info_panel/provider/kinder_data.dart';
 import 'package:smart_info_panel/provider/teacher_data.dart';
+import 'package:smart_info_panel/provider/test_notice_provider.dart';
 import 'package:smart_info_panel/smartinfopanel.dart';
 import 'package:smart_info_panel/teacher_info.dart';
 
@@ -48,6 +49,9 @@ void main() async {
       ),
       ChangeNotifierProvider(
         create: (_) => TeacherDataProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => NoticeProvider(),
       ),
     ], child: SmartInfoPanel()),
   );
@@ -118,7 +122,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   Image kinderImage = Image.asset("name");
 
   int childNum = 0;
-  int column = 5;
+  int column = 0;
   int row=0;
   int rest=0; //나머지 아이들
   String className = '새싹어린이반';
@@ -130,6 +134,30 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   //반 나이, 총 인원, 남아 수, 여아 수 순서
   List<int> classInfo =[0,0,0,0];
 
+  String news = '이번달 행사';
+  String today = '오늘의 소식';
+  int eventNum = 0;
+  int months = 0;
+  int weeks = 0;
+  int rowNotice=0;
+  int columnNotice = 4;
+  int restNotice=0;
+  int newImageNum = 0;
+  List<String> childrenImagePath = [];
+  String weekinfo = '';
+  String NewsComment = '';
+  List<String> event2 = [];
+
+  List<Image> imageList = [];
+  // List<String> childrenName = [
+  //   '','','','','','','',
+  //   '','','','','','','',
+  //   '','','','','','','',
+  //   '','','','','','','',
+  // ];
+  //
+  // List<Image> childrenImage = [];
+  // int childNum = 0;
   ///어린이집소개 좌측용
   void _callBasicApi() async {
     Map<String, String> headers = Map();
@@ -263,7 +291,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           fit: BoxFit.cover,
         ),);
       }
-
       row = childNum ~/ column;
       rest = childNum % column;
       print("row: " +row.toString());
@@ -278,6 +305,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       }
       context.read<ClassDataProvider>().dataUpdate(childNum, column,row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
+      context.read<NoticeProvider>().updateData(news, today, eventNum, months, rowNotice, restNotice, newImageNum, childrenImagePath, weekinfo, NewsComment, event2, imageList);
     });
 
   }

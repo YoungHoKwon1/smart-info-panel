@@ -300,7 +300,8 @@ class _NoticeState extends State<Notice> {
                     ),
                   ],
                 ),
-                child: Column(
+                child:
+                Column(
                   children: [
                     Row(
                       children: [
