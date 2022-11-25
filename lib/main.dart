@@ -10,6 +10,7 @@ import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/provider/chlid_life_data.dart';
 import 'package:smart_info_panel/provider/class_data.dart';
 import 'package:smart_info_panel/provider/kinder_data.dart';
+import 'package:smart_info_panel/provider/teacher_data.dart';
 import 'package:smart_info_panel/smartinfopanel.dart';
 import 'package:smart_info_panel/teacher_info.dart';
 
@@ -47,6 +48,9 @@ void main() async {
       ),
       ChangeNotifierProvider(
         create: (_) => ClassDataProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => TeacherDataProvider(),
       ),
     ], child: SmartInfoPanel()),
   );
