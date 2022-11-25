@@ -135,7 +135,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     headers['authorization'] = token;
     final client = RestInfoPanel(dio);
     final responseBasic =
-        await client.getHouseInfo(token).catchError((Object obj) {
+    await client.getHouseInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       switch (res!.statusCode) {
         case 200:
@@ -385,7 +385,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     final token =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
     final responseAttend =
-        await client.getAttendInfo(token).catchError((Object obj) {
+    await client.getAttendInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       //swagger 참조
       switch (res!.statusCode) {

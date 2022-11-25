@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
+import 'package:smart_info_panel/widgets/classinfo10_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo30_widget.dart';
 import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
+import 'package:smart_info_panel/widgets/teacher_info_widget.dart';
 
 
 import 'api/infopanel.dart';
@@ -157,8 +159,10 @@ class _MainPanelState extends State<MainPanel> {
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
                     ClassInfo30Widget()
-                    // ChildLifeDataWidget(),
+                  // ChildLifeDataWidget(),
                   // KinderInfoWidget(),
+                  // ClassInfo10Widget(),
+                  // TeacherInfoWidget()
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],
