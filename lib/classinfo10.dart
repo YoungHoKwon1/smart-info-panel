@@ -303,14 +303,14 @@ class _ClassInfo10State extends State<ClassInfo10> {
 
   @override
   Widget build(BuildContext context) {
-    if(weatherType=='비') {
-      return Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
+        if(weatherType=='비') {
+          return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Expanded(
                   flex: 1,
