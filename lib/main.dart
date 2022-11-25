@@ -47,7 +47,7 @@ void main() async {
         create: (_) => ChildLifeProvider(),
       ),
       ChangeNotifierProvider(
-        create: (_) => ClassDataProvider(),
+        create: (_) => TeacherDataProvider(),
       ),
       ChangeNotifierProvider(
         create: (_) => TeacherDataProvider(),
