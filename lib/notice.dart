@@ -583,7 +583,6 @@ class _NoticeState extends State<Notice> {
                                   ],
                                 ],
                               )
-
                             ]]),
                     ],
                   ],

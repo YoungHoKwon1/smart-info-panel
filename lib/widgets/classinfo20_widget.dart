@@ -8,14 +8,14 @@ import 'dart:async';
 import '../provider/class_data.dart';
 import 'package:provider/provider.dart';
 
-class ClassInfo30Widget extends StatefulWidget {
-  const ClassInfo30Widget({Key? key}) : super(key: key);
+class ClassInfo20Widget extends StatefulWidget {
+  const ClassInfo20Widget({Key? key}) : super(key: key);
 
   @override
-  State<ClassInfo30Widget> createState() => _ClassInfo30WidgetState();
+  State<ClassInfo20Widget> createState() => _ClassInfo20WidgetState();
 }
 
-class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
+class _ClassInfo20WidgetState extends State<ClassInfo20Widget> {
   void initState() {
     super.initState();
   }
@@ -59,19 +59,20 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
                           BorderRadius.circular(20)),
                       child: Center(
                         child: Text(
-                            context.watch<ClassDataProvider>().classInfo[0].toString() +
+                          context.watch<ClassDataProvider>().classInfo[0].toString() +
                               '세 | ' +
-                                context.watch<ClassDataProvider>().classInfo[1].toString() +
+                              context.watch<ClassDataProvider>().classInfo[1].toString() +
                               '명 | 남:' +
-                                context.watch<ClassDataProvider>().classInfo[2].toString() +
+                              context.watch<ClassDataProvider>().classInfo[2].toString() +
                               '명 여:' +
-                                context.watch<ClassDataProvider>().classInfo[3].toString() +
+                              context.watch<ClassDataProvider>().classInfo[3].toString() +
                               '명',
                           style: TextStyle(fontSize: 18.sp,
-                            color: const Color(0xff000000),),
+                            color: const Color(0xff000000),
+                          ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -82,16 +83,19 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
               Column(
                 children: [
                   Container(
-                      width: 120.w,
-                      height: 120.w,
-                      //페이지에 따라 마진 조절 바람 건희, 성민
-                      margin: EdgeInsets.only(left: 5.w),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(250),
-                      child: context.watch<ClassDataProvider>().teacherImage[i])),
+                    width: 180.w,
+                    height: 180.w,
+                    margin: EdgeInsets.only(left: 20.w),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(250),
+                        child: context.watch<ClassDataProvider>().teacherImage[i],
+                    ),
+
+                  ),
                   Container(
-                    width: 160.w,
-                    height: 40.w,
+                    width: 180.w,
+                    height: 45.w,
+                    margin: EdgeInsets.only(left: 30.w),
                     decoration: BoxDecoration(
                         color: const Color(0xffc7f7f5),
                         borderRadius: BorderRadius.circular(20)),
@@ -128,42 +132,63 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
                   children: [
                     if (j == 0) ...[
                       Container(
-                          width: 110.w,
-                          height: 110.w,
-                          margin: EdgeInsets.only(left: 31.w, top: 30.w),
-                          child: ClipRRect(
+                          width: 116.w,
+                          height: 116.w,
+                          margin: EdgeInsets.only(left: 132.w, top: 66.w),
+                          child:ClipRRect(
                               borderRadius: BorderRadius.circular(250),
-                          child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j]))
-                    ] else ...[
+                          child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j]
+                          ),
+                      ),
                       Container(
-                        width: 110.w,
-                        height: 110.w,
-                        margin: EdgeInsets.only(left: 36.w, top: 30.w),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(250),
+                        width: 116.w,
+                        height: 35.w,
+                        decoration: BoxDecoration(
+                            color: const Color(0xffc7f7f5),
+                            borderRadius:
+                            BorderRadius.circular(17.5)),
+                        margin: EdgeInsets.only(left: 132.w),
                         child: Center(
-                            child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j])),
+                          child: Text(context.watch<ClassDataProvider>().childrenName[context.watch<ClassDataProvider>().column * i + j],
+                              style: TextStyle(
+                                fontFamily: 'NotoSansKR',
+                                color: const Color(0xff000000),
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                        ),
+                      )
+                    ]else ...[
+                      Container(
+                        width: 116.w,
+                        height: 116.w,
+                        margin: EdgeInsets.only(left: 50.w, top: 66.w),
+                        child:ClipRRect(
+                          borderRadius: BorderRadius.circular(250),
+                        child: Center(
+                            child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j]),),
+                      ),
+                      Container(
+                        width: 116.w,
+                        height: 35.w,
+                        decoration: BoxDecoration(
+                            color: const Color(0xffc7f7f5),
+                            borderRadius:
+                            BorderRadius.circular(17.5)),
+                        margin: EdgeInsets.only(left: 50.w),
+                        child: Center(
+                          child: Text(context.watch<ClassDataProvider>().childrenName[context.watch<ClassDataProvider>().column * i + j],
+                              style: TextStyle(
+                                fontFamily: 'NotoSansKR',
+                                color: const Color(0xff000000),
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                              )),
+                        ),
                       )
                     ],
-                    Container(
-                      width: 116.w,
-                      height: 35.w,
-                      decoration: BoxDecoration(
-                          color: const Color(0xffc7f7f5),
-                          borderRadius:
-                          BorderRadius.circular(17.5)),
-                      margin: EdgeInsets.only(left: 28.w),
-                      child: Center(
-                        child: Text(context.watch<ClassDataProvider>().childrenName[context.watch<ClassDataProvider>().column * i + j],
-                            style: TextStyle(
-                              fontFamily: 'NotoSansKR',
-                              color: const Color(0xff000000),
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
-                            )),
-                      ),
-                    )
                   ],
                 )
               ]
@@ -182,18 +207,18 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
                   children: [
                     if (j == 0) ...[
                       Container(
-                          width: 110.w,
-                          height: 110.w,
-                          margin: EdgeInsets.only(left: 31.w, top: 30.w),
-                          child: ClipRRect(
+                          width: 116.w,
+                          height: 116.w,
+                          margin: EdgeInsets.only(left: 133.w, top: 30.w),
+                          child:ClipRRect(
                               borderRadius: BorderRadius.circular(250),
                           child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().row * context.watch<ClassDataProvider>().column + j]))
                     ] else ...[
                       Container(
-                          width: 110.w,
-                          height: 110.w,
-                          margin: EdgeInsets.only(left: 36.w, top: 30.w),
-                          child: ClipRRect(
+                          width: 116.w,
+                          height: 116.w,
+                          margin: EdgeInsets.only(left: 50.w, top: 30.w),
+                          child:ClipRRect(
                               borderRadius: BorderRadius.circular(250),
                           child: Center(
                               child: context.watch<ClassDataProvider>().childrenImage[
@@ -206,7 +231,7 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
                           color: const Color(0xffc7f7f5),
                           borderRadius:
                           BorderRadius.circular(17.5)),
-                      margin: EdgeInsets.only(left: 28.w),
+                      margin: EdgeInsets.only(left: 132.w),
                       child: Center(
                         child:
                         Text(context.watch<ClassDataProvider>().childrenName[context.watch<ClassDataProvider>().row * context.watch<ClassDataProvider>().column + j],

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:smart_info_panel/classinfo20.dart';
+import 'package:smart_info_panel/facetime.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
+import 'package:smart_info_panel/widgets/facetime_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo30_widget.dart';
+import 'package:smart_info_panel/widgets/classinfo20_widget.dart';
 import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
+import 'package:smart_info_panel/widgets/notice_widget.dart';
 
 
 import 'api/infopanel.dart';
@@ -156,8 +161,12 @@ class _MainPanelState extends State<MainPanel> {
                   ),
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
-                    ClassInfo30Widget()
-                    // ChildLifeDataWidget(),
+
+                    //FacetimeWidget()
+                      //NoticeWidget()
+                    //ClassInfo30Widget()
+                     // ClassInfo20Widget()
+                     ChildLifeDataWidget(),
                   // KinderInfoWidget(),
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
@@ -251,10 +260,12 @@ class _MainPanelState extends State<MainPanel> {
                                   borderRadius: BorderRadius.circular(18.w),
                                   color: const Color(0x4d63e66d),
                                 ),
-                                child: Text(
+                                child:
+                                Text(
                                   (100 * context.watch<AttendanceDataProvider>().boyrate).toString() + "%",
-                                  style: TextStyle(fontSize: 16.sp),
+                                  style: TextStyle(fontSize: 12.sp),
                                   textAlign: TextAlign.right,
+
                                 ),
                               )
                               //남아
