@@ -7,6 +7,7 @@ import 'package:smart_info_panel/widgets/classinfo10_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo30_widget.dart';
 import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
 import 'package:smart_info_panel/widgets/teacher_info_widget.dart';
+import 'package:smart_info_panel/widgets/test_notice_widget.dart';
 
 
 import 'api/infopanel.dart';
@@ -25,6 +26,8 @@ class MainPanel extends StatefulWidget {
 }
 
 class _MainPanelState extends State<MainPanel> {
+  //글씨섹
+  List<Color> weatherFontColor = [Colors.blue, Colors.orange, Color(0xFFa27258)];
   @override
   void initState() {
     super.initState();
@@ -162,7 +165,8 @@ class _MainPanelState extends State<MainPanel> {
                   //  ClassInfo30Widget()
                   // ChildLifeDataWidget(),
                   // KinderInfoWidget(),
-                   TeacherInfoWidget()
+                  //  TeacherInfoWidget()
+                  NoticeWidget()
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],
