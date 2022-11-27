@@ -10,7 +10,12 @@ import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/provider/chlid_life_data.dart';
 import 'package:smart_info_panel/provider/class_data.dart';
 import 'package:smart_info_panel/provider/kinder_data.dart';
+
 import 'package:smart_info_panel/provider/notice_data.dart';
+
+import 'package:smart_info_panel/provider/teacher_data.dart';
+import 'package:smart_info_panel/provider/test_notice_provider.dart';
+
 import 'package:smart_info_panel/smartinfopanel.dart';
 import 'package:smart_info_panel/teacher_info.dart';
 
@@ -49,7 +54,10 @@ void main() async {
         create: (_) => ChildLifeProvider(),
       ),
       ChangeNotifierProvider(
-        create: (_) => ClassDataProvider(),
+        create: (_) => TeacherDataProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => NoticeProvider(),
       ),
       ChangeNotifierProvider(
         create: (_) => NoticedataProvider(),
@@ -123,7 +131,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   Image kinderImage = Image.asset("name");
 
   int childNum = 0;
-  int column = 7;
+  int column = 0;
   int row=0;
   int rest=0; //나머지 아이들
   String className = '새싹어린이반';
@@ -153,13 +161,37 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   var now = DateTime.now();
 
 
+  String news = '이번달 행사';
+  String today = '오늘의 소식';
+  int eventNum = 0;
+  int months = 0;
+  int weeks = 0;
+  int rowNotice=0;
+  int columnNotice = 4;
+  int restNotice=0;
+  int newImageNum = 0;
+  List<String> childrenImagePath = [];
+  String weekinfo = '';
+  String NewsComment = '';
+  List<String> event2 = [];
+
+  List<Image> imageList = [];
+  // List<String> childrenName = [
+  //   '','','','','','','',
+  //   '','','','','','','',
+  //   '','','','','','','',
+  //   '','','','','','','',
+  // ];
+  //
+  // List<Image> childrenImage = [];
+  // int childNum = 0;
   ///어린이집소개 좌측용
   void _callBasicApi() async {
     Map<String, String> headers = Map();
     headers['authorization'] = token;
     final client = RestInfoPanel(dio);
     final responseBasic =
-        await client.getHouseInfo(token).catchError((Object obj) {
+    await client.getHouseInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       switch (res!.statusCode) {
         case 200:
@@ -265,11 +297,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
       }
       childNum = mapResult["classInfo"][0]["children"].length;
-      if(childNum<10){
+
+      if(childNum<10) {
         column=4;
-      }else if(childNum<20) {
+      } else if(childNum<20) {
         column=5;
-      }else {
+      } else {
         column=7;
       }
       classInfo[1] = childNum;
@@ -301,9 +334,11 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         }
       }
 
+
       context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
       context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now);
+
     });
 
   }
@@ -412,7 +447,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     final token =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
     final responseAttend =
-        await client.getAttendInfo(token).catchError((Object obj) {
+    await client.getAttendInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       //swagger 참조
       switch (res!.statusCode) {
