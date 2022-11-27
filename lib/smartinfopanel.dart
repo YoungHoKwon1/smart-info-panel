@@ -6,11 +6,20 @@ import 'package:smart_info_panel/facetime.dart';
 import 'package:smart_info_panel/notice.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
+
 import 'package:smart_info_panel/widgets/facetime_widget.dart';
+
+import 'package:smart_info_panel/widgets/classinfo10_widget.dart';
+
 import 'package:smart_info_panel/widgets/classinfo30_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo20_widget.dart';
 import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
+
 import 'package:smart_info_panel/widgets/notice_widget.dart';
+
+import 'package:smart_info_panel/widgets/teacher_info_widget.dart';
+import 'package:smart_info_panel/widgets/test_notice_widget.dart';
+
 
 
 import 'api/infopanel.dart';
@@ -163,12 +172,21 @@ class _MainPanelState extends State<MainPanel> {
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
                     //Notice()
+
+
                     //FacetimeWidget()
-                      NoticeWidget()
+                    //NoticeWidget()
                     //ClassInfo30Widget()
                      // ClassInfo20Widget()
                      //ChildLifeDataWidget(),
+                     ChildLifeDataWidget(),
+
+                  // ClassInfo10Widget(),
+                  //  ClassInfo30Widget()
+                  // ChildLifeDataWidget(),
+
                   // KinderInfoWidget(),
+                  //  TeacherInfoWidget()
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],

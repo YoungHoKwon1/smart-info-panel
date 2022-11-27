@@ -909,7 +909,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text("온도",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: const Color(0xff04acd1),
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -920,7 +920,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text("습도",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: const Color(0xff04acd1),
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -931,7 +931,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text("미세먼지",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: const Color(0xff04acd1),
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -942,7 +942,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text("이산화탄소",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: const Color(0xff04acd1),
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -953,7 +953,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text("초미세먼지",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: const Color(0xff04acd1),
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -972,7 +972,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text(sensorTemperature.toString()+"도",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
+                                  color: const Color(0xff2d3a44),
                                   fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
@@ -983,7 +983,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text(sensorHumidity.toString()+"%",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
+                                  color: const Color(0xff2d3a44),
                                   fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
@@ -994,7 +994,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text(sensorPm10.toString()+"㎍/㎥",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
+                                  color: const Color(0xff2d3a44),
                                   fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
@@ -1005,7 +1005,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text(sensorCo2.toString()+"ppm",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
+                                  color: const Color(0xff2d3a44),
                                   fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
@@ -1016,7 +1016,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                             child: Text(sensorPm25.toString()+"㎍/㎥",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
+                                  color: const Color(0xff2d3a44),
                                   fontSize: 30.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,

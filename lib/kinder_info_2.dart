@@ -30,9 +30,9 @@ class _KinderInfo2State extends State<KinderInfo2> {
     _callEnvApi();
     _callAttendApi();
     // 자동 라우팅, Timer()쓰려면 import 'dart:async'; 필요
-    // Timer(Duration(seconds: 10), () {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo3()));
-    // });
+    Timer(Duration(seconds: 10), () {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>KinderInfo3()));
+    });
   }
 
   Dio dio = Dio();
@@ -402,8 +402,7 @@ class _KinderInfo2State extends State<KinderInfo2> {
                       ),
                     ],
                   ),
-                  child:
-                  Column(
+                  child: Column(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
