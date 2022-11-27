@@ -32,10 +32,18 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
                       Container(
                           width: 140.w,
                           height: 140.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xffffffff),
+                          ),
                           //페이지에 따라 마진 조절 바람 건희, 성민
                           margin:
                           EdgeInsets.only(left: 102.w, top: 49.w),
-                          child: context.watch<TeacherDataProvider>().directorImage[i]),
+                          child:
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(250),
+                            child: context.watch<TeacherDataProvider>().directorImage[i]),
+                            ),
                       Container(
                         width: 200.w,
                         height: 45.w,
@@ -97,9 +105,17 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
                           Container(
                               width: 135.w,
                               height: 135.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xffffffff),
+                              ),
                               margin: EdgeInsets.only(
                                   left: 23.w, top: 65.w),
-                              child: context.watch<TeacherDataProvider>().teacherImage[j]),
+                            child:
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(250),
+                                child: context.watch<TeacherDataProvider>().teacherImage[j]),
+                          ),
                           Container(
                             width: 180.w,
                             height: 45.w,
@@ -138,9 +154,17 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
                           Container(
                               width: 135.w,
                               height: 135.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: const Color(0xffffffff),
+                            ),
                               margin: EdgeInsets.only(
                                   left: 13.w, top: 65.w),
-                              child: context.watch<TeacherDataProvider>().teacherImage[j]),
+                            child:
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(250),
+                                child: context.watch<TeacherDataProvider>().teacherImage[j]),
+                          ),
                           Container(
                             width: 180.w,
                             height: 45.w,
@@ -195,9 +219,17 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
                           Container(
                               width: 135.w,
                               height: 135.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xffffffff),
+                              ),
                               margin: EdgeInsets.only(
                                   left: 23.w, top: 65.w),
-                              child: context.watch<TeacherDataProvider>().committeeImage[j]),
+                            child:
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(250),
+                                child: context.watch<TeacherDataProvider>().committeeImage[j]),
+                          ),
                           Container(
                             width: 180.w,
                             height: 45.w,
@@ -236,10 +268,19 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
                           Container(
                               width: 135.w,
                               height: 135.w,
-                              margin: EdgeInsets.only(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: const Color(0xffffffff),
+                            ),
+
+                            margin: EdgeInsets.only(
                                   left: 13.w, top: 65.w),
-                              child: context.watch<TeacherDataProvider>().committeeImage[j]),
-                          Container(
+                            child:
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(250),
+                                child: context.watch<TeacherDataProvider>().committeeImage[j]),
+                          ),
+                              Container(
                             width: 180.w,
                             height: 45.w,
                             margin: EdgeInsets.only(left: 23.w),
@@ -261,7 +302,7 @@ class _TeacherInfoWidgetState extends State<TeacherInfoWidget> {
                           Container(
                               width: 160.w,
                               height: 47.w,
-                              margin: EdgeInsets.only(left: 33.w),
+                              margin: EdgeInsets.only(left: 25.w),
                               child: Center(
                                   child: Text(context.watch<TeacherDataProvider>().committeeClassName[j],
                                       style: TextStyle(

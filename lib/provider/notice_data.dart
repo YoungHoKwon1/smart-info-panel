@@ -78,6 +78,7 @@ class NoticedataProvider with ChangeNotifier {
     _now = now;
     _names = names;
     print("Class Data Upate1");
+
     notifyListeners();
   }
 }
