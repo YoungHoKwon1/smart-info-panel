@@ -418,6 +418,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     });
   }
   Image childImage = Image.asset("name");
+  String childImagePath='';
   String childName = "";
   String childBDay = '';
   String oneClassName = '';
@@ -476,6 +477,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         height: 146.w,
         fit: BoxFit.cover,
       );
+      childImagePath = mapResult["imagePath"];
       childName = mapResult["name"];
       childBDay = mapResult["birthday"];
       bdayYear = childBDay.substring(0,4);
@@ -496,7 +498,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       toiletCount = mapResult["toiletCount"].toString();
       medicineCount = mapResult["medicineCount"].toString();
       accidentCount = mapResult["accidentCount"].toString();
-      context.read<ChildLifeProvider>().updateData(childImage, childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
+      context.read<ChildLifeProvider>().updateData(childImage,childImagePath, childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
       row = newImageNum ~/ column;
       rest = newImageNum % column;
     });
@@ -546,7 +548,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       return obj.response;
     });
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
-    // print(mapResult);
+    print("AttendApi");
+    print(mapResult);//모든 데이터가 0이들어와서 일단 주석처리해두었습니다.
     setState(() {
       //값이 0이 들어와서 현재 제대로 그릴수없어서 임의로 대체
       //boyrate = mapResult["maleRate"];
@@ -554,6 +557,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       // childClassName = mapResult["classList"];
       // chartRate = mapResult["rateByClass"].cast<double>();
       context.read<AttendanceDataProvider>().updateData(boyrate, girlrate, childClassName, chartRate);
+      print("margin test");
+      // print(336-336*context.watch<AttendanceDataProvider>().girlrate.w);
     });
   }
 

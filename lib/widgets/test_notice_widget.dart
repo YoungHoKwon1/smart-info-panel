@@ -61,6 +61,7 @@ class _TestNoticeWidgetState extends State<TestNoticeWidget> {
                       Container(
                           margin: EdgeInsets.only(left: 27.w, top: 30.w),
                           child: Text(context.watch<NoticedataProvider>().months.toString() +'월'+context.watch<NoticedataProvider>().weeks.toString()+'주'+ context.watch<NoticedataProvider>().names.toString()+  '주요행사',
+
                               style: TextStyle(
                                 fontFamily:'NotSanaKR',
                                 color: const Color(0xff39605f),
@@ -216,7 +217,9 @@ class _TestNoticeWidgetState extends State<TestNoticeWidget> {
                         Container(
                           width: 200.w,
                           height: 200.w,
+
                           margin: EdgeInsets.only(left: 98.w, top:30.w),
+
                           child: context.watch<NoticedataProvider>().imageList[context.watch<NoticedataProvider>().co*i+j],
                         )
                       ]else ...[

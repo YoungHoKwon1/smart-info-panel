@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 class ChildLifeProvider with ChangeNotifier {
   Image _childImage = Image.asset("name");
+  String _childImagePath = "";
+
+  String get childImagePath => _childImagePath;
   String _childName = "";
   String _childBDay = '';
   String _className = '';
@@ -20,6 +23,7 @@ class ChildLifeProvider with ChangeNotifier {
   String _medicineCount = '';
   String _accidentCount = '';
   String _bdayYear='';
+
 
   Image get childImage => _childImage;
   String _bdayMonth='';
@@ -65,11 +69,12 @@ class ChildLifeProvider with ChangeNotifier {
 
   String get bdayDay => _bdayDay;
 
-  void updateData(Image childImage,String childName, String childBDay, String className, String collectionPeriod,
+  void updateData(Image childImage, String childImagePath, String childName, String childBDay, String className, String collectionPeriod,
   String attendanceCount, String avgAttendTime, String avgGoinghomeTime, String height, String weight, String beforeAttendEmotion,
   String beforeGoingHomeEmotion, String avgMeal, String avgSleep, String vomitCount, String toiletCount, String medicineCount,
   String accidentCount, String bdayYear, String bdayMonth, String bdayDay) {
     _childImage = childImage;
+    _childImagePath = childImagePath;
     _childName = childName;
     _childBDay = childBDay;
     _className = className;
