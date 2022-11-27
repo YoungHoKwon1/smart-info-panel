@@ -136,10 +136,21 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   int rest=0; //나머지 아이들
   String className = '새싹어린이반';
   int teacherNum = 0;
+  int directorNum = 0;
+  int committeeNum = 0;
   List<String> teacherName = ['김담임', '김담임', '김담임'];
   List<Image> teacherImage = [];
   List<String> childrenName = [];
   List<Image> childrenImage = [];
+  List<String> directorImagePath = [];
+  List<Image> directorImage = [];
+  List<String> directorName = [];
+  List<String> directorIntroduction = [];
+  List<String> teacherIntroduction = [];
+
+  List<Image> committeeImage = [];
+  List<String> committeeName = [];
+  List<String> committeeClassName = [];
   //반 나이, 총 인원, 남아 수, 여아 수 순서
   List<int> classInfo =[0,0,0,0];
   String news = '이번달 행사';
@@ -164,7 +175,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     "api/image/뒷산사진2.png",
   ];
   var now = DateTime.now();
-
 
 
   ///어린이집소개 좌측용
@@ -197,7 +207,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(
         responseBasic); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
 
-
     setState(() {
       weeks = mapResult["news"]["week"];
       months= mapResult["news"]["month"];
@@ -219,6 +228,71 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       ro = newImageNum ~/ co;
       re = newImageNum % co;
       //print(co);
+
+      }
+
+      teacherNum = mapResult["teachers"].length;
+      directorNum = mapResult["directors"].length;
+      committeeNum = mapResult["committees"].length;
+      // print(teacherNum);
+      print(mapResult["teachers"]);
+      print("before For");
+      for(int i=0;i<teacherNum;i++) {
+        teacherName.add(mapResult["teachers"][i]["name"]);
+        teacherIntroduction.add(mapResult["teachers"][i]["introduction"]);
+        teacherImage.add(
+          Image.network(
+            url + mapResult["teachers"][i]["imagePath"],
+            headers: headers,
+            width: 128.w,
+            height: 146.w,
+
+            fit: BoxFit.cover,
+          ),
+        );
+      }
+
+      print("-----");
+      print(teacherName);
+      print(teacherIntroduction);
+      print("-----");
+      classInfo[1] = directorNum;
+      directorName.clear();
+      directorIntroduction.clear();
+      for (int i = 0; i < directorNum; i++) {
+        directorName.add(mapResult["directors"][i]["name"]);
+        directorIntroduction.add(mapResult["directors"][i]["introduction"]);
+        // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+        directorImage.add(
+          Image.network(
+            url + mapResult["directors"][i]["imagePath"],
+            headers: headers,
+            width: 128.w,
+            height: 146.w,
+            fit: BoxFit.cover,
+          ),
+        );
+      }
+      classInfo[1] = committeeNum;
+      committeeName.clear();
+      committeeClassName.clear();
+      for (int i = 0; i < committeeNum; i++) {
+        committeeName.add(mapResult["committees"][i]["name"]);
+        committeeClassName.add(mapResult["committees"][i]["className"]);
+        //       for (int i = 0; i < committeesNum; i++) {
+        //         committeesName.add(mapResult["classInfo"][0]["committees"][i]["name"]);
+        //         // childrenImagePath.add(mapResult["classInfo"][0]["children"][i]["imagePath"]);
+        committeeImage.add(
+          Image.network(
+            url + mapResult["committees"][i]["imagePath"],
+            headers: headers,
+            width: 128.w,
+            height: 146.w,
+            fit: BoxFit.cover,
+          ),
+        );
+        context.read<TeacherDataProvider>().dataUpdate(column, row, rest, teacherNum, teacherName, teacherImage, teacherIntroduction, directorNum, directorName, directorImage, directorIntroduction, committeeNum, committeeName, committeeImage, committeeClassName);
+      }
 
       kinderImage = Image.network(
         url + mapResult["kindergarten"]["imagePath"],
@@ -424,10 +498,10 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       medicineCount = mapResult["medicineCount"].toString();
       accidentCount = mapResult["accidentCount"].toString();
       context.read<ChildLifeProvider>().updateData(childImage, childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
-
+      row = newImageNum ~/ column;
+      rest = newImageNum % column;
     });
-  }
-
+  }///
 
   double boyrate = 0.5;
   double girlrate = 0.78;
@@ -483,8 +557,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       context.read<AttendanceDataProvider>().updateData(boyrate, girlrate, childClassName, chartRate);
     });
   }
-
-
 
   String weatherTemperature = '22';
   String weatherType = '비';

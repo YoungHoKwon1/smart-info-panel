@@ -87,6 +87,7 @@ class NoticedataProvider with ChangeNotifier {
     _names = names;
     _imagePaths = imagePaths;
     print("Class Data Upate1");
+
     notifyListeners();
   }
 }
