@@ -397,17 +397,17 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     width: 140.w,
                                     height: 140.w,
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: const Color(0xff707070),
-                                            width: 1
-                                        ),
-                                        color: const Color(0xffffffff)
+                                            border: Border.all(
+                                                color: const Color(0xff707070),
+                                                width: 1
+                                            ),
+                                            color: const Color(0xffffffff),
                                     ),
-
                                     //페이지에 따라 마진 조절 바람 건희, 성민
                                     margin:
                                         EdgeInsets.only(left: 102.w, top: 49.w),
                                     child: directorImage[i]),
+
                                 Container(
                                   width: 200.w,
                                   height: 45.w,
