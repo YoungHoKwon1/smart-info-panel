@@ -43,6 +43,7 @@ class _MainPanelState extends State<MainPanel> {
   List<Color> weatherDataFontColor = [Color(0xff42372c), Color(0xff39605f), Color(0xffffffff), Color(0xff2d3a44), Color(0xff2f3846), Color(0xffffffff), Color(0xfff45f1e)];
   //(해/구름),(바람),(눈/비),(구름),(비),(눈),(맑음)
 
+
   @override
   void initState() {
     super.initState();
