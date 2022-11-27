@@ -159,7 +159,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   int days = 0;
   String snews= '';
   String names='';
+  List<String> imagePaths = [
+    "api/image/뒷산사진1.png",
+    "api/image/뒷산사진2.png",
+  ];
   var now = DateTime.now();
+
 
 
   ///어린이집소개 좌측용
@@ -192,6 +197,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(
         responseBasic); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
 
+
     setState(() {
       weeks = mapResult["news"]["week"];
       months= mapResult["news"]["month"];
@@ -209,7 +215,11 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             fit: BoxFit.cover,
           ),
         );
-      }
+      };
+      ro = newImageNum ~/ co;
+      re = newImageNum % co;
+      //print(co);
+
       kinderImage = Image.network(
         url + mapResult["kindergarten"]["imagePath"],
         headers: headers,
@@ -330,7 +340,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
       context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
-      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now, names);
+      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now, names, imagePaths);
     });
 
   }
@@ -414,10 +424,10 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       medicineCount = mapResult["medicineCount"].toString();
       accidentCount = mapResult["accidentCount"].toString();
       context.read<ChildLifeProvider>().updateData(childImage, childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
-      row = newImageNum ~/ column;
-      rest = newImageNum % column;
+
     });
-  }///
+  }
+
 
   double boyrate = 0.5;
   double girlrate = 0.78;
@@ -473,6 +483,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       context.read<AttendanceDataProvider>().updateData(boyrate, girlrate, childClassName, chartRate);
     });
   }
+
+
 
   String weatherTemperature = '22';
   String weatherType = '비';

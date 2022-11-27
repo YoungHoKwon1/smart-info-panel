@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_info_panel/provider/test_notice_provider.dart';
+import 'package:smart_info_panel/provider/notice_data.dart';
 import 'package:provider/provider.dart';
-class NoticeWidget extends StatefulWidget {
-  const NoticeWidget({Key? key}) : super(key: key);
+class TestNoticeWidget extends StatefulWidget {
+  const TestNoticeWidget({Key? key}) : super(key: key);
 
   @override
-  State<NoticeWidget> createState() => _NoticeWidgetState();
+  State<TestNoticeWidget> createState() => _TestNoticeWidgetState();
 }
 
-class _NoticeWidgetState extends State<NoticeWidget> {
+class _TestNoticeWidgetState extends State<TestNoticeWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,7 +49,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                     children: [
                       Container(
                           margin: EdgeInsets.only(left: 27.w, top: 29.w),
-                          child: Text(context.watch<NoticeProvider>().news,
+                          child: Text(context.watch<NoticedataProvider>().news,
                               style: TextStyle(
                                 fontFamily:'NotSanaKR',
                                 color: const Color(0xff898989),
@@ -60,7 +60,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                       ),
                       Container(
                           margin: EdgeInsets.only(left: 27.w, top: 30.w),
-                          child: Text(context.watch<NoticeProvider>().months.toString() +'월'+context.watch<NoticeProvider>().weeks.toString()+'주 아이좋아 어린이집 주요행사',
+                          child: Text(context.watch<NoticedataProvider>().months.toString() +'월'+context.watch<NoticedataProvider>().weeks.toString()+'주'+ context.watch<NoticedataProvider>().names.toString()+  '주요행사',
                               style: TextStyle(
                                 fontFamily:'NotSanaKR',
                                 color: const Color(0xff39605f),
@@ -71,7 +71,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                       ),
                       Container(
                           margin: EdgeInsets.only(left: 27.w, top: 15.w),
-                          child: Text(context.watch<NoticeProvider>().weekinfo,
+                          child: Text(context.watch<NoticedataProvider>().weekinfo,
                               style: TextStyle(
                                 fontFamily:'NotSanaKR',
                                 color: const Color(0xff39605f),
@@ -87,7 +87,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                           child: Row(
                             children: [
                               Flexible(
-                                  child: Text(context.watch<NoticeProvider>().NewsComment,
+                                  child: Text(context.watch<NoticedataProvider>().NewsComment,
                                       overflow:  TextOverflow.ellipsis,
                                       maxLines: 2,
                                       style: TextStyle(
@@ -139,7 +139,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                     children: [
                       Container(
                           margin: EdgeInsets.only(left: 27.w, top: 29.w),
-                          child: Text(context.watch<NoticeProvider>().today,
+                          child: Text(context.watch<NoticedataProvider>().today,
                               style: TextStyle(
                                 fontFamily:'NotSanaKR',
                                 color: const Color(0xff898989),
@@ -148,99 +148,35 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                                 fontStyle: FontStyle.normal,
                               ))
                       ),
-                      Row(
-                        children: [
-                          Container(
-                              margin: EdgeInsets.only(left: 27.w, top: 65.w),
-                              child: Text("오늘은",
-                                  style: TextStyle(
-                                    fontFamily:'GamjaFlower',
-                                    color: const Color(0xff39605f),
-                                    fontSize: 30.sp,
-                                    fontWeight: FontWeight.w400,
-                                    fontStyle: FontStyle.normal,
-                                  ))
-                          ),
-                          Container(
-                            width: 70.w,
-                            height: 70.w,
-                            margin: EdgeInsets.only(left: 20.w, top: 40.w),
-                            child: const Center(
-                              child: Image(
-                                  image: AssetImage(
-                                      'assets/childlifedata/baby_sample.png')),
-                            ),
-                          ),
-                          Container(
-                            width: 70.w,
-                            height: 70.w,
-                            margin: EdgeInsets.only(left: 19.w, top: 40.w),
-                            child: const Center(
-                              child: Image(
-                                  image: AssetImage(
-                                      'assets/childlifedata/baby_sample.png')),
-                            ),
-                          ),
-                          Container(
-                            width: 70.w,
-                            height: 70.w,
-                            margin: EdgeInsets.only(left: 19.w, top: 40.w),
-                            child: const Center(
-                              child: Image(
-                                  image: AssetImage(
-                                      'assets/childlifedata/baby_sample.png')),
-                            ),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(left: 24.w, top: 65.w),
-                              child: Text("생일!",
-                                  style: TextStyle(
-                                    fontFamily:'GamjaFlower',
-                                    color: const Color(0xff39605f),
-                                    fontSize: 30.sp,
-                                    fontWeight: FontWeight.w400,
-                                    fontStyle: FontStyle.normal,
-                                  ))
-                          ),
-                        ],
-                      ),
-                      Row(
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(left: 130.w, top: 10.w),
-                                child: Text("김아가",
-                                    style: TextStyle(
-                                      fontFamily:'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
-                            ),
-                            Container(
-                                margin: EdgeInsets.only(left: 41.w, top: 10.w),
-                                child: Text("박모세",
-                                    style: TextStyle(
-                                      fontFamily:'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
-                            ),
-                            Container(
-                                margin: EdgeInsets.only(left: 41.w, top: 10.w),
-                                child: Text("이자랑",
-                                    style: TextStyle(
-                                      fontFamily:'GamjaFlower',
-                                      color: const Color(0xff39605f),
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                    ))
-                            ),
-                          ]
-                      ),
+                      if(context.watch<NoticedataProvider>().now == context.watch<NoticedataProvider>().days)...[
+                        Container(
+                            margin: EdgeInsets.only(left: 27.w, top: 40.w),
+                        child:Text(context.watch<NoticedataProvider>().snews,
+                          style: TextStyle(
+                            fontFamily:'NotSanaKR',
+                            color: const Color(0xff39605f),
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.normal,
+                          )
+                        )
+                        )
+                      ]else...[
+                        Container(
+                            margin: EdgeInsets.only(left: 27.w, top: 40.w),
+                            child: Text("오늘은 일정 없음",
+                            style: TextStyle(
+                              fontFamily:'NotSanaKR',
+                              color: const Color(0xff39605f),
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal,
+                            )
+                        )
+                        )
+                      ],
+
+
                       Container(
                           margin: EdgeInsets.only(left: 20.w, top: 30.w),
                           child: Text("친구한테 생일축하한다고 말해주세요!(등의 한마디)",
@@ -270,26 +206,26 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                   fontStyle: FontStyle.normal,
                 ))
         ),
-        for(int i=0;i<context.watch<NoticeProvider>().rowNotice;i++)...[
+        for(int i=0;i<context.watch<NoticedataProvider>().ro;i++)...[
           Row(
               children: [
-                for(int j=0;j<context.watch<NoticeProvider>().columnNotice;j++)...[
+                for(int j=0;j<context.watch<NoticedataProvider>().co;j++)...[
                   Column(
                     children: [
                       if(j==0)...[
                         Container(
                           width: 200.w,
                           height: 200.w,
-                          margin: EdgeInsets.only(left: 60.w, top:10.w),
-                          child: context.watch<NoticeProvider>().imageList[context.watch<NoticeProvider>().columnNotice*i+j],
+                          margin: EdgeInsets.only(left: 98.w, top:30.w),
+                          child: context.watch<NoticedataProvider>().imageList[context.watch<NoticedataProvider>().co*i+j],
                         )
                       ]else ...[
                         Container(
                           width: 200.w,
                           height: 200.w,
-                          margin: EdgeInsets.only(left: 20.w, top: 20.w),
+                          margin: EdgeInsets.only(left: 20.w, top: 30.w),
                           child: Center(
-                              child: context.watch<NoticeProvider>().imageList[context.watch<NoticeProvider>().columnNotice*i+j]
+                              child: context.watch<NoticedataProvider>().imageList[context.watch<NoticedataProvider>().co*i+j]
                           ),
                         )
                       ],

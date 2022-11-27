@@ -171,18 +171,19 @@ class _MainPanelState extends State<MainPanel> {
                   ),
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
-                    //Notice()
+                    //Notice(),
 
 
-                    //FacetimeWidget()
-                    //NoticeWidget()
-                    //ClassInfo30Widget()
-                     // ClassInfo20Widget()
+                    //FacetimeWidget(),
+                    //NoticeWidget(),
+                    //ClassInfo30Widget(),
+                      //ClassInfo20Widget(),
                      //ChildLifeDataWidget(),
-                     ChildLifeDataWidget(),
+                     //ChildLifeDataWidget(),
+                  TestNoticeWidget(),
 
                   // ClassInfo10Widget(),
-                  //  ClassInfo30Widget()
+                  //  ClassInfo30Widget(),
                   // ChildLifeDataWidget(),
 
                   // KinderInfoWidget(),
