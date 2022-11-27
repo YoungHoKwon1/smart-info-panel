@@ -229,7 +229,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       re = newImageNum % co;
       //print(co);
 
-      }
+
 
       teacherNum = mapResult["teachers"].length;
       directorNum = mapResult["directors"].length;
@@ -315,9 +315,9 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         classGraphRate[i] = classNumEach[i] / classNumTotal;
       }
       childrenCountByTeacher =
-      mapResult["kindergarten"]["childrenCountByTeacher"]; //교사당 유아수
+        mapResult["kindergarten"]["childrenCountByTeacher"]; //교사당 유아수
       childrenCountByClass =
-      mapResult["kindergarten"]["childrenCountByClass"]; //학급당 유아수
+        mapResult["kindergarten"]["childrenCountByClass"]; //학급당 유아수
       firstRowInt[0] = mapResult["kindergarten"]["classroomCount"];
       firstRowInt[1] = mapResult["kindergarten"]["classroomArea"];
       firstRowInt[2] = mapResult["kindergarten"]["indoorgymCount"];
@@ -370,7 +370,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           width: 128.w,
           height: 146.w,
           fit: BoxFit.cover,
-        ),
+          ),
         );
 
       }
@@ -416,7 +416,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
       context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now, names, imagePaths);
     });
-
   }
   Image childImage = Image.asset("name");
   String childName = "";
@@ -665,4 +664,5 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       ),
     );
   }
+
 }
