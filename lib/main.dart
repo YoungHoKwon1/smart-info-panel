@@ -270,6 +270,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             fit: BoxFit.cover,
           ),
         );
+        context.read<TeacherDataProvider>().dataUpdate(column, row, rest, teacherNum, teacherName, teacherImage, teacherIntroduction, directorNum, directorName, directorImage, directorIntroduction, committeeNum, committeeName, committeeImage, committeeClassName);
       }
       kinderImage = Image.network(
         url + mapResult["kindergarten"]["imagePath"],
