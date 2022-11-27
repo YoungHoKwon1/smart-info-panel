@@ -193,7 +193,7 @@ class _MainPanelState extends State<MainPanel> {
                     //Notice(),
 
 
-                    FacetimeWidget(),
+                    //FacetimeWidget(),
                     //NoticeWidget(),
                     //ClassInfo30Widget(),
                       //ClassInfo20Widget(),
@@ -203,7 +203,7 @@ class _MainPanelState extends State<MainPanel> {
 
 
 
-                  // ClassInfo10Widget(),
+                   ClassInfo10Widget(),
                   //  ClassInfo30Widget(),
                   // ChildLifeDataWidget(),
 

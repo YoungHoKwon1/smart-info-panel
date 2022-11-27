@@ -33,14 +33,14 @@ class _ClassInfo10WidgetState extends State<ClassInfo10Widget> {
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: AssetImage(
-                          'assets/class_info_deco/age2class.png'))),
+                          'assets/class_info_deco/2class.png.png'))),
               child: Center(
                 child: Column(
                   children: [
                     //교실이름구역
                     Container(
                       margin:
-                      EdgeInsets.only(left: 60.w, top: 143.w),
+                      EdgeInsets.only(left: 20.w, top: 139.w),
                       child: Text(context.watch<ClassDataProvider>().className,
                           style: TextStyle(
                             fontFamily: 'GamjaFlower',
@@ -53,11 +53,7 @@ class _ClassInfo10WidgetState extends State<ClassInfo10Widget> {
                     Container(
                       width: 351.w,
                       height: 53.w,
-                      margin: EdgeInsets.only(top: 20.w),
-                      decoration: new BoxDecoration(
-                          color: Color(0xffc7f7f5),
-                          borderRadius:
-                          BorderRadius.circular(20)),
+                      margin: EdgeInsets.only(top: 15.w),
                       child: Center(
                         child: Text(
                           context.watch<ClassDataProvider>().classInfo[0].toString() +
