@@ -18,7 +18,15 @@ class NoticedataProvider with ChangeNotifier {
   List<String> _event2 = [];
   List<Image> _imageList = [];
   String _names = '';
+  List<String> _imagePaths = [
+    "api/image/뒷산사진1.png",
+    "api/image/뒷산사진2.png",
+  ];
+
+
   var _now = DateTime.now();
+
+  List<String> get imagePaths => _imagePaths;
 
   String get names => _names;
 
@@ -58,7 +66,7 @@ class NoticedataProvider with ChangeNotifier {
   get now => _now;
 
   void updataData(String news,String today,int eventNum,int months,int weeks,int ro,int co,int re,int newImageNum,
-      int days,List<String> childrenImagePath,String weekinfo,String NewsComment,String snews,List<String> event2,List<Image> imageList,now,String names ) {
+      int days,List<String> childrenImagePath,String weekinfo,String NewsComment,String snews,List<String> event2,List<Image> imageList,now,String names,List<String>  imagePaths ) {
     _news = news;
     _today = today;
     _eventNum = eventNum;
@@ -77,6 +85,7 @@ class NoticedataProvider with ChangeNotifier {
     _imageList = imageList;
     _now = now;
     _names = names;
+    _imagePaths = imagePaths;
     print("Class Data Upate1");
 
     notifyListeners();

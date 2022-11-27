@@ -170,19 +170,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   int days = 0;
   String snews= '';
   String names='';
+  List<String> imagePaths = [
+    "api/image/뒷산사진1.png",
+    "api/image/뒷산사진2.png",
+  ];
   var now = DateTime.now();
 
-
-
-  // List<String> childrenName = [
-  //   '','','','','','','',
-  //   '','','','','','','',
-  //   '','','','','','','',
-  //   '','','','','','','',
-  // ];
-  //
-  // List<Image> childrenImage = [];
-  // int childNum = 0;
 
   ///어린이집소개 좌측용
   void _callBasicApi() async {
@@ -215,7 +208,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         responseBasic); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
 
     setState(() {
-
       weeks = mapResult["news"]["week"];
       months= mapResult["news"]["month"];
       weekinfo = mapResult["news"]["weekNews"];
@@ -229,10 +221,15 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             headers: headers,
             width: 200.w,
             height: 200.w,
-             fit: BoxFit.cover,
+            fit: BoxFit.cover,
           ),
         );
-      }
+      };
+      ro = newImageNum ~/ co;
+      re = newImageNum % co;
+      //print(co);
+
+
 
       teacherNum = mapResult["teachers"].length;
       directorNum = mapResult["directors"].length;
@@ -318,9 +315,9 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         classGraphRate[i] = classNumEach[i] / classNumTotal;
       }
       childrenCountByTeacher =
-      mapResult["kindergarten"]["childrenCountByTeacher"]; //교사당 유아수
+        mapResult["kindergarten"]["childrenCountByTeacher"]; //교사당 유아수
       childrenCountByClass =
-      mapResult["kindergarten"]["childrenCountByClass"]; //학급당 유아수
+        mapResult["kindergarten"]["childrenCountByClass"]; //학급당 유아수
       firstRowInt[0] = mapResult["kindergarten"]["classroomCount"];
       firstRowInt[1] = mapResult["kindergarten"]["classroomArea"];
       firstRowInt[2] = mapResult["kindergarten"]["indoorgymCount"];
@@ -373,7 +370,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           width: 128.w,
           height: 146.w,
           fit: BoxFit.cover,
-        ),
+          ),
         );
 
       }
@@ -417,9 +414,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
       context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
-      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now, names);
+      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now, names, imagePaths);
     });
-
   }
   Image childImage = Image.asset("name");
   String childImagePath='';
@@ -673,4 +669,5 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       ),
     );
   }
+
 }

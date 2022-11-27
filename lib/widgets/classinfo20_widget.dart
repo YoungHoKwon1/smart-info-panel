@@ -28,18 +28,18 @@ class _ClassInfo20WidgetState extends State<ClassInfo20Widget> {
             Container(
               width: 410.w,
               height: 278.w,
-              margin: EdgeInsets.only(left: 43.w, top: 13.w),
+              margin: EdgeInsets.only(left: 43.w, top: 8.w),
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: AssetImage(
-                          'assets/class_info_deco/age1class.png'))),
+                          'assets/class_info_deco/1class.png.png'))),
               child: Center(
                 child: Column(
                   children: [
                     Container(
                       margin:
-                      EdgeInsets.only(left: 40.w, top: 140.w),
+                      EdgeInsets.only(left: 40.w, top: 127.w),
                       child: Text(context.watch<ClassDataProvider>().className,
                           style: TextStyle(
                             fontFamily: 'GamjaFlower',
@@ -52,11 +52,7 @@ class _ClassInfo20WidgetState extends State<ClassInfo20Widget> {
                     Container(
                       width: 270.w,
                       height: 40.w,
-                      margin: EdgeInsets.only(top: 20.w),
-                      decoration: BoxDecoration(
-                          color: const Color(0xffc7f7f5),
-                          borderRadius:
-                          BorderRadius.circular(20)),
+                      margin: EdgeInsets.only(top: 15.w),
                       child: Center(
                         child: Text(
                           context.watch<ClassDataProvider>().classInfo[0].toString() +
@@ -67,7 +63,7 @@ class _ClassInfo20WidgetState extends State<ClassInfo20Widget> {
                               '명 여:' +
                               context.watch<ClassDataProvider>().classInfo[3].toString() +
                               '명',
-                          style: TextStyle(fontSize: 18.sp,
+                          style: TextStyle(fontSize: 17.sp,
                             color: const Color(0xff000000),
                           ),
                         ),
@@ -89,6 +85,7 @@ class _ClassInfo20WidgetState extends State<ClassInfo20Widget> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(250),
                         child: context.watch<ClassDataProvider>().teacherImage[i],
+
                     ),
 
                   ),

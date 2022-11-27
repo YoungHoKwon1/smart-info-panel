@@ -69,8 +69,6 @@ class _MainPanelState extends State<MainPanel> {
   var sensorTvoc='비';
 
   String weather_assets = 'assets/airple_weather/sunny.jpg';
-
-
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
@@ -229,24 +227,85 @@ class _MainPanelState extends State<MainPanel> {
                           blurRadius: 6,
                           spreadRadius: 0)
                     ],
-                    color: const Color(0xffffffff)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 40.w, top: 40.w),
-                      child: Text(
-                        '등원유아 수',
-                        style: TextStyle(
-                          color: const Color(0xff39605f),
-                          fontSize: 20.sp,
-                          fontFamily: 'NotoSansKR',
-                          fontWeight: FontWeight.w700,
-                        ),
-                        strutStyle: StrutStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w700,
-                          forceStrutHeight: true,
+
+                  ),
+                  ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
+                  child:
+                    //Notice(),
+
+
+                    //FacetimeWidget(),
+                    //NoticeWidget(),
+                    //ClassInfo30Widget(),
+                      //ClassInfo20Widget(),
+                     //ChildLifeDataWidget(),
+                     //ChildLifeDataWidget(),
+                  //TestNoticeWidget(),
+
+
+
+                   ClassInfo10Widget(),
+                  //  ClassInfo30Widget(),
+                  // ChildLifeDataWidget(),
+
+                  // KinderInfoWidget(),
+
+                  //  TeacherInfoWidget()
+                  //NoticeWidget()
+
+                  ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
+                ),
+              ],
+            ),
+
+            /// 등원유아 수, 공기질
+            /// 가로그래프의 경우 아시다시피 세로그래프를 => 가로그래프 로 회전시킨거라
+            /// 가로그래프의 길이(width)를 넓힐 경우 => 해당 구역의 height가 늘어나 밑에 overflow가 발생합니다
+            /// 이는 차후에 수정해 나가야 할 듯 싶습니다.
+            Column(
+              children: [
+                ///등원유아 수
+                // 사각형 9608
+                Container(
+                  width: 820.w,
+                  height: 518.w,
+                  margin: EdgeInsets.only(left: 15.w, top: 10.w),
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      border:
+                      Border.all(color: const Color(0x6663e6d7), width: 1),
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Color(0x29b1b1b1),
+                            offset: Offset(-2, 2),
+                            blurRadius: 6,
+                            spreadRadius: 0),
+                        BoxShadow(
+                            color: Color(0x29dbdbdb),
+                            offset: Offset(-2, -4),
+                            blurRadius: 6,
+                            spreadRadius: 0)
+                      ],
+                      color: const Color(0xffffffff)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 40.w, top: 40.w),
+                        child: Text(
+                          '등원유아 수',
+                          style: TextStyle(
+                            color: const Color(0xff39605f),
+                            fontSize: 20.sp,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w700,
+                          ),
+                          strutStyle: StrutStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700,
+                            forceStrutHeight: true,
+                          ),
+
                         ),
                       ),
                     ),
