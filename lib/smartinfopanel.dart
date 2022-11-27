@@ -17,7 +17,8 @@ import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
 import 'package:smart_info_panel/widgets/notice_widget.dart';
 
 import 'package:smart_info_panel/widgets/teacher_info_widget.dart';
-import 'package:smart_info_panel/widgets/test_notice_widget.dart';
+// import 'package:smart_info_panel/widgets/test_notice_widget.dart';
+// import 'package:smart_info_panel/widgets/test_notice_widget.dart';
 
 
 
@@ -39,20 +40,24 @@ class MainPanel extends StatefulWidget {
 class _MainPanelState extends State<MainPanel> {
   //글씨섹
   List<Color> weatherFontColor = [Colors.blue, Colors.orange, Color(0xFFa27258)];
+  List<Widget> boraboraWidgets =[KinderInfoWidget(), TeacherInfoWidget(), ClassInfo10Widget(), ClassInfo20Widget(), ClassInfo30Widget(),
+  NoticeWidget(), ChildLifeDataWidget()];
   @override
   void initState() {
     super.initState();
     _callEnvApi();
+
+    // while(true) {
+    //   Timer(Duration(seconds: 10), () {
+    //     _callEnvApi();
+    //
+    //   });
+    // }
   }
 
   Dio dio = Dio();
-
   String url = "http://tmap.aijoa.us:48764/";
   final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
-
-
-
   String weatherTemperature='22';
   String weatherType='비';
   String weatherHumidity='85';
@@ -173,20 +178,15 @@ class _MainPanelState extends State<MainPanel> {
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
 
-
-                    //FacetimeWidget()
-                      //NoticeWidget()
-                    //ClassInfo30Widget()
-                     // ClassInfo20Widget()
-                     ChildLifeDataWidget(),
-
+                  KinderInfoWidget(),
+                  //  TeacherInfoWidget(),
+                  // ClassInfo30Widget()
+                  // ClassInfo20Widget()
                   // ClassInfo10Widget(),
-                  //  ClassInfo30Widget()
+                  // NoticeWidget()
+                  // NoticeWidget()
+                  // FacetimeWidget()
                   // ChildLifeDataWidget(),
-
-                  // KinderInfoWidget(),
-                  //  TeacherInfoWidget()
-                  NoticeWidget()
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],

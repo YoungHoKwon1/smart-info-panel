@@ -161,30 +161,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   var now = DateTime.now();
 
 
-  String news = '이번달 행사';
-  String today = '오늘의 소식';
-  int eventNum = 0;
-  int months = 0;
-  int weeks = 0;
-  int rowNotice=0;
-  int columnNotice = 4;
-  int restNotice=0;
-  int newImageNum = 0;
-  List<String> childrenImagePath = [];
-  String weekinfo = '';
-  String NewsComment = '';
-  List<String> event2 = [];
 
-  List<Image> imageList = [];
-  // List<String> childrenName = [
-  //   '','','','','','','',
-  //   '','','','','','','',
-  //   '','','','','','','',
-  //   '','','','','','','',
-  // ];
-  //
-  // List<Image> childrenImage = [];
-  // int childNum = 0;
   ///어린이집소개 좌측용
   void _callBasicApi() async {
     Map<String, String> headers = Map();
@@ -281,7 +258,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           secondRowInt,
           thirdRowInt
       );
-      className = mapResult["classInfo"][0]["name"];
       className = mapResult["classInfo"][0]["name"];
       teacherNum = mapResult["classInfo"][0]["teachers"].length;
       for(int i=0;i<teacherNum;i++) {

@@ -73,5 +73,7 @@ class NoticedataProvider with ChangeNotifier {
     _event2 = event2;
     _imageList = imageList;
     _now = now;
+    print("update notice Data");
+    notifyListeners();
   }
 }
