@@ -443,6 +443,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                         fontSize: 14.sp,
                                         fontFamily: '.NotoSansKR',
                                       ),
+                                      textAlign: TextAlign.center,
                                       strutStyle: StrutStyle(
                                         fontSize: 18.sp,
                                         forceStrutHeight: true,
@@ -522,6 +523,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                                   fontSize: 14.sp,
                                                   fontFamily: '.NotoSansKR',
                                                 ),
+                                                textAlign: TextAlign.center,
                                                 strutStyle: StrutStyle(
                                                   fontSize: 18.sp,
                                                   forceStrutHeight: true,
@@ -579,6 +581,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                                   fontSize: 14.sp,
                                                   fontFamily: '.NotoSansKR',
                                                 ),
+                                                textAlign: TextAlign.center,
                                                 strutStyle: StrutStyle(
                                                   fontSize: 18.sp,
                                                   forceStrutHeight: true,
