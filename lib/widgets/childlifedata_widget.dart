@@ -30,9 +30,9 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
         Row(
           children: [
             Container(
-              width: 356.w,
-              height: 329.w,
-              margin: EdgeInsets.only(left: 249.w, top: 49.w),
+              width: 250.w,
+              height: 250.w,
+              margin: EdgeInsets.only(left: 310.w, top: 108.w),
               decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.cover,
@@ -45,9 +45,9 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
             ///아이정보
             Center(
               child: Container(
-                  width: 170.w,
+                  width: 169.w,
                   height: 195.w,
-                  margin: EdgeInsets.only(left: 5.w, top: 110.w),
+                  margin: EdgeInsets.only(left: 50.w, top: 110.w),
                   child: Text(
                       context.watch<ChildLifeProvider>().childName +
                           "\n\n" +
@@ -281,6 +281,7 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
                           color: Color(0xff39605f),
                           fontSize: 30.sp,
                           fontFamily: 'GamjaFlower',
+
                         ),
                         strutStyle: StrutStyle(
                           fontSize: 30.sp,

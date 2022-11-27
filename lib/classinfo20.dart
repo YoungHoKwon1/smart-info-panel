@@ -408,8 +408,8 @@ class _ClassInfo20State extends State<ClassInfo20> {
                             Column(
                               children: [
                                 Container(
-                                    width: 180.w,
-                                    height: 168.w,
+                                    width: 130.w,
+                                    height: 130.w,
                                     //페이지에 따라 마진 조절 바람 건희, 성민
                                     margin:
                                         EdgeInsets.only(left: 30.w, top: 60.w),

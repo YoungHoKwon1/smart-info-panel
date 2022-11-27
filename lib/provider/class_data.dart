@@ -27,6 +27,7 @@ class ClassDataProvider with ChangeNotifier {
 
   List<String> get teacherName => _teacherName;
 
+
   List<Image> get teacherImage => _teacherImage;
 
   List<String> get childrenName => _childrenName;
@@ -38,7 +39,7 @@ class ClassDataProvider with ChangeNotifier {
 
   void dataUpdate(int childNum, int column, int row, int rest, String className,
       int teacherNum, List<String> teacherName, List<Image> teacherImage,List<String> childrenName, List<Image> childrenImage,
-      List<int> classInfo) {
+      List<int> classInfo,){
     _childNum = childNum;
     _column = column;
     _row = row;

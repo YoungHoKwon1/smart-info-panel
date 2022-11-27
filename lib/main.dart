@@ -10,8 +10,12 @@ import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/provider/chlid_life_data.dart';
 import 'package:smart_info_panel/provider/class_data.dart';
 import 'package:smart_info_panel/provider/kinder_data.dart';
+
+import 'package:smart_info_panel/provider/notice_data.dart';
+
 import 'package:smart_info_panel/provider/teacher_data.dart';
 import 'package:smart_info_panel/provider/test_notice_provider.dart';
+
 import 'package:smart_info_panel/smartinfopanel.dart';
 import 'package:smart_info_panel/teacher_info.dart';
 
@@ -23,6 +27,8 @@ import 'classinfo30.dart';
 import 'fl_graph_test.dart';
 import 'notice.dart';
 
+import 'package:timer_builder/timer_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_info_panel/api/infopanel.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +58,9 @@ void main() async {
       ),
       ChangeNotifierProvider(
         create: (_) => NoticeProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => NoticedataProvider(),
       ),
     ], child: SmartInfoPanel()),
   );
@@ -133,6 +142,24 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   List<Image> childrenImage = [];
   //반 나이, 총 인원, 남아 수, 여아 수 순서
   List<int> classInfo =[0,0,0,0];
+  String news = '이번달 행사';
+  String today = '오늘의 소식';
+  int eventNum = 0;
+  int months = 0;
+  int weeks = 0;
+  int ro=0;
+  int co = 4;
+  int re=0;
+  int newImageNum = 0;
+  List<String> childrenImagePath = [];
+  String weekinfo = '';
+  String NewsComment = '';
+  List<String> event2 = [];
+  List<Image> imageList = [];
+  int days = 0;
+  String snews= '';
+  var now = DateTime.now();
+
 
   String news = '이번달 행사';
   String today = '오늘의 소식';
@@ -270,6 +297,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
       }
       childNum = mapResult["classInfo"][0]["children"].length;
+
       if(childNum<10) {
         column=4;
       } else if(childNum<20) {
@@ -291,6 +319,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           fit: BoxFit.cover,
         ),);
       }
+
+
       row = childNum ~/ column;
       rest = childNum % column;
       print("row: " +row.toString());
@@ -303,9 +333,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           classInfo[3]++;//여+1
         }
       }
-      context.read<ClassDataProvider>().dataUpdate(childNum, column,row, rest, className, teacherNum,
+
+
+      context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
-      context.read<NoticeProvider>().updateData(news, today, eventNum, months, rowNotice, restNotice, newImageNum, childrenImagePath, weekinfo, NewsComment, event2, imageList);
+      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now);
+
     });
 
   }
