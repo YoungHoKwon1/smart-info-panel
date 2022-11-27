@@ -169,7 +169,9 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   List<Image> imageList = [];
   int days = 0;
   String snews= '';
+  String names='';
   var now = DateTime.now();
+
 
 
   // List<String> childrenName = [
@@ -181,13 +183,14 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   //
   // List<Image> childrenImage = [];
   // int childNum = 0;
+
   ///어린이집소개 좌측용
   void _callBasicApi() async {
     Map<String, String> headers = Map();
     headers['authorization'] = token;
     final client = RestInfoPanel(dio);
     final responseBasic =
-    await client.getHouseInfo(token).catchError((Object obj) {
+        await client.getHouseInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       switch (res!.statusCode) {
         case 200:
@@ -212,6 +215,25 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         responseBasic); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
 
     setState(() {
+
+      weeks = mapResult["news"]["week"];
+      months= mapResult["news"]["month"];
+      weekinfo = mapResult["news"]["weekNews"];
+      NewsComment = mapResult["news"]["weekNewsComment"];
+      names = mapResult["kindergarten"]["name"];
+      newImageNum = mapResult["news"]["imagePaths"].length;
+      for(int q=0;q<newImageNum;q++) {
+        imageList.add(
+          Image.network(
+            url + mapResult["news"]["imagePaths"][q],
+            headers: headers,
+            width: 200.w,
+            height: 200.w,
+             fit: BoxFit.cover,
+          ),
+        );
+      }
+
       teacherNum = mapResult["teachers"].length;
       directorNum = mapResult["directors"].length;
       committeeNum = mapResult["committees"].length;
@@ -227,10 +249,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             headers: headers,
             width: 128.w,
             height: 146.w,
+
             fit: BoxFit.cover,
           ),
         );
       }
+
       print("-----");
       print(teacherName);
       print(teacherIntroduction);
@@ -272,6 +296,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         );
         context.read<TeacherDataProvider>().dataUpdate(column, row, rest, teacherNum, teacherName, teacherImage, teacherIntroduction, directorNum, directorName, directorImage, directorIntroduction, committeeNum, committeeName, committeeImage, committeeClassName);
       }
+
       kinderImage = Image.network(
         url + mapResult["kindergarten"]["imagePath"],
         headers: headers,
@@ -390,11 +415,9 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         }
       }
 
-
       context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
-      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now);
-
+      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now, names);
     });
 
   }
@@ -478,6 +501,8 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       medicineCount = mapResult["medicineCount"].toString();
       accidentCount = mapResult["accidentCount"].toString();
       context.read<ChildLifeProvider>().updateData(childImage, childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
+      row = newImageNum ~/ column;
+      rest = newImageNum % column;
     });
   }///
 
@@ -503,7 +528,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
     final token =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
     final responseAttend =
-    await client.getAttendInfo(token).catchError((Object obj) {
+        await client.getAttendInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
       //swagger 참조
       switch (res!.statusCode) {

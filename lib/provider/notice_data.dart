@@ -17,7 +17,10 @@ class NoticedataProvider with ChangeNotifier {
   String _snews= '';
   List<String> _event2 = [];
   List<Image> _imageList = [];
+  String _names = '';
   var _now = DateTime.now();
+
+  String get names => _names;
 
 
   String get news => _news;
@@ -55,7 +58,7 @@ class NoticedataProvider with ChangeNotifier {
   get now => _now;
 
   void updataData(String news,String today,int eventNum,int months,int weeks,int ro,int co,int re,int newImageNum,
-      int days,List<String> childrenImagePath,String weekinfo,String NewsComment,String snews,List<String> event2,List<Image> imageList,now ) {
+      int days,List<String> childrenImagePath,String weekinfo,String NewsComment,String snews,List<String> event2,List<Image> imageList,now,String names ) {
     _news = news;
     _today = today;
     _eventNum = eventNum;
@@ -73,7 +76,9 @@ class NoticedataProvider with ChangeNotifier {
     _event2 = event2;
     _imageList = imageList;
     _now = now;
-    print("update notice Data");
+    _names = names;
+    print("Class Data Upate1");
+
     notifyListeners();
   }
 }

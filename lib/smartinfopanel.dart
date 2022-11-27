@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:smart_info_panel/classinfo20.dart';
 import 'package:smart_info_panel/facetime.dart';
+import 'package:smart_info_panel/notice.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
 
@@ -38,6 +39,7 @@ class MainPanel extends StatefulWidget {
   State<MainPanel> createState() => _MainPanelState();
 }
 class _MainPanelState extends State<MainPanel> {
+
   //글씨색
   List<Color> weatherFontColor = [Color(0xffc45d1a), Color(0xff139894), Color(0xff7c546c), Color(0xff04acd1), Color(0xff1864a), Color(0xff5529a2), Color(0xffa27258)];
   List<Color> weatherDataFontColor = [Color(0xff42372c), Color(0xff39605f), Color(0xffffffff), Color(0xff2d3a44), Color(0xff2f3846), Color(0xffffffff), Color(0xfff45f1e)];
@@ -190,21 +192,26 @@ class _MainPanelState extends State<MainPanel> {
                   ),
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
+                    //Notice()
 
 
                     //FacetimeWidget()
-                      //NoticeWidget()
+                    //NoticeWidget()
                     //ClassInfo30Widget()
                      // ClassInfo20Widget()
                      //ChildLifeDataWidget(),
+
+                     ChildLifeDataWidget(),
 
                   // ClassInfo10Widget(),
                   //ClassInfo30Widget()
                   // ChildLifeDataWidget(),
 
                   // KinderInfoWidget(),
-                  TeacherInfoWidget()
+
+                  //  TeacherInfoWidget()
                   //NoticeWidget()
+
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],

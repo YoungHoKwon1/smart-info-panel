@@ -32,35 +32,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
         ),
         child: Row(
             children: [
-              Column(
-                children:[
-              Container(
-                width: 1000.w,
-                height: 891.w,
-                margin: EdgeInsets.only(left: 5.w, top: 5.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: const Color(0x6663e6d7),
-                    width: 1.w,
-                  ),
-                  borderRadius: BorderRadius.circular(20.w),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0x29b1b1b1),
-                      offset: Offset(-2.w, 2.w),
-                      blurRadius: 6.w,
-                      spreadRadius: 0.w,
-                    ),
-                    BoxShadow(
-                      color: const Color(0x29dbdbdb),
-                      offset: Offset(-2.w, -4.w),
-                      blurRadius: 6.w,
-                      spreadRadius: 0.w,
-                    ),
-                  ],
-                ),
-                child: Column(
+                 Column(
                   children: [
                     Row(
                       children: [
@@ -110,7 +82,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                                   Container(
                                       margin: EdgeInsets.only(
                                           left: 27.w, top: 30.w),
-                                      child: Text(context.watch<NoticedataProvider>().months.toString() + '월' + context.watch<NoticedataProvider>().weeks.toString() + '주 아이좋아 어린이집 주요행사',
+                                      child: Text(context.watch<NoticedataProvider>().months.toString() + '월' + context.watch<NoticedataProvider>().weeks.toString() + '주'+ context.watch<NoticedataProvider>().names.toString() +'주요행사',
                                           style: TextStyle(
                                             fontFamily: 'NotSanaKR',
                                             color: const Color(0xff39605f),
@@ -353,30 +325,28 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                                           ],
                                         )
                                     ]]),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 1000.w,
+                                      height: 97.w,
+                                      margin: EdgeInsets.only(left: 5.w, top: 5.w),
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xff707070),
+                                          border: Border.all(
+                                            color: const Color(0xffffffff),
+                                            width: 1.w,
+                                          )
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ],
                             ],
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 1000.w,
-                              height: 97.w,
-                              margin: EdgeInsets.only(left: 5.w, top: 33.w),
-                              decoration: BoxDecoration(
-                                  color: const Color(0xff707070),
-                                  border: Border.all(
-                                    color: const Color(0xffffffff),
-                                    width: 1.w,
-                                  )
-                              ),
-                            )
-                          ],
-                        )
-                ]
-              )
+
             ],
-                    ),
+        ),
     );
   }
 }
