@@ -373,7 +373,8 @@ class _MainPanelState extends State<MainPanel> {
                           margin: EdgeInsets.only(left: 40.w, top: 40.w),
                           child: // 학급별
                           Text("학급별",
-                              style: TextStyle(
+                              style:
+                              TextStyle(
                                   color: Color(0xff39605f),
                                   fontWeight: FontWeight.w700,
                                   fontFamily: "NotoSansKR",
@@ -439,7 +440,7 @@ class _MainPanelState extends State<MainPanel> {
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w400,
                                       fontStyle: FontStyle.normal,
-                                    ))
+                                    ),),
                               ]
                             ]),
                       )
@@ -503,7 +504,7 @@ class _MainPanelState extends State<MainPanel> {
                             margin: EdgeInsets.only(top: 62.w),
                           ),
                           Container(
-                            child: Text("이산화탄소",
+                            child: Text("초미세먼지",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
                                   color: weatherFontColorReal,
@@ -514,7 +515,7 @@ class _MainPanelState extends State<MainPanel> {
                             margin: EdgeInsets.only(top: 62.w),
                           ),
                           Container(
-                            child: Text("초미세먼지",
+                            child: Text("이산화탄소",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
                                   color: weatherFontColorReal,
@@ -537,22 +538,22 @@ class _MainPanelState extends State<MainPanel> {
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: weatherDataFontColorReal,
-                                  fontSize: 40.sp,
+                                  fontSize: 35.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
-                            margin: EdgeInsets.only(top: 50.w, left: 5.w),
+                            margin: EdgeInsets.only(top: 53.w, left: 5.w),
                           ),
                           Container(
                             child: Text(sensorHumidity.toString()+"%",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
                                   color: weatherDataFontColorReal,
-                                  fontSize: 40.sp,
+                                  fontSize: 35.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
-                            margin: EdgeInsets.only(top: 40.w, left: 5.w),
+                            margin: EdgeInsets.only(top: 47.w, left: 5.w),
                           ),
                           Container(
                             child: RichText(
@@ -561,7 +562,7 @@ class _MainPanelState extends State<MainPanel> {
                                       TextSpan(text: sensorPm10.toString(),
                                         style: TextStyle(fontFamily: 'GamjaFlower',
                                         color: weatherDataFontColorReal,
-                                        fontSize: 30.sp,
+                                        fontSize: 35.sp,
                                         fontWeight: FontWeight.w400)
                                       ),
                                       TextSpan(text: '㎍/㎥',
@@ -571,7 +572,26 @@ class _MainPanelState extends State<MainPanel> {
                                         fontStyle: FontStyle.normal,)),
                                     ])
                             ),
-                            margin: EdgeInsets.only(top: 50.w, left: 5.w),
+                            margin: EdgeInsets.only(top: 47.w, left: 10.w),
+                          ),
+                          Container(
+                            child: RichText(
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(text: sensorPm25.toString(),
+                                          style: TextStyle(fontFamily: 'GamjaFlower',
+                                              color: weatherDataFontColorReal,
+                                              fontSize: 35.sp,
+                                              fontWeight: FontWeight.w400)
+                                      ),
+                                      TextSpan(text: '㎍/㎥',
+                                          style: TextStyle(fontFamily: 'GamjaFlower',
+                                            color: weatherDataFontColorReal,fontSize: 20.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,)),
+                                    ])
+                            ),
+                            margin: EdgeInsets.only(top: 47.w, left: 12.w),
                           ),
                           Container(
                             child: RichText(
@@ -590,26 +610,7 @@ class _MainPanelState extends State<MainPanel> {
                                             fontStyle: FontStyle.normal,)),
                                     ])
                             ),
-                            margin: EdgeInsets.only(top: 55.w, left: 12.w),
-                          ),
-                          Container(
-                            child: RichText(
-                                text: TextSpan(
-                                    children: [
-                                      TextSpan(text: sensorPm25.toString(),
-                                          style: TextStyle(fontFamily: 'GamjaFlower',
-                                              color: weatherDataFontColorReal,
-                                              fontSize: 30.sp,
-                                              fontWeight: FontWeight.w400)
-                                      ),
-                                      TextSpan(text: '㎍/㎥',
-                                          style: TextStyle(fontFamily: 'GamjaFlower',
-                                            color: weatherDataFontColorReal,fontSize: 20.sp,
-                                            fontWeight: FontWeight.w400,
-                                            fontStyle: FontStyle.normal,)),
-                                    ])
-                            ),
-                            margin: EdgeInsets.only(top: 50.w, left: 5.w),
+                            margin: EdgeInsets.only(top: 52.w, left: 10.w),
                           ),
                         ],
                       )
@@ -628,5 +629,4 @@ class _MainPanelState extends State<MainPanel> {
 
   }
 }
-
 
