@@ -7,17 +7,12 @@ import 'package:smart_info_panel/classinfo20.dart';
 import 'package:smart_info_panel/facetime.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
-
 import 'package:smart_info_panel/widgets/facetime_widget.dart';
-
 import 'package:smart_info_panel/widgets/classinfo10_widget.dart';
-
 import 'package:smart_info_panel/widgets/classinfo30_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo20_widget.dart';
 import 'package:smart_info_panel/widgets/kinder_info_widget.dart';
-
 import 'package:smart_info_panel/widgets/notice_widget.dart';
-
 import 'package:smart_info_panel/widgets/teacher_info_widget.dart';
 import 'package:smart_info_panel/widgets/test_notice_widget.dart';
 
@@ -39,10 +34,12 @@ class MainPanel extends StatefulWidget {
 }
 class _MainPanelState extends State<MainPanel> {
   //글씨색
-  List<Color> weatherFontColor = [Color(0xffc45d1a), Color(0xff139894), Color(0xff7c546c), Color(0xff04acd1), Color(0xff1864a), Color(0xff5529a2), Color(0xffa27258)];
+  List<Color> weatherFontColor = [Color(0xffc45d1a), Color(0xff139894), Color(0xff7c546c), Color(0xff04acd1), Color(0xff1864a), Color(0xff5529a2),Color(0xffa27258)];
   List<Color> weatherDataFontColor = [Color(0xff42372c), Color(0xff39605f), Color(0xffffffff), Color(0xff2d3a44), Color(0xff2f3846), Color(0xffffffff), Color(0xfff45f1e)];
   //(해/구름),(바람),(눈/비),(구름),(비),(눈),(맑음)
 
+  Color weatherFontColorReal = Color(0xffc45d1a);
+  Color weatherDataFontColorReal = Color(0xffc45d1a);
 
   @override
   void initState() {
@@ -54,8 +51,6 @@ class _MainPanelState extends State<MainPanel> {
 
   String url = "http://tmap.aijoa.us:48764/";
   final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
-
-
 
 
   String weatherTemperature='22';
@@ -111,28 +106,28 @@ class _MainPanelState extends State<MainPanel> {
       switch(weatherType) {
         case "구름" :
           weather_assets = 'assets/airple_weather/cloudy.jpg';
-          weatherFontColor = [weatherFontColor][3];
-          weatherDataFontColor = [weatherDataFontColor][3];
+          weatherFontColorReal = weatherFontColor[3];
+          weatherDataFontColorReal = weatherDataFontColor[3];
           break;
         case "비" :
           weather_assets = 'assets/airple_weather/rain_only.jpg';
-          weatherFontColor = [weatherFontColor][4];
-          weatherDataFontColor = [weatherDataFontColor][4];
+          weatherFontColorReal = weatherFontColor[4];
+          weatherDataFontColorReal = weatherDataFontColor[4];
           break;
         case "눈" :
           weather_assets = 'assets/airple_weather/snow_only.jpg';
-          weatherFontColor = [weatherFontColor][5];
-          weatherDataFontColor = [weatherDataFontColor][5];
+          weatherFontColorReal = weatherFontColor[5];
+          weatherDataFontColorReal = weatherDataFontColor[5];
           break;
         case "눈/비" :
           weather_assets = 'assets/airple_weather/snow_rain.jpg';
-          weatherFontColor = [weatherFontColor][2];
-          weatherDataFontColor = [weatherDataFontColor][2];
+          weatherFontColorReal = weatherFontColor[2];
+          weatherDataFontColorReal = weatherDataFontColor[2];
           break;
         case "맑음" :
           weather_assets = 'assets/airple_weather/sunny.jpg';
-          weatherFontColor = [weatherFontColor][6];
-          weatherDataFontColor = [weatherDataFontColor][6];
+          weatherFontColorReal = weatherFontColor[6];
+          weatherDataFontColorReal = weatherDataFontColor[6];
           break;
         case "바람" :
           weather_assets = 'assets/airple_weather/wind.jpg';
@@ -471,7 +466,7 @@ class _MainPanelState extends State<MainPanel> {
                             child: Text("온도",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: weatherFontColorReal,
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -482,7 +477,7 @@ class _MainPanelState extends State<MainPanel> {
                             child: Text("습도",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: weatherFontColorReal,
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -493,7 +488,7 @@ class _MainPanelState extends State<MainPanel> {
                             child: Text("미세먼지",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: weatherFontColorReal,
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -504,7 +499,7 @@ class _MainPanelState extends State<MainPanel> {
                             child: Text("이산화탄소",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: weatherFontColorReal,
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -515,7 +510,7 @@ class _MainPanelState extends State<MainPanel> {
                             child: Text("초미세먼지",
                                 style: TextStyle(
                                   fontFamily: 'NotoSansKR',
-                                  color: const Color(0xffc45d1a),
+                                  color: weatherFontColorReal,
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
@@ -534,56 +529,80 @@ class _MainPanelState extends State<MainPanel> {
                             child: Text(sensorTemperature.toString()+"도",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 30.sp,
+                                  color: weatherDataFontColorReal,
+                                  fontSize: 40.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
-                            margin: EdgeInsets.only(top: 50.w),
+                            margin: EdgeInsets.only(top: 50.w, left: 5.w),
                           ),
                           Container(
                             child: Text(sensorHumidity.toString()+"%",
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 30.sp,
+                                  color: weatherDataFontColorReal,
+                                  fontSize: 40.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
-                            margin: EdgeInsets.only(top: 55.w),
+                            margin: EdgeInsets.only(top: 40.w, left: 5.w),
                           ),
                           Container(
-                            child: Text(sensorPm10.toString()+"㎍/㎥",
-                                style: TextStyle(
-                                  fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 30.sp,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                            margin: EdgeInsets.only(top: 45.w),
+                            child: RichText(
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(text: sensorPm10.toString(),
+                                        style: TextStyle(fontFamily: 'GamjaFlower',
+                                        color: weatherDataFontColorReal,
+                                        fontSize: 30.sp,
+                                        fontWeight: FontWeight.w400)
+                                      ),
+                                      TextSpan(text: '㎍/㎥',
+                                          style: TextStyle(fontFamily: 'GamjaFlower',
+                                            color: weatherDataFontColorReal,fontSize: 20.sp,
+                                            fontWeight: FontWeight.w400,
+                                        fontStyle: FontStyle.normal,)),
+                                    ])
+                            ),
+                            margin: EdgeInsets.only(top: 50.w, left: 5.w),
                           ),
                           Container(
-                            child: Text(sensorCo2.toString()+"ppm",
-                                style: TextStyle(
-                                  fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 30.sp,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                            margin: EdgeInsets.only(top: 50.w),
+                            child: RichText(
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(text: sensorCo2.toString(),
+                                          style: TextStyle(fontFamily: 'GamjaFlower',
+                                              color: weatherDataFontColorReal,
+                                              fontSize: 30.sp,
+                                              fontWeight: FontWeight.w400)
+                                      ),
+                                      TextSpan(text: 'ppm',
+                                          style: TextStyle(fontFamily: 'GamjaFlower',
+                                            color: weatherDataFontColorReal,fontSize: 25.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,)),
+                                    ])
+                            ),
+                            margin: EdgeInsets.only(top: 55.w, left: 12.w),
                           ),
                           Container(
-                            child: Text(sensorPm25.toString()+"㎍/㎥",
-                                style: TextStyle(
-                                  fontFamily: 'GamjaFlower',
-                                  color: const Color(0xff42372c),
-                                  fontSize: 30.sp,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                            margin: EdgeInsets.only(top: 50.w),
+                            child: RichText(
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(text: sensorPm25.toString(),
+                                          style: TextStyle(fontFamily: 'GamjaFlower',
+                                              color: weatherDataFontColorReal,
+                                              fontSize: 30.sp,
+                                              fontWeight: FontWeight.w400)
+                                      ),
+                                      TextSpan(text: '㎍/㎥',
+                                          style: TextStyle(fontFamily: 'GamjaFlower',
+                                            color: weatherDataFontColorReal,fontSize: 20.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontStyle: FontStyle.normal,)),
+                                    ])
+                            ),
+                            margin: EdgeInsets.only(top: 50.w, left: 5.w),
                           ),
                         ],
                       )
