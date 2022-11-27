@@ -19,9 +19,15 @@ class ChildLifeDataWidget extends StatefulWidget {
 }
 
 class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
+  String url = "http://tmap.aijoa.us:48764/";
+  final token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+
+  Map<String, String> headers = Map();
   void initState() {
     // TODO: implement initState
     super.initState();
+    headers['authorization'] = token;
   }
   @override
   Widget build(BuildContext context) {
@@ -35,13 +41,18 @@ class _ChildLifeDataWidgetState extends State<ChildLifeDataWidget> {
               margin: EdgeInsets.only(left: 310.w, top: 108.w),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                        'assets/child_face_deco/age0face.png')),
+                    fit: BoxFit.scaleDown,
+                     image: NetworkImage(
+                       url+context.watch<ChildLifeProvider>().childImagePath,
+                         headers: headers,
+                       scale: 15.w
+                     )
+                ),
               ),
-              child: context.watch<ChildLifeProvider>().childImage,
+              child: Image.asset('assets/child_face_deco/age0face.png'),
             ),
-
+            // AssetImage(
+            //     'assets/child_face_deco/age0face.png'),
             ///아이정보
             Center(
               child: Container(
