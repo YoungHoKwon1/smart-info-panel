@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -35,10 +37,12 @@ class MainPanel extends StatefulWidget {
   @override
   State<MainPanel> createState() => _MainPanelState();
 }
-
 class _MainPanelState extends State<MainPanel> {
-  //글씨섹
-  List<Color> weatherFontColor = [Colors.blue, Colors.orange, Color(0xFFa27258)];
+  //글씨색
+  List<Color> weatherFontColor = [Color(0xffc45d1a), Color(0xff139894), Color(0xff7c546c), Color(0xff04acd1), Color(0xff1864a), Color(0xff5529a2), Color(0xffa27258)];
+  List<Color> weatherDataFontColor = [Color(0xff42372c), Color(0xff39605f), Color(0xffffffff), Color(0xff2d3a44), Color(0xff2f3846), Color(0xffffffff), Color(0xfff45f1e)];
+  //(해/구름),(바람),(눈/비),(구름),(비),(눈),(맑음)
+
   @override
   void initState() {
     super.initState();
@@ -67,6 +71,8 @@ class _MainPanelState extends State<MainPanel> {
   var sensorTvoc='비';
 
   String weather_assets = 'assets/airple_weather/sunny.jpg';
+
+
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
@@ -104,21 +110,33 @@ class _MainPanelState extends State<MainPanel> {
       switch(weatherType) {
         case "구름" :
           weather_assets = 'assets/airple_weather/cloudy.jpg';
+          weatherFontColor = [weatherFontColor][3];
+          weatherDataFontColor = [weatherDataFontColor][3];
           break;
         case "비" :
           weather_assets = 'assets/airple_weather/rain_only.jpg';
+          weatherFontColor = [weatherFontColor][4];
+          weatherDataFontColor = [weatherDataFontColor][4];
           break;
         case "눈" :
           weather_assets = 'assets/airple_weather/snow_only.jpg';
+          weatherFontColor = [weatherFontColor][5];
+          weatherDataFontColor = [weatherDataFontColor][5];
           break;
         case "눈/비" :
           weather_assets = 'assets/airple_weather/snow_rain.jpg';
+          weatherFontColor = [weatherFontColor][2];
+          weatherDataFontColor = [weatherDataFontColor][2];
           break;
         case "맑음" :
           weather_assets = 'assets/airple_weather/sunny.jpg';
+          weatherFontColor = [weatherFontColor][6];
+          weatherDataFontColor = [weatherDataFontColor][6];
           break;
         case "바람" :
           weather_assets = 'assets/airple_weather/wind.jpg';
+          weatherFontColor = [weatherFontColor][1];
+          weatherDataFontColor = [weatherDataFontColor][1];
           break;
       }
       weatherHumidity =  mapResult["weatherHumidity"];
@@ -178,15 +196,15 @@ class _MainPanelState extends State<MainPanel> {
                       //NoticeWidget()
                     //ClassInfo30Widget()
                      // ClassInfo20Widget()
-                     ChildLifeDataWidget(),
+                     //ChildLifeDataWidget(),
 
                   // ClassInfo10Widget(),
-                  //  ClassInfo30Widget()
+                  //ClassInfo30Widget()
                   // ChildLifeDataWidget(),
 
                   // KinderInfoWidget(),
-                  //  TeacherInfoWidget()
-                  NoticeWidget()
+                  TeacherInfoWidget()
+                  //NoticeWidget()
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
               ],

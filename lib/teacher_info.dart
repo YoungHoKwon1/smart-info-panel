@@ -103,6 +103,7 @@ class _TeacherInfoState extends State<TeacherInfo> {
       // print(teacherNum);
       print(mapResult["teachers"]);
       print("before For");
+
       for(int i=0;i<teacherNum;i++) {
         teacherName.add(mapResult["teachers"][i]["name"]);
         teacherIntroduction.add(mapResult["teachers"][i]["introduction"]);
@@ -395,6 +396,14 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                 Container(
                                     width: 140.w,
                                     height: 140.w,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: const Color(0xff707070),
+                                            width: 1
+                                        ),
+                                        color: const Color(0xffffffff)
+                                    ),
+
                                     //페이지에 따라 마진 조절 바람 건희, 성민
                                     margin:
                                         EdgeInsets.only(left: 102.w, top: 49.w),
@@ -462,6 +471,24 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     Container(
                                         width: 135.w,
                                         height: 135.w,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: const Color(0xffc0f5ef),
+                                                width: 1
+                                            ),
+                                            boxShadow: [BoxShadow(
+                                                color: const Color(0x297b7b7b),
+                                                offset: Offset(3,3),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            ), BoxShadow(
+                                                color: const Color(0x0dc0f5ef),
+                                                offset: Offset(3,5),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            )] ,
+                                            color: const Color(0xffffffff)
+                                        ),
                                         margin: EdgeInsets.only(
                                             left: 23.w, top: 65.w),
                                         child: teacherImage[j]),
@@ -503,9 +530,25 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     Container(
                                         width: 135.w,
                                         height: 135.w,
-                                        margin: EdgeInsets.only(
-                                            left: 13.w, top: 65.w),
-                                        child: teacherImage[j]),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: const Color(0xffc0f5ef),
+                                                width: 1
+                                            ),
+                                            boxShadow: [BoxShadow(
+                                                color: const Color(0x297b7b7b),
+                                                offset: Offset(3,3),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            ), BoxShadow(
+                                                color: const Color(0x0dc0f5ef),
+                                                offset: Offset(3,5),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            )] ,
+                                            color: const Color(0xffffffff)
+                                        )
+                                    ),
                                     Container(
                                       width: 180.w,
                                       height: 45.w,
@@ -561,6 +604,23 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     Container(
                                         width: 135.w,
                                         height: 135.w,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: const Color(0xffc0f5ef),
+                                                width: 1
+                                            ),
+                                            boxShadow: [BoxShadow(
+                                                color: const Color(0x297b7b7b),
+                                                offset: Offset(3,3),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            ), BoxShadow(
+                                                color: const Color(0x0dc0f5ef),
+                                                offset: Offset(3,5),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            )] ,
+                                            color: const Color(0xffffffff)),
                                         margin: EdgeInsets.only(
                                             left: 23.w, top: 65.w),
                                         child: committeeImage[j]),
@@ -602,6 +662,23 @@ class _TeacherInfoState extends State<TeacherInfo> {
                                     Container(
                                         width: 135.w,
                                         height: 135.w,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: const Color(0xffc0f5ef),
+                                                width: 1
+                                            ),
+                                            boxShadow: [BoxShadow(
+                                                color: const Color(0x297b7b7b),
+                                                offset: Offset(3,3),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            ), BoxShadow(
+                                                color: const Color(0x0dc0f5ef),
+                                                offset: Offset(3,5),
+                                                blurRadius: 4,
+                                                spreadRadius: 0
+                                            )] ,
+                                            color: const Color(0xffffffff)),
                                         margin: EdgeInsets.only(
                                             left: 13.w, top: 65.w),
                                         child: committeeImage[j]),
