@@ -51,10 +51,11 @@ class _FacetimeWidgetState extends State<FacetimeWidget> {
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                         color: const Color(0xff63e6d7),
-                                        width: 6.w
-                                    )
-                                )
-                            )
+                                        width: 6.w,
+                                    ),
+                                    borderRadius: BorderRadius.circular(600)
+                                ))
+
                           ],
                         )
                 ],

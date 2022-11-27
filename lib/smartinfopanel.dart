@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:smart_info_panel/classinfo20.dart';
 import 'package:smart_info_panel/facetime.dart';
+import 'package:smart_info_panel/notice.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
 import 'package:smart_info_panel/widgets/facetime_widget.dart';
@@ -161,12 +162,12 @@ class _MainPanelState extends State<MainPanel> {
                   ),
                   ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
                   child:
-
+                    //Notice()
                     //FacetimeWidget()
-                      //NoticeWidget()
+                      NoticeWidget()
                     //ClassInfo30Widget()
                      // ClassInfo20Widget()
-                     ChildLifeDataWidget(),
+                     //ChildLifeDataWidget(),
                   // KinderInfoWidget(),
                   ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
                 ),
