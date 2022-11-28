@@ -9,6 +9,7 @@ import 'package:smart_info_panel/classinfo30.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
 import 'package:smart_info_panel/provider/chlid_life_data.dart';
 import 'package:smart_info_panel/provider/class_data.dart';
+import 'package:smart_info_panel/provider/env_data.dart';
 import 'package:smart_info_panel/provider/kinder_data.dart';
 
 import 'package:smart_info_panel/provider/notice_data.dart';
@@ -62,6 +63,9 @@ void main() async {
       ChangeNotifierProvider(
         create: (_) => NoticedataProvider(),
       ),
+      ChangeNotifierProvider(
+        create: (_) => EnvDataProvider(),
+      ),
     ], child: SmartInfoPanel()),
   );
 }
@@ -101,6 +105,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   @override
   void initState() {
     super.initState();
+    _callEnvApi();
     _callBasicApi();
     _callAttendApi();
     _callChildApi();
@@ -637,18 +642,42 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       // print(336-336*context.watch<AttendanceDataProvider>().girlrate.w);
     });
   }
+  List<Color> weatherFontColor = [
+    Color(0xffc45d1a),
+    Color(0xff139894),
+    Color(0xff7c546c),
+    Color(0xff04acd1),
+    Color(0xff1d74cc),
+    Color(0xff5529a2),
+    Color(0xffa27258),
+    Color(0xff1864a3),
+  ];
+  List<Color> weatherDataFontColor = [
+    Color(0xff42372c),
+    Color(0xff39605f),
+    Color(0xffffffff),
+    Color(0xff2d3a44),
+    Color(0xff2c3342),
+    Color(0xffffffff),
+    Color(0xfff45f1e),
+    Color(0xff2f3846),
+  ];
 
+  //(해/구름),(바람),(눈/비),(구름),(비),(눈),(맑음),(강한 비)
+
+  Color weatherFontColorReal = Color(0xffa27258);
+  Color weatherDataFontColorReal = Color(0xffc45d1a);
   String weatherTemperature = '22';
   String weatherType = '비';
   String weatherHumidity = '85';
   String weatherPm10 = '비';
   String weatherPm25 = '비';
   var sensorLocation = '비';
-  var sensorTemperature = '비';
-  var sensorHumidity = '비';
-  var sensorPm25 = '비';
-  var sensorPm10 = '비';
-  var sensorCo2 = '비';
+  var sensorTemperature = "22";
+  var sensorHumidity = '52';
+  var sensorPm25 = '11.8';
+  var sensorPm10 = '11.2';
+  var sensorCo2 = '1561.8';
   var sensorTvoc = '비';
 
   String weather_assets = 'assets/airple_weather/sunny.jpg';
@@ -690,23 +719,45 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       weatherTemperature = mapResult["weatherTemperature"];
       weatherType = mapResult["weatherType"];
       switch (weatherType) {
+        case "해/구름":
+          weather_assets = 'assets/airple_weather/sunny_cloudy.png';
+          weatherFontColorReal = weatherFontColor[0];
+          weatherDataFontColorReal = weatherDataFontColor[0];
+          break;
         case "구름":
           weather_assets = 'assets/airple_weather/cloudy.jpg';
+          weatherFontColorReal = weatherFontColor[3];
+          weatherDataFontColorReal = weatherDataFontColor[3];
           break;
         case "비":
           weather_assets = 'assets/airple_weather/rain_only.jpg';
+          weatherFontColorReal = weatherFontColor[4];
+          weatherDataFontColorReal = weatherDataFontColor[4];
           break;
         case "눈":
           weather_assets = 'assets/airple_weather/snow_only.jpg';
+          weatherFontColorReal = weatherFontColor[5];
+          weatherDataFontColorReal = weatherDataFontColor[5];
           break;
         case "눈/비":
           weather_assets = 'assets/airple_weather/snow_rain.jpg';
+          weatherFontColorReal = weatherFontColor[2];
+          weatherDataFontColorReal = weatherDataFontColor[2];
           break;
         case "맑음":
           weather_assets = 'assets/airple_weather/sunny.jpg';
+          weatherFontColorReal = weatherFontColor[6];
+          weatherDataFontColorReal = weatherDataFontColor[6];
           break;
         case "바람":
           weather_assets = 'assets/airple_weather/wind.jpg';
+          weatherFontColorReal = weatherFontColor[1];
+          weatherDataFontColorReal = weatherDataFontColor[1];
+          break;
+        case "강한 비":
+          weather_assets = 'assets/airple_weather/heavyrain.png';
+          weatherFontColorReal = weatherFontColor[7];
+          weatherDataFontColorReal = weatherDataFontColor[7];
           break;
       }
       weatherHumidity = mapResult["weatherHumidity"];
@@ -719,6 +770,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       sensorPm10 = mapResult["sensorPm10"][0];
       sensorCo2 = mapResult["sensorCo2"][0];
       sensorTvoc = mapResult["sensorTvoc"][0];
+      context.read<EnvDataProvider>().updateData(sensorTemperature, sensorHumidity, sensorPm25, sensorPm10, sensorCo2, weatherFontColorReal, weatherDataFontColorReal, weather_assets);
     });
   }
 

@@ -7,6 +7,7 @@ import 'package:smart_info_panel/classinfo20.dart';
 import 'package:smart_info_panel/facetime.dart';
 import 'package:smart_info_panel/notice.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
+import 'package:smart_info_panel/provider/env_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
 import 'package:smart_info_panel/widgets/facetime_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo10_widget.dart';
@@ -18,8 +19,6 @@ import 'package:smart_info_panel/widgets/notice_widget.dart';
 import 'package:smart_info_panel/widgets/teacher_info_widget.dart';
 import 'package:smart_info_panel/widgets/test_notice_widget.dart';
 
-
-
 import 'api/infopanel.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
@@ -27,13 +26,17 @@ import 'dart:async';
 
 import 'kinder_info_3.dart';
 
-//왠지는
+const routeKinderInfo = "/KinderInfo";
+const routeTeacherInfo = "/TeacherInfo";
+const routeC = "/C";
+
 class MainPanel extends StatefulWidget {
   const MainPanel({Key? key}) : super(key: key);
 
   @override
   State<MainPanel> createState() => _MainPanelState();
 }
+
 class _MainPanelState extends State<MainPanel> {
 
   //글씨색
@@ -60,41 +63,78 @@ class _MainPanelState extends State<MainPanel> {
 
   //(해/구름),(바람),(눈/비),(구름),(비),(눈),(맑음),(강한 비)
 
-  Color weatherFontColorReal = Color(0xffc45d1a);
+  Color weatherFontColorReal = Color(0xffa27258);
   Color weatherDataFontColorReal = Color(0xffc45d1a);
+
+  Widget myWidget = KinderInfoWidget();
+  int timerI = 1;
 
   @override
   void initState() {
     super.initState();
-    _callEnvApi();
+    // _callEnvApi();
+    Timer.periodic(Duration(seconds: 500), (timer) {
+      _callEnvApi();
+      _callAttendApi();//0값들이 들어와 제대로 출력되지않아 임의의 값들을 넣어놓았음
+      // print(DateTime.now());
+    });
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      print("10sec");
+      if (timerI == 0) {
+        setState(() {
+          myWidget = KinderInfoWidget();
+        });
+        timerI++;
+      } else if (timerI == 1) {
+        setState(() {
+          myWidget = TeacherInfoWidget();
+        });
+        timerI++;
+      } else if(timerI == 2) {
+        setState(() {
+          myWidget = ClassInfo10Widget();
+        });
+        timerI++;
+      } else if(timerI == 3) {
+        setState(() {
+          myWidget = TestNoticeWidget();
+        });
+        timerI++;
+      }else if(timerI == 4) {
+        setState(() {
+          myWidget = ChildLifeDataWidget();
+        });
+        timerI=0;
+      }
+    });
   }
 
   Dio dio = Dio();
 
   String url = "http://tmap.aijoa.us:48764/";
-  final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+  final token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
-
-  String weatherTemperature='22';
-  String weatherType='비';
-  String weatherHumidity='85';
-  String weatherPm10='비';
-  String weatherPm25='비';
-  var sensorLocation='비';
-  var sensorTemperature='비';
-  var sensorHumidity='비';
-  var sensorPm25='비';
-  var sensorPm10='비';
-  var sensorCo2='비';
-  var sensorTvoc='비';
+  String weatherTemperature = '22';
+  String weatherType = '비';
+  String weatherHumidity = '85';
+  String weatherPm10 = '비';
+  String weatherPm25 = '비';
+  var sensorLocation = '비';
+  var sensorTemperature = "22";
+  var sensorHumidity = '52';
+  var sensorPm25 = '11.8';
+  var sensorPm10 = '11.2';
+  var sensorCo2 = '1561.8';
+  var sensorTvoc = '비';
 
   String weather_assets = 'assets/airple_weather/sunny.jpg';
-
 
   ///환경데이터 api
   void _callEnvApi() async {
     final client = RestInfoPanel(dio);
-    final token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+    final token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
 
     final response = await client.getEnvInfo(token).catchError((Object obj) {
       final res = (obj as DioError).response;
@@ -121,62 +161,125 @@ class _MainPanelState extends State<MainPanel> {
       return obj.response;
     });
     // print(response);//데이터 뭐가오나 확인
-    Map<String, dynamic> mapResult = Map<String, dynamic>.from(response);//안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(
+        response); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
     setState(() {
-      weatherTemperature =  mapResult["weatherTemperature"];
-      weatherType =  mapResult["weatherType"];
-      switch(weatherType) {
-        case "해/구름" :
+      weatherTemperature = mapResult["weatherTemperature"];
+      weatherType = mapResult["weatherType"];
+      switch (weatherType) {
+        case "해/구름":
           weather_assets = 'assets/airple_weather/sunny_cloudy.png';
           weatherFontColorReal = weatherFontColor[0];
           weatherDataFontColorReal = weatherDataFontColor[0];
           break;
-        case "구름" :
+        case "구름":
           weather_assets = 'assets/airple_weather/cloudy.jpg';
           weatherFontColorReal = weatherFontColor[3];
           weatherDataFontColorReal = weatherDataFontColor[3];
           break;
-        case "비" :
+        case "비":
           weather_assets = 'assets/airple_weather/rain_only.jpg';
           weatherFontColorReal = weatherFontColor[4];
           weatherDataFontColorReal = weatherDataFontColor[4];
           break;
-        case "눈" :
+        case "눈":
           weather_assets = 'assets/airple_weather/snow_only.jpg';
           weatherFontColorReal = weatherFontColor[5];
           weatherDataFontColorReal = weatherDataFontColor[5];
           break;
-        case "눈/비" :
+        case "눈/비":
           weather_assets = 'assets/airple_weather/snow_rain.jpg';
           weatherFontColorReal = weatherFontColor[2];
           weatherDataFontColorReal = weatherDataFontColor[2];
           break;
-        case "맑음" :
+        case "맑음":
           weather_assets = 'assets/airple_weather/sunny.jpg';
           weatherFontColorReal = weatherFontColor[6];
           weatherDataFontColorReal = weatherDataFontColor[6];
           break;
-        case "바람" :
+        case "바람":
           weather_assets = 'assets/airple_weather/wind.jpg';
           weatherFontColorReal = weatherFontColor[1];
           weatherDataFontColorReal = weatherDataFontColor[1];
           break;
-        case "강한 비" :
+        case "강한 비":
           weather_assets = 'assets/airple_weather/heavyrain.png';
           weatherFontColorReal = weatherFontColor[7];
           weatherDataFontColorReal = weatherDataFontColor[7];
           break;
       }
-      weatherHumidity =  mapResult["weatherHumidity"];
-      weatherPm10 =  mapResult["weatherPm10"];
-      weatherPm25 =  mapResult["weatherPm25"];
-      sensorLocation =  mapResult["sensorLocation"][0];
-      sensorTemperature =  mapResult["sensorTemperature"][0];
-      sensorHumidity =  mapResult["sensorHumidity"][0];
-      sensorPm25 =  mapResult["sensorPm25"][0];
-      sensorPm10 =  mapResult["sensorPm10"][0];
-      sensorCo2 =  mapResult["sensorCo2"][0];
-      sensorTvoc =  mapResult["sensorTvoc"][0];
+      weatherHumidity = mapResult["weatherHumidity"];
+      weatherPm10 = mapResult["weatherPm10"];
+      weatherPm25 = mapResult["weatherPm25"];
+      sensorLocation = mapResult["sensorLocation"][0];
+      sensorTemperature = mapResult["sensorTemperature"][0];
+      sensorHumidity = mapResult["sensorHumidity"][0];
+      sensorPm25 = mapResult["sensorPm25"][0];
+      sensorPm10 = mapResult["sensorPm10"][0];
+      sensorCo2 = mapResult["sensorCo2"][0];
+      sensorTvoc = mapResult["sensorTvoc"][0];
+      context.read<EnvDataProvider>().updateData(sensorTemperature, sensorHumidity, sensorPm25, sensorPm10, sensorCo2, weatherFontColorReal, weatherDataFontColorReal, weather_assets);
+    });
+  }
+  double boyrate = 0.5;
+  double girlrate = 0.78;
+
+  List<dynamic> childClassName = [
+    '꽃사랑',
+    // '개나리',
+    // '진달래',
+    // '방울꽃',
+    // '계란꽃',
+    // '아카시아',
+    // '튤립',
+    // '해바라기',
+    // '금잔디',
+    // '소나무',
+  ]; //반 이름입니다.
+  List<double> chartRate = [0.67,
+    // 0.89, 0.30, 1.00,
+    // 0.92, 0.94, 0.89,0.90 ,
+    // 0.89,0.90
+  ];
+  ///등하원 api
+  void _callAttendApi() async {
+    final client = RestInfoPanel(dio);
+    final token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6MjIsInZlcnNpb24iOiIwLjAuNCIsImlhdCI6MTY2NzM2MTY3NCwiZXhwIjoxNjY5OTUzNjc0LCJpc3MiOiJhaWpvYSJ9.GKbcaliPyXkYy5szr_4nJOOpfN-vvigMBt3ufShmgtY';
+    final responseAttend =
+    await client.getAttendInfo(token).catchError((Object obj) {
+      final res = (obj as DioError).response;
+      //swagger 참조
+      switch (res!.statusCode) {
+        case 200:
+          debugPrint('200');
+          break;
+        case 401:
+          debugPrint('401 : 유효하지 않은 토큰입니다.');
+          break;
+        case 419:
+          debugPrint('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          debugPrint('500 : 심각한 서버 문제.');
+          break;
+        default:
+          break;
+      }
+      return obj.response;
+    });
+    Map<String, dynamic> mapResult = Map<String, dynamic>.from(responseAttend); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
+    print("AttendApi");
+    print(mapResult);//모든 데이터가 0이들어와서 일단 주석처리해두었습니다.
+    setState(() {
+      //값이 0이 들어와서 현재 제대로 그릴수없어서 임의로 대체
+      //boyrate = mapResult["maleRate"];
+      //girlrate = mapResult["femaleRate"];
+      // childClassName = mapResult["classList"];
+      // chartRate = mapResult["rateByClass"].cast<double>();
+      context.read<AttendanceDataProvider>().updateData(boyrate, girlrate, childClassName, chartRate);
+      print("margin test");
+      // print(336-336*context.watch<AttendanceDataProvider>().girlrate.w);
     });
   }
 
@@ -191,45 +294,51 @@ class _MainPanelState extends State<MainPanel> {
           Column(
             children: [
               Container(
-                width: 1048.w,
-                height: 1048.w,
-                margin: EdgeInsets.only(left: 19.w, top: 10.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: const Color(0x6663e6d7),
-                    width: 1.w,
+                  width: 1048.w,
+                  height: 1048.w,
+                  margin: EdgeInsets.only(left: 19.w, top: 10.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: const Color(0x6663e6d7),
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(20.w),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0x29b1b1b1),
+                        offset: Offset(-2.w, 2.w),
+                        blurRadius: 6.w,
+                        spreadRadius: 0.w,
+                      ),
+                      BoxShadow(
+                        color: const Color(0x29dbdbdb),
+                        offset: Offset(-2.w, -4.w),
+                        blurRadius: 6.w,
+                        spreadRadius: 0.w,
+                      ),
+                    ],
                   ),
-                  borderRadius: BorderRadius.circular(20.w),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0x29b1b1b1),
-                      offset: Offset(-2.w, 2.w),
-                      blurRadius: 6.w,
-                      spreadRadius: 0.w,
-                    ),
-                    BoxShadow(
-                      color: const Color(0x29dbdbdb),
-                      offset: Offset(-2.w, -4.w),
-                      blurRadius: 6.w,
-                      spreadRadius: 0.w,
-                    ),
-                  ],
-                ),
 
-                ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
-                child: KinderInfoWidget()
-                // KinderInfoWidget(),
-                // KinderInfoWidget3(),
-                // TeacherInfoWidget()
-                // ClassInfo10Widget(),
-                // ClassInfo20Widget(),
-                // ClassInfo30Widget(),
-                // ChildLifeDataWidget(),
-                //FacetimeWidget()
-                // TestNoticeWidget()
-                ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
-              ),
+                  ///<각 페이지의 왼쪽 위젯이 들어갈 자리입니다, widgetleft
+                  child:
+                      // Navigator(
+                      //   key: _navigatorKey,
+                      //   initialRoute: routeKinderInfo,
+                      //   onGenerateRoute: _onGenerateRoute,
+                      // )
+                      myWidget
+                  // KinderInfoWidget(),
+                  // KinderInfoWidget3(),
+                  // TeacherInfoWidget()
+                  // ClassInfo10Widget(),
+                  // ClassInfo20Widget(),
+                  // ClassInfo30Widget(),
+                  // ChildLifeDataWidget(),
+                  //FacetimeWidget()
+                  // TestNoticeWidget()
+                  ///각 페이지의 왼쪽 위젯이 들어갈 자리입니다>
+                  ),
             ],
           ),
 
@@ -487,14 +596,24 @@ class _MainPanelState extends State<MainPanel> {
                             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              for (int i = 0; i < context.watch<AttendanceDataProvider>().chartRate.length; i++) ...[
+                              for (int i = 0;
+                                  i <
+                                      context.watch<AttendanceDataProvider>().chartRate
+                                          .length;
+                                  i++) ...[
                                 Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         margin: EdgeInsets.only(bottom: 2.w),
                                         child: Text(
-                                            (100.0 * context.watch<AttendanceDataProvider>().chartRate[i]).toString() + "%",
+                                            (100.0 *
+                                                        context
+                                                            .watch<
+                                                                AttendanceDataProvider>()
+                                                            .chartRate[i])
+                                                    .toString() +
+                                                "%",
                                             style: TextStyle(
                                               fontFamily: 'NotoSansKR',
                                               color: Color(0xff393838),
@@ -521,7 +640,8 @@ class _MainPanelState extends State<MainPanel> {
                                           width: 74.8.w,
                                           height: 3.w,
                                           // margin: EdgeInsets.only(left: 40.w),
-                                          decoration: BoxDecoration(color: Color(0xff63e6d7))),
+                                          decoration: BoxDecoration(
+                                              color: Color(0xff63e6d7))),
                                       Text(
                                           context
                                               .watch<AttendanceDataProvider>()
@@ -534,7 +654,6 @@ class _MainPanelState extends State<MainPanel> {
                                             fontWeight: FontWeight.w400,
                                             fontStyle: FontStyle.normal,
                                           ))
-
                                     ]),
                               ]
                             ])),
@@ -592,7 +711,7 @@ class _MainPanelState extends State<MainPanel> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage(weather_assets),
+                  image: AssetImage(context.watch<EnvDataProvider>().weather_assets),
                 )),
                 child: Row(
                   children: [
@@ -606,7 +725,7 @@ class _MainPanelState extends State<MainPanel> {
                           child: Text("온도",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
-                                color: weatherFontColorReal,
+                                color: context.watch<EnvDataProvider>().weatherFontColorReal,
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.normal,
@@ -617,18 +736,7 @@ class _MainPanelState extends State<MainPanel> {
                           child: Text("습도",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
-                                color: weatherFontColorReal,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                              )),
-                          margin: EdgeInsets.only(top: 62.w),
-                        ),
-                        Container(
-                          child: Text("미세먼지",
-                              style: TextStyle(
-                                fontFamily: 'NotoSansKR',
-                                color: weatherFontColorReal,
+                                color: context.watch<EnvDataProvider>().weatherFontColorReal,
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.normal,
@@ -639,7 +747,7 @@ class _MainPanelState extends State<MainPanel> {
                           child: Text("이산화탄소",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
-                                color: weatherFontColorReal,
+                                color: context.watch<EnvDataProvider>().weatherFontColorReal,
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.normal,
@@ -647,10 +755,22 @@ class _MainPanelState extends State<MainPanel> {
                           margin: EdgeInsets.only(top: 62.w),
                         ),
                         Container(
+                          child: Text("미세먼지",
+                              style: TextStyle(
+                                fontFamily: 'NotoSansKR',
+                                color: context.watch<EnvDataProvider>().weatherFontColorReal,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.normal,
+                              )),
+                          margin: EdgeInsets.only(top: 62.w),
+                        ),
+
+                        Container(
                           child: Text("초미세먼지",
                               style: TextStyle(
                                 fontFamily: 'NotoSansKR',
-                                color: weatherFontColorReal,
+                                color: context.watch<EnvDataProvider>().weatherFontColorReal,
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.normal,
@@ -666,10 +786,10 @@ class _MainPanelState extends State<MainPanel> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Text(sensorTemperature.toString() + "도",
+                          child: Text(context.watch<EnvDataProvider>().sensorTemperature.toString() + "도",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
-                                color: weatherDataFontColorReal,
+                                color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
                                 fontSize: 40.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
@@ -677,10 +797,10 @@ class _MainPanelState extends State<MainPanel> {
                           margin: EdgeInsets.only(top: 50.w, left: 5.w),
                         ),
                         Container(
-                          child: Text(sensorHumidity.toString() + "%",
+                          child: Text(context.watch<EnvDataProvider>().sensorHumidity.toString() + "%",
                               style: TextStyle(
                                 fontFamily: 'GamjaFlower',
-                                color: weatherDataFontColorReal,
+                                color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
                                 fontSize: 40.sp,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
@@ -691,39 +811,17 @@ class _MainPanelState extends State<MainPanel> {
                           child: RichText(
                               text: TextSpan(children: [
                             TextSpan(
-                                text: sensorPm10.toString(),
+                                text: context.watch<EnvDataProvider>().sensorCo2.toString(),
                                 style: TextStyle(
                                     fontFamily: 'GamjaFlower',
-                                    color: weatherDataFontColorReal,
-                                    fontSize: 30.sp,
-                                    fontWeight: FontWeight.w400)),
-                            TextSpan(
-                                text: '㎍/㎥',
-                                style: TextStyle(
-                                  fontFamily: 'GamjaFlower',
-                                  color: weatherDataFontColorReal,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.w400,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                          ])),
-                          margin: EdgeInsets.only(top: 50.w, left: 5.w),
-                        ),
-                        Container(
-                          child: RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: sensorCo2.toString(),
-                                style: TextStyle(
-                                    fontFamily: 'GamjaFlower',
-                                    color: weatherDataFontColorReal,
+                                    color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
                                     fontSize: 30.sp,
                                     fontWeight: FontWeight.w400)),
                             TextSpan(
                                 text: 'ppm',
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: weatherDataFontColorReal,
+                                  color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
                                   fontSize: 25.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
@@ -734,18 +832,40 @@ class _MainPanelState extends State<MainPanel> {
                         Container(
                           child: RichText(
                               text: TextSpan(children: [
+                                TextSpan(
+                                    text: context.watch<EnvDataProvider>().sensorPm10.toString(),
+                                    style: TextStyle(
+                                        fontFamily: 'GamjaFlower',
+                                        color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
+                                        fontSize: 30.sp,
+                                        fontWeight: FontWeight.w400)),
+                                TextSpan(
+                                    text: '㎍/㎥',
+                                    style: TextStyle(
+                                      fontFamily: 'GamjaFlower',
+                                      color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                    )),
+                              ])),
+                          margin: EdgeInsets.only(top: 50.w, left: 5.w),
+                        ),
+                        Container(
+                          child: RichText(
+                              text: TextSpan(children: [
                             TextSpan(
-                                text: sensorPm25.toString(),
+                                text: context.watch<EnvDataProvider>().sensorPm25.toString(),
                                 style: TextStyle(
                                     fontFamily: 'GamjaFlower',
-                                    color: weatherDataFontColorReal,
+                                    color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
                                     fontSize: 30.sp,
                                     fontWeight: FontWeight.w400)),
                             TextSpan(
                                 text: '㎍/㎥',
                                 style: TextStyle(
                                   fontFamily: 'GamjaFlower',
-                                  color: weatherDataFontColorReal,
+                                  color: context.watch<EnvDataProvider>().weatherDataFontColorReal,
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
@@ -769,3 +889,5 @@ class _MainPanelState extends State<MainPanel> {
     );
   }
 }
+
+
