@@ -5,20 +5,68 @@ class TeacherDataProvider with ChangeNotifier {
   int _row=0;
   int _rest=0;
 
-  int _teacherNum = 0;
-  int _directorNum = 0;
-  int _committeeNum = 0;
-  List<String> _teacherName = [];
-  List<Image> _teacherImage = [];
-  List<String> _teacherIntroduction = [];
+  int _teacherNum = 5;
+  int _directorNum = 3;
+  int _committeeNum = 5;
+  List<String> _teacherName = [
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+  ];
+  List<Image> _teacherImage = [
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+  ];
+  List<String> _teacherIntroduction = [
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+  ];
 
-  List<String> _directorName = [];
-  List<Image> _directorImage = [];
-  List<String> _directorIntroduction = [];
+  List<String> _directorName = [
+    '김담임',
+    '김담임',
+    '김담임',
+  ];
+  List<Image> _directorImage = [
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+  ];
+  List<String> _directorIntroduction = [
+    '김담임',
+    '김담임',
+    '김담임',
+  ];
 
-  List<String> _committeeName = [];
-  List<Image> _committeeImage = [];
-  List<String> _committeeClassName = [];
+  List<String> _committeeName = [
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+  ];
+  List<Image> _committeeImage = [
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    Image.asset("assets/childlifedata/baby_sample.png"),
+  ];
+  List<String> _committeeClassName = [
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+    '김담임',
+  ];
 
   int get column => _column;
 

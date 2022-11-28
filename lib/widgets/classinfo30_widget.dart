@@ -33,7 +33,7 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: AssetImage(
-                          'assets/class_info_deco/1class.png.png'))),
+                          'assets/class_info_deco/1class.png'))),
               child: Center(
                 child: Column(
                   children: [
@@ -76,16 +76,57 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
             ///담임
             for (int i = 0; i < context.watch<ClassDataProvider>().teacherNum; i++) ...[
               Column(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
+                  if(i==0)...[Container(
                       width: 120.w,
                       height: 120.w,
                       //페이지에 따라 마진 조절 바람 건희, 성민
                       margin: EdgeInsets.only(left: 5.w),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: const Color(0x29b1b1b1),
+                              offset: const Offset(-2, 2),
+                              blurRadius: 6.w,
+                              spreadRadius: 0),
+                          BoxShadow(
+                              color: const Color(0x29dbdbdb),
+                              offset: const Offset(-2, -4),
+                              blurRadius: 6.w,
+                              spreadRadius: 0)
+                        ],
+                      ),
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(250),
-                      child: context.watch<ClassDataProvider>().teacherImage[i])),
-                  Container(
+                      child: context.watch<ClassDataProvider>().teacherImage[i]))
+                  ] else ...[
+                    Container(
+                        width: 120.w,
+                        height: 120.w,
+                        //페이지에 따라 마진 조절 바람 건희, 성민
+                        margin: EdgeInsets.only(left: 20.w),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: const Color(0x29b1b1b1),
+                                offset: const Offset(-2, 2),
+                                blurRadius: 6.w,
+                                spreadRadius: 0),
+                            BoxShadow(
+                                color: const Color(0x29dbdbdb),
+                                offset: const Offset(-2, -4),
+                                blurRadius: 6.w,
+                                spreadRadius: 0)
+                          ],
+                        ),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(250),
+                            child: context.watch<ClassDataProvider>().teacherImage[i]))
+                  ],
+                  if(i==0)...[
+                    Container(
                     width: 160.w,
                     height: 40.w,
                     decoration: BoxDecoration(
@@ -105,7 +146,30 @@ class _ClassInfo30WidgetState extends State<ClassInfo30Widget> {
                         ),
                       ),
                     ),
-                  )
+                  )] else ...[
+                    Container(
+                      width: 160.w,
+                      height: 40.w,
+                      margin: EdgeInsets.only(left: 20.w),
+                      decoration: BoxDecoration(
+                          color: const Color(0xffc7f7f5),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Center(
+                        child: Text(
+                          context.watch<ClassDataProvider>().teacherName[i],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.sp,
+                            fontFamily: '.AppleSystemUIFont',
+                          ),
+                          strutStyle: StrutStyle(
+                            fontSize: 18.sp,
+                            forceStrutHeight: true,
+                          ),
+                        ),
+                      ),
+                    )
+                  ]
                 ],
               )
             ]

@@ -33,7 +33,7 @@ class _ClassInfo20WidgetState extends State<ClassInfo20Widget> {
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: AssetImage(
-                          'assets/class_info_deco/1class.png.png'))),
+                          'assets/class_info_deco/1class.png'))),
               child: Center(
                 child: Column(
                   children: [
@@ -79,13 +79,26 @@ class _ClassInfo20WidgetState extends State<ClassInfo20Widget> {
               Column(
                 children: [
                   Container(
-                    width: 180.w,
-                    height: 180.w,
+                    width: 155.w,
+                    height: 155.w,
                     margin: EdgeInsets.only(left: 20.w),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: const Color(0x29b1b1b1),
+                            offset: const Offset(-2, 2),
+                            blurRadius: 6.w,
+                            spreadRadius: 0),
+                        BoxShadow(
+                            color: const Color(0x29dbdbdb),
+                            offset: const Offset(-2, -4),
+                            blurRadius: 6.w,
+                            spreadRadius: 0)
+                      ],
+                    ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(250),
                         child: context.watch<ClassDataProvider>().teacherImage[i],
-
                     ),
 
                   ),

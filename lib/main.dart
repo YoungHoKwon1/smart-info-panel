@@ -129,9 +129,10 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   List<dynamic> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   Image kinderImage = Image.asset("name");
+  Image floorImage = Image.asset("name");
 
   int childNum = 0;
-  int column = 0;
+  int column = 4;
   int row=0;
   int rest=0; //나머지 아이들
   String className = '새싹어린이반';
@@ -165,18 +166,22 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   List<String> childrenImagePath = [];
   String weekinfo = '';
   String NewsComment = '';
-  List<String> event2 = [];
   List<Image> imageList = [];
   int days = 0;
-  String snews= '';
+  List<dynamic> specialDays=[];
+  List<dynamic> specialNews=[];
+  bool newsExist = false;
+  int specialDaysLength=0;
   String names='';
   List<String> imagePaths = [
     "api/image/뒷산사진1.png",
     "api/image/뒷산사진2.png",
   ];
-  var now = DateTime.now();
+  var now = DateTime.now().day;
 
+  String classAge='만2세반';
 
+  String classDeco ='assets/class_info_deco/2class.png';
   ///어린이집소개 좌측용
   void _callBasicApi() async {
     Map<String, String> headers = Map();
@@ -203,10 +208,12 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       }
       return obj.response;
     });
-    // print(responseBasic);
     Map<String, dynamic> mapResult = Map<String, dynamic>.from(
         responseBasic); //안해주면 Iteral뭐시기 형태로 데이터가 들어와 Map형식으로 읽을 수 없음
 
+    print("classinfo 0 age");
+    // print(mapResult["classInfo"][0]["age"]);
+    print(mapResult["classInfo"][0]);
     setState(() {
       weeks = mapResult["news"]["week"];
       months= mapResult["news"]["month"];
@@ -224,7 +231,11 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
             fit: BoxFit.cover,
           ),
         );
-      };
+      }
+      print(mapResult["news"]);
+      specialDaysLength = mapResult["news"]["specialDays"].length;
+      specialDays =  mapResult["news"]["specialDays"];
+      specialNews = mapResult["news"]["specialNews"];
       ro = newImageNum ~/ co;
       re = newImageNum % co;
       //print(co);
@@ -256,7 +267,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       print(teacherName);
       print(teacherIntroduction);
       print("-----");
-      classInfo[1] = directorNum;
       directorName.clear();
       directorIntroduction.clear();
       for (int i = 0; i < directorNum; i++) {
@@ -273,7 +283,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           ),
         );
       }
-      classInfo[1] = committeeNum;
       committeeName.clear();
       committeeClassName.clear();
       for (int i = 0; i < committeeNum; i++) {
@@ -297,9 +306,16 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       kinderImage = Image.network(
         url + mapResult["kindergarten"]["imagePath"],
         headers: headers,
+        width: 400.w,
+        height: 490.w,
+        fit: BoxFit.cover,
+      );
+      floorImage = Image.network(
+        url+mapResult["kindergarten"]["floorPlan"],
+        headers: headers,
         width: 128.w,
         height: 146.w,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
       );
       classNumEach =
           mapResult["kindergarten"]["classCounts"].cast<int>(); //원형그래프:각 나이별 학급 수
@@ -348,6 +364,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       thirdRowInt[7] = mapResult["kindergarten"]["otherplaceArea"];
       context.read<KinderDataProvider>().dataUpdate(
           kinderImage,
+          floorImage,
           classNumEach,
           classGraphName,
           childNumEachAge,
@@ -359,7 +376,6 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
           secondRowInt,
           thirdRowInt
       );
-      className = mapResult["classInfo"][0]["name"];
       className = mapResult["classInfo"][0]["name"];
       teacherNum = mapResult["classInfo"][0]["teachers"].length;
       for(int i=0;i<teacherNum;i++) {
@@ -382,6 +398,34 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         column=5;
       } else {
         column=7;
+      }
+      classAge = mapResult["classInfo"][0]["age"];
+      switch(classAge) {
+        case "만0세반":
+        case "만0~1세반":
+          classDeco='assets/class_info_deco/0class.png';
+          break;
+        case "만1세반":
+        case "만1~2세반":
+          classDeco='assets/class_info_deco/1class.png';
+          break;
+        case "만2세반":
+        case "만2~3세반":
+          classDeco='assets/class_info_deco/2class.png';
+          break;
+        case "만3세반":
+        case "만3~4세반":
+          classDeco='assets/class_info_deco/3class.png';
+          break;
+        case "만4세반":
+        case "만4~5세반":
+          classDeco='assets/class_info_deco/4class.png';
+          break;
+        case "만5세반":
+          classDeco='assets/class_info_deco/5class.png';
+          break;
+        default:
+          break;
       }
       classInfo[1] = childNum;
       childrenName.clear();
@@ -412,13 +456,18 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         }
       }
 
-      context.read<ClassDataProvider>().dataUpdate(childNum, column, row, rest, className, teacherNum,
+      context.read<ClassDataProvider>().dataUpdate(childNum,classAge, classDeco, column, row, rest, className, teacherNum,
           teacherName, teacherImage, childrenName, childrenImage, classInfo);
-      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, snews, event2, imageList, now, names, imagePaths);
+      print("now");
+      print(now);
+      print(now.runtimeType);//int
+      context.read<NoticedataProvider>().updataData(news, today, eventNum, months, weeks, ro, co, re, newImageNum, days, childrenImagePath, weekinfo, NewsComment, specialDays, specialNews, newsExist, imageList, now, names, imagePaths);
     });
   }
   Image childImage = Image.asset("name");
   String childImagePath='';
+  int childlifedataAge=0;
+  String childlifeDeco='assets/child_face_deco/age0face.png';
   String childName = "";
   String childBDay = '';
   String oneClassName = '';
@@ -478,6 +527,29 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
         fit: BoxFit.cover,
       );
       childImagePath = mapResult["imagePath"];
+      print("childlifedataAge");
+      print(mapResult["age"]);
+      childlifedataAge =mapResult["age"];
+      switch(childlifedataAge) {
+        case 0:
+          childlifeDeco = "assets/child_face_deco/age0face.png";
+          break;
+        case 1:
+          childlifeDeco = "assets/child_face_deco/age1face.png";
+          break;
+        case 2:
+          childlifeDeco = "assets/child_face_deco/age2face.png";
+          break;
+        case 3:
+          childlifeDeco = "assets/child_face_deco/age3face.png";
+          break;
+        case 4:
+          childlifeDeco = "assets/child_face_deco/age4face.png";
+          break;
+        case 5:
+          childlifeDeco = "assets/child_face_deco/age5face.png";
+          break;
+      }
       childName = mapResult["name"];
       childBDay = mapResult["birthday"];
       bdayYear = childBDay.substring(0,4);
@@ -498,7 +570,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
       toiletCount = mapResult["toiletCount"].toString();
       medicineCount = mapResult["medicineCount"].toString();
       accidentCount = mapResult["accidentCount"].toString();
-      context.read<ChildLifeProvider>().updateData(childImage,childImagePath, childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
+      context.read<ChildLifeProvider>().updateData(childImage,childImagePath, childlifedataAge, childlifeDeco,childName, childBDay, oneClassName, collectionPeriod, attendanceCount, avgAttendTime, avgGoinghomeTime, height, weight, beforeAttendEmotion, beforeGoingHomeEmotion, avgMeal, avgSleep, vomitCount, toiletCount, medicineCount, accidentCount, bdayYear, bdayMonth, bdayDay);
       row = newImageNum ~/ column;
       rest = newImageNum % column;
     });
@@ -509,17 +581,21 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
   List<dynamic> childClassName = [
     '꽃사랑',
-    '개나리',
-    '진달래',
-    '방울꽃',
-    '계란꽃',
-    '아카시아',
-    '튤립',
-    '해바라기',
-    //'금잔디',
-    //'소나무',
+    // '개나리',
+    // '진달래',
+    // '방울꽃',
+    // '계란꽃',
+    // '아카시아',
+    // '튤립',
+    // '해바라기',
+    // '금잔디',
+    // '소나무',
   ]; //반 이름입니다.
-  List<double> chartRate = [0.67, 0.89, 0.30, 1.00, 0.92, 0.94, 0.89, 0.90];
+  List<double> chartRate = [0.67,
+    // 0.89, 0.30, 1.00,
+    // 0.92, 0.94, 0.89,0.90 ,
+    // 0.89,0.90
+  ];
   ///등하원 api
   void _callAttendApi() async {
     final client = RestInfoPanel(dio);

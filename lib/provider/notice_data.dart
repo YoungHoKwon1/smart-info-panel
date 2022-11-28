@@ -14,8 +14,9 @@ class NoticedataProvider with ChangeNotifier {
   List<String> _childrenImagePath = [];
   String _weekinfo = '';
   String _NewsComment = '';
-  String _snews= '';
-  List<String> _event2 = [];
+  List<dynamic> _specialDays=[];
+  List<dynamic> _specialNews = [];
+  bool newsExist =true;
   List<Image> _imageList = [];
   String _names = '';
   List<String> _imagePaths = [
@@ -24,7 +25,7 @@ class NoticedataProvider with ChangeNotifier {
   ];
 
 
-  var _now = DateTime.now();
+  int _now = 1;
 
   List<String> get imagePaths => _imagePaths;
 
@@ -57,16 +58,16 @@ class NoticedataProvider with ChangeNotifier {
 
   String get NewsComment => _NewsComment;
 
-  String get snews => _snews;
+  List<dynamic> get specialDays => _specialDays;
 
-  List<String> get event2 => _event2;
+  List<dynamic> get specialNews => _specialNews;
 
   List<Image> get imageList => _imageList;
 
-  get now => _now;
+  int get now => _now;
 
   void updataData(String news,String today,int eventNum,int months,int weeks,int ro,int co,int re,int newImageNum,
-      int days,List<String> childrenImagePath,String weekinfo,String NewsComment,String snews,List<String> event2,List<Image> imageList,now,String names,List<String>  imagePaths ) {
+      int days,List<String> childrenImagePath,String weekinfo,String NewsComment, List<dynamic> specialDays,List<dynamic> specialNews,bool newsExist,List<Image> imageList,now,String names,List<String>  imagePaths ) {
     _news = news;
     _today = today;
     _eventNum = eventNum;
@@ -80,8 +81,9 @@ class NoticedataProvider with ChangeNotifier {
     _childrenImagePath = childrenImagePath;
     _weekinfo = weekinfo;
     _NewsComment = NewsComment;
-    _snews = snews;
-    _event2 = event2;
+    _specialDays = specialDays;
+    _specialNews = specialNews;
+    this.newsExist = newsExist;
     _imageList = imageList;
     _now = now;
     _names = names;

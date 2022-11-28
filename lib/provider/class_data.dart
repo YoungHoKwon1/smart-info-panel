@@ -2,13 +2,27 @@ import 'package:flutter/material.dart';
 
 class ClassDataProvider with ChangeNotifier {
   int _childNum = 0;
+  String _classDeco ='assets/class_info_deco/2class.png';
+  String _classAge ='만2세반';
   int _column = 7;
+
+
+  String get classAge => _classAge;
+
+  String get classDeco => _classDeco;
   int _row=0;
   int _rest=0; //나머지 아이들
   String _className = '새싹어린이반';
-  int _teacherNum = 0;
-  List<String> _teacherName = ['김담임', '김담임', '김담임'];
-  List<Image> _teacherImage = [];
+  int _teacherNum = 1;
+  List<String> _teacherName = ['김담임',
+    // '김담임',
+    // '김담임'
+  ];
+  List<Image> _teacherImage = [
+    Image.asset("assets/childlifedata/baby_sample.png"),
+    // Image.asset("assets/childlifedata/baby_sample.png"),
+    // Image.asset("assets/childlifedata/baby_sample.png"),
+  ];
   List<String> _childrenName = [];
   List<Image> _childrenImage = [];
 
@@ -37,10 +51,12 @@ class ClassDataProvider with ChangeNotifier {
 
   List<int> get classInfo => _classInfo;
 
-  void dataUpdate(int childNum, int column, int row, int rest, String className,
+  void dataUpdate(int childNum,String classAge, String classDeco, int column, int row, int rest, String className,
       int teacherNum, List<String> teacherName, List<Image> teacherImage,List<String> childrenName, List<Image> childrenImage,
       List<int> classInfo,){
     _childNum = childNum;
+    _classAge = classAge;
+    _classDeco = classDeco;
     _column = column;
     _row = row;
     _rest = rest;

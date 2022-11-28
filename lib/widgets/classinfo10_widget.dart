@@ -29,11 +29,13 @@ class _ClassInfo10WidgetState extends State<ClassInfo10Widget> {
               width: 464.w,
               height: 298.w,
               margin: EdgeInsets.only(left: 170.w),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage(
-                          'assets/class_info_deco/2class.png.png'))),
+                      image:
+                      AssetImage(context.watch<ClassDataProvider>().classDeco)
+                  )
+              ),
               child: Center(
                 child: Column(
                   children: [
@@ -56,8 +58,8 @@ class _ClassInfo10WidgetState extends State<ClassInfo10Widget> {
                       margin: EdgeInsets.only(top: 15.w),
                       child: Center(
                         child: Text(
-                          context.watch<ClassDataProvider>().classInfo[0].toString() +
-                              '세 | ' +
+                          context.watch<ClassDataProvider>().classAge +
+                              ' | ' +
                               context.watch<ClassDataProvider>().classInfo[1].toString() +
                               '명 | 남:' +
                               context.watch<ClassDataProvider>().classInfo[2].toString() +
@@ -81,22 +83,42 @@ class _ClassInfo10WidgetState extends State<ClassInfo10Widget> {
               Column(
                 children: [
                   Container(
-                      width: 150.w,
-                      height: 100.w,
-                      //페이지에 따라 마진 조절 바람 건희, 성민
-                      child: context.watch<ClassDataProvider>().teacherImage[i]),
-                  Container(
-                    width: 190.w,
-                    height: 47.w,
+                    width: 155.w,
+                    height: 155.w,
+                    margin: EdgeInsets.only(left: 18.w),
                     decoration: BoxDecoration(
-                        color: Color(0xffc7f7f5),
+                      boxShadow: [
+                        BoxShadow(
+                            color: const Color(0x29b1b1b1),
+                            offset: const Offset(-2, 2),
+                            blurRadius: 6.w,
+                            spreadRadius: 0),
+                        BoxShadow(
+                            color: const Color(0x29dbdbdb),
+                            offset: const Offset(-2, -4),
+                            blurRadius: 6.w,
+                            spreadRadius: 0)
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(250),
+                      child: context.watch<ClassDataProvider>().teacherImage[i],
+                    ),
+
+                  ),
+                  Container(
+                    width: 180.w,
+                    height: 45.w,
+                    margin: EdgeInsets.only(left: 20.w),
+                    decoration: BoxDecoration(
+                        color: const Color(0xffc7f7f5),
                         borderRadius: BorderRadius.circular(20)),
                     child: Center(
                       child: Text(
                         context.watch<ClassDataProvider>().teacherName[i],
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 20.sp,
+                          fontSize: 18.sp,
                           fontFamily: '.AppleSystemUIFont',
                         ),
                         strutStyle: StrutStyle(
@@ -128,7 +150,10 @@ class _ClassInfo10WidgetState extends State<ClassInfo10Widget> {
                           height: 120.w,
                           margin: EdgeInsets.only(
                               left: 151.w, top: 82.w),
-                          child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j]),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(250),
+                              child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j]
+                          ),),
                       Container(
                         width: 116.w,
                         height: 35.w,
@@ -155,8 +180,10 @@ class _ClassInfo10WidgetState extends State<ClassInfo10Widget> {
                         height: 120.w,
                         margin: EdgeInsets.only(
                             left: 92.w, top: 82.w),
-                        child: Center(
-                            child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j]),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(250),
+                          child: Center(
+                              child: context.watch<ClassDataProvider>().childrenImage[context.watch<ClassDataProvider>().column * i + j]),),
                       ),
                       Container(
                         width: 116.w,

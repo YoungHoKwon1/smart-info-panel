@@ -18,6 +18,9 @@ class KinderDataProvider with ChangeNotifier {
   List<dynamic> _secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   List<dynamic> _thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   Image _kinderImage = Image.asset("name");
+  Image _floorImage = Image.asset("name");
+
+  Image get floorImage => _floorImage;
 
   set kinderImage(Image value) {
     _kinderImage = value;
@@ -45,10 +48,11 @@ class KinderDataProvider with ChangeNotifier {
 
   int get childrenCountByClass => _childrenCountByClass;
 
-  void dataUpdate(Image kinderImage, List<int> classNumEach, List<dynamic> classGraphName, List<dynamic> childNumEachAge,
+  void dataUpdate(Image kinderImage, Image floorImage, List<int> classNumEach, List<dynamic> classGraphName, List<dynamic> childNumEachAge,
       int classNumTotal, List<double> classGraphRate, var childrenCountByTeacher, var childrenCountByClass, List<dynamic> firstRowInt,
       List<dynamic> secondRowInt, List<dynamic> thirdRowInt,) {
     _kinderImage = kinderImage;
+    _floorImage = floorImage;
     _classNumEach = classNumEach;
     _classGraphName = classGraphName;
     _childNumEachAge = childNumEachAge;

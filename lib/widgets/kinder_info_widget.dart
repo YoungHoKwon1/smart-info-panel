@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'dart:async';
 import 'package:smart_info_panel/api/infopanel.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_info_panel/widgets/teacher_info_widget.dart';
 
 import '../provider/kinder_data.dart';
 class KinderInfoWidget extends StatefulWidget {
@@ -25,6 +26,9 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
   @override
   void initState() {
     super.initState();
+    // Timer(Duration(seconds: 10), () {
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TeacherInfoWidget()));
+    // });
   }
 
   Dio dio = Dio();
@@ -107,9 +111,34 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                 margin: EdgeInsets.only(left: 34.w, top: 34.w),
                 decoration: BoxDecoration(
                   // color: Colors.black,
-                    borderRadius: BorderRadius.circular(20.w)),
-                child: context.watch<KinderDataProvider>().kinderImage),
-
+                    borderRadius: BorderRadius.circular(20.w),
+                  boxShadow: [
+                    BoxShadow(
+                        color: const Color(0x29b1b1b1),
+                        offset: const Offset(-2, 2),
+                        blurRadius: 6.w,
+                        spreadRadius: 0),
+                    BoxShadow(
+                        color: const Color(0x29dbdbdb),
+                        offset: const Offset(-2, -4),
+                        blurRadius: 6.w,
+                        spreadRadius: 0)
+                  ],
+                ),
+                child: Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.w),
+                      child: context.watch<KinderDataProvider>().kinderImage,
+                )
+            ),),
+            // Container(
+            //   width: 400.w,
+            //       height: 490.w,
+            //   child: ClipRRect(
+            //     borderRadius: BorderRadius.circular(20.w),
+            //     child: context.watch<KinderDataProvider>().kinderImage,
+            //   ),
+            // ),
             ///어린이집 사진>
 
             ///<학급수, 유아수 그래프

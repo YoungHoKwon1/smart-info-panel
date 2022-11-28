@@ -344,7 +344,8 @@ class _KinderInfo3State extends State<KinderInfo3> {
                       ),
                     ],
                   ),
-                  child: Column(
+                  child:
+                  Column(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
