@@ -435,7 +435,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                             CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 200.0 * context.watch<KinderDataProvider>().childrenCountByTeacher/100.w,
+                                width: (200.0 * context.watch<KinderDataProvider>().childrenCountByTeacher/30).w,
                                 height: 20.w,
                                 margin: EdgeInsets.only(
                                     left: 20.w, top: 20.w),
@@ -449,7 +449,7 @@ class _KinderInfoWidgetState extends State<KinderInfoWidget> {
                                 ),
                               ),
                               Container(
-                                width: 200.0 * context.watch<KinderDataProvider>().childrenCountByClass/100.w,
+                                width: (200.0 * context.watch<KinderDataProvider>().childrenCountByClass/30).w,
                                 height: 20.w,
                                 margin: EdgeInsets.only(
                                     left: 20.w, top: 20.w),

@@ -7,7 +7,9 @@ import 'package:smart_info_panel/classinfo20.dart';
 import 'package:smart_info_panel/facetime.dart';
 import 'package:smart_info_panel/notice.dart';
 import 'package:smart_info_panel/provider/attendance_data.dart';
+import 'package:smart_info_panel/provider/class_data.dart';
 import 'package:smart_info_panel/provider/env_data.dart';
+import 'package:smart_info_panel/provider/kinder_data.dart';
 import 'package:smart_info_panel/widgets/childlifedata_widget.dart';
 import 'package:smart_info_panel/widgets/facetime_widget.dart';
 import 'package:smart_info_panel/widgets/classinfo10_widget.dart';
@@ -81,9 +83,15 @@ class _MainPanelState extends State<MainPanel> {
     Timer.periodic(Duration(seconds: 10), (timer) {
       print("10sec");
       if (timerI == 0) {
-        setState(() {
-          myWidget = KinderInfoWidget();
-        });
+        if(context.read<KinderDataProvider>().floorImage == null) {
+          setState(() {
+            myWidget = KinderInfoWidget();
+          });
+        } else {
+          setState(() {
+            myWidget = KinderInfoWidget3();
+          });
+        }
         timerI++;
       } else if (timerI == 1) {
         setState(() {
@@ -91,9 +99,19 @@ class _MainPanelState extends State<MainPanel> {
         });
         timerI++;
       } else if(timerI == 2) {
-        setState(() {
-          myWidget = ClassInfo10Widget();
-        });
+        if(context.read<ClassDataProvider>().childNum<10) {
+          setState(() {
+            myWidget = ClassInfo10Widget();
+          });
+        } else if(context.read<ClassDataProvider>().childNum<20) {
+          setState(() {
+            myWidget = ClassInfo20Widget();
+          });
+        } else {
+          setState(() {
+            myWidget = ClassInfo30Widget();
+          });
+        }
         timerI++;
       } else if(timerI == 3) {
         setState(() {

@@ -134,7 +134,7 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
   List<dynamic> secondRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   List<dynamic> thirdRowInt = [0, 0, 0, 0, 1, 37, 1, 37];
   Image kinderImage = Image.asset("name");
-  Image floorImage = Image.asset("name");
+  Image floorImage = Image.asset("");
 
   int childNum = 0;
   int column = 4;
@@ -777,23 +777,25 @@ class _SmartInfoPanelMainState extends State<SmartInfoPanelMain> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Container(
-        width: 1920.w,
-        height: 980.w,
-        child: Container(
-            width: 200.w,
-            height: 100.w,
-            color: Colors.white,
-            child: ElevatedButton(
-              onPressed: () {
+    return Scaffold(
+      body: MaterialApp(
+        home: Container(
+          width: 1920.w,
+          height: 980.w,
+          child: Container(
+              width: 200.w,
+              height: 100.w,
+              color: Colors.white,
+              child: ElevatedButton(
+                onPressed: () {
 
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainPanel()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainPanel()));
 
-              },
-              child: Text('데모 시작'),
-            )),
+                },
+                child: Text('데모 시작'),
+              )),
+        ),
       ),
     );
   }
