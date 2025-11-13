@@ -1,16 +1,49 @@
-# smart_info_panel
+# Smart Info Panel
+Real-time air quality and kindergarten information display system for Smart Childcare Centers
 
-A new Flutter project.
+## Overview
+**Smart Info Panel** is an information display system designed for Smart Childcare Centers.  
+It provides real-time updates on **air quality**, **environmental conditions**, and **kindergarten-related information**, helping staff and parents stay informed through a clear and accessible interface.
 
-## Getting Started
+This project focuses on delivering essential data through external APIs and presenting them in an intuitive, easy-to-read format.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## Objective
+Enable Smart Childcare Centers to:
+- Display **current air quality** data in real time  
+- Present essential **kindergarten notices and information**  
+- Improve communication and environment awareness for staff and parents  
+- Integrate external environmental data APIs into on-site display panels  
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+---
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Key Contributions (Implemented)
+- **Designed and implemented the entire project end-to-end**  
+  - From UI design to system logic and deployment  
+  - Ensured optimal readability and clear visualization  
+
+- **Integrated external APIs to display real-time information**  
+  - Fetched and displayed air quality metrics (e.g., PM2.5, PM10, CO₂)  
+  - Rendered additional kindergarten data from backend or designated endpoints  
+
+- **Created a reliable smart information panel suitable for on-site use**  
+  - Focused on clarity, stability, and real-time responsiveness  
+
+---
+
+## Project Management Responsibilities (PM Role)
+As the Project Manager, contributed to the overall direction and execution of the project by:
+- **Defining requirements** for data visualization and information display  
+- **Planning and managing project timeline**, deliverables, and milestones  
+- **Coordinating communication** between childcare staff, developers, and stakeholders  
+- **Organizing documentation**, technical specifications, and deployment procedures  
+- **Prioritizing features** based on real-world childcare center needs  
+- Participating in **demonstrations and feedback sessions** to refine project objectives  
+
+---
+
+## Tech Stack
+- **Frontend:** Flutter
+- **Backend Communication:** HTTP (REST API)  
+- **Data Sources:** Air quality monitoring API + Kindergarten info API  
